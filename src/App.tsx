@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import logo from './logo.svg';
 import './App.css';
-import useWindowDimensions from './components/setup/useWindoDimensions';
+import useWindowDimensions from './components/setup/useWindowDimensions';
 import Home from './components/landing/home';
 
 function App() {

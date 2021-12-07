@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from'three/examples/jsm/loaders/GLTFLoader.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 function MonkeyBis(props: JSX.IntrinsicElements['mesh']) {
 const gltf = useLoader(GLTFLoader, "/source/monkeyBis.glb");
