@@ -75,7 +75,7 @@ interface cameraOptionsInferface{
         }
         
                     <ambientLight intensity={0.5} />
-                    <pointLight color="white" intensity={0.25} position={[10, 10, 10]} />
+                    <pointLight color="white" intensity={0.75} position={[initialScenePosition.x, initialScenePosition.y + 3, initialScenePosition.z + 10]} />
         
 
                     <Suspense fallback={null}>
@@ -94,7 +94,7 @@ interface cameraOptionsInferface{
                      <Suspense fallback={WaitingSceneToLoad}>
                     {CurrentAvatar && <CurrentAvatar
                         position={[initialScenePosition.x-2, initialScenePosition.y + 0.55, initialScenePosition.z + 5.6]}
-                        scale={[0.0075,0.0075,0.0075]}
+                        scale={0.0075}
                         rotation={initialElephantRotation}
                         />}       
                     </Suspense>
