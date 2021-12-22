@@ -66,19 +66,19 @@ interface cameraOptionsInferface{
 
     return (
         
-            <div ref={scrollArea} style={{height: "100%", width: "100%"}} onWheel={setRotationOnWheel}>
+            <div ref={scrollArea} style={{height: "100%", width: "100%", position: "relative"}} onWheel={setRotationOnWheel}>
       
                 <Canvas>
                 <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
         {
-                   //<OrbitControls />
+                   // <OrbitControls />
         }
         
-                    <ambientLight intensity={0.5} />
+                    <ambientLight intensity={0.75} />
                     <pointLight color="white" intensity={0.75} position={[initialScenePosition.x, initialScenePosition.y + 3, initialScenePosition.z + 10]} />
         
 
-                    <Suspense fallback={null}>
+                    <Suspense fallback={WaitingSceneToLoad}>
                         <Room position={initialScenePosition} rotation={initialSceneRotation} />
         
                         <Rain
@@ -91,13 +91,13 @@ interface cameraOptionsInferface{
                             snowCount={1250}
                             position={initialMeteoPosition}
                         />
-                     <Suspense fallback={WaitingSceneToLoad}>
+
                     {CurrentAvatar && <CurrentAvatar
                         position={[initialScenePosition.x-2, initialScenePosition.y + 0.55, initialScenePosition.z + 5.6]}
                         scale={0.0075}
                         rotation={initialElephantRotation}
                         />}       
-                    </Suspense>
+ 
                       <Suspense fallback={null}>
                         <Rain
                             isVisible={state.meteo.rainProperties.rain}
@@ -134,6 +134,17 @@ interface cameraOptionsInferface{
                                 <b>Snow</b>
                             </p>
                         </Html>
+
+                        <Html 
+                          transform
+                          style={{color: "Pink", fontSize:"0.3em"}}
+                          position={[initialScenePosition.x + 4.2, initialScenePosition.y + 3.75, initialScenePosition.z + 3]}
+                        >
+                            <p>
+                                <b>{state.user.name}</b>
+                            </p>
+                        </Html>
+                      
                       </Suspense>
                     </Suspense>
         

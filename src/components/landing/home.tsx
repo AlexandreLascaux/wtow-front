@@ -24,6 +24,7 @@ function Home(): ReactElement{
 
   function handleOnClick(avatar: avatarNames){
     dispatch({type: 'setAvatar', value: avatar});
+    dispatch({type: 'setName', value: userName});
     setOpenScene(true);
   }
 
