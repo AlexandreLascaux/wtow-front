@@ -4,6 +4,7 @@
     grid-gap: 36px;
     max-width: 768px;
     margin: auto;
+    padding: 25px;
     min-width: 360px;
   }
   .home-grid-name-label { grid-row-start: 1 }

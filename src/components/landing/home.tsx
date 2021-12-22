@@ -10,11 +10,22 @@ function Home(): ReactElement{
   const [openScene, setOpenScene] = useState<boolean>(false)
   const [userName, setUserName] = useState<string>("");
   const listAvatars: avatarNames[] = ["toufan", "feline", "chafrou", "crocmou", "noel", "rusard"];
+  const availableAvatars: avatarNames[] = ["toufan", "chafrou"];
+
   const { state, dispatch } = React.useContext(AppContext);
 
-  function isActive(avatar: string){
+  function isActive(avatar: avatarNames){
     return avatar === state.user.avatar;
   }
+
+  function isDisabled(avatar: avatarNames){
+    return !availableAvatars.includes(avatar);
+  }
+
+  function handleOnClick(avatar: avatarNames){
+    dispatch({type: 'setAvatar', value: avatar});
+  }
+
   return (
     <>
     {
@@ -36,7 +47,13 @@ function Home(): ReactElement{
             {
               listAvatars.map((avatar) => 
                 <div className="home-avatar-list d-flex justify-content-center">
-                  <CustomAvatar avatarName={avatar} width={130} active={isActive(avatar)} />
+                  <CustomAvatar
+                    onClick={() => handleOnClick(avatar)}
+                    avatarName={avatar}
+                    width={130}
+                    active={isActive(avatar)}
+                    disabled={isDisabled(avatar)}
+                    />
                 </div>
               )
             }

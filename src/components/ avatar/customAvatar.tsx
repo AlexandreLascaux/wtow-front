@@ -8,8 +8,9 @@ interface AvatarInterface {
     width?: number;
     active?: boolean;
     disabled?: boolean;
+    onClick?: () => void;
 }
-export default function CustomAvatar({avatarName, width = 24, active, disabled}: AvatarInterface) {
+export default function CustomAvatar({avatarName, width = 24, active, disabled, onClick}: AvatarInterface) {
     function className(){
         let className = "";
         if(disabled) className += "is-disabled";
@@ -19,6 +20,7 @@ export default function CustomAvatar({avatarName, width = 24, active, disabled}:
     return (
         <div className="avatar-container">
             <Avatar
+            onClick={onClick}
             className={`mb-2 cursor-pointer avatar-style ${className()}`}
             alt={avatarName}
             src={`./assets/avatar/${avatarName}.png`}

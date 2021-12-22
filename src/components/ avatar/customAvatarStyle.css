@@ -13,9 +13,10 @@
 }
 
 .is-active{
-    box-shadow: 0 0 1.25rem rgba(250, 241, 121, 75%);
+    box-shadow: 0 0 1.25rem rgba(250, 241, 121, 75%)!important;
 }
 
 .is-disabled{
-    
+    filter: grayscale(80%);
+    pointer-events: none;
 }

@@ -18,7 +18,7 @@ const initialState: stateInterface = {
 
 const AppContext = createContext<{
   state: stateInterface;
-  dispatch: Dispatch<ClotheAction | MeteoAction>;
+  dispatch: Dispatch<ClotheAction | MeteoAction | UserAction>;
 }>({
   state: initialState,
   dispatch: () => null
