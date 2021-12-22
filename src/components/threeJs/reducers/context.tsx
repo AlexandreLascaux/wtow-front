@@ -1,53 +1,36 @@
 import React, { createContext, useReducer, Dispatch } from "react";
 import clotheReducer, { ClotheAction, clotheInterface } from "./clotheReducer";
 import meteoReducer, { MeteoAction, meteoInterface } from "./meteoReducer";
+import userReducer, { UserAction, userInterface } from "./userReducer";
+import { initialMeteo, initialClothe, initialUser } from "./utils";
 
 export interface stateInterface {
     meteo: meteoInterface;
     clothe: clotheInterface;
+    user: userInterface;
 }
 
-const initialMeteo = {
-  rainProperties: {
-    rain: false,
-    rainPrecipitation: 1500
-},
-snowProperties: {
-    snow: false,
-    snowPrecipitation: 3000,
-}
-}
-
-const initialClothe = {
-  hat: {
-    type: "winter"
-  },
-  tshirt: {
-    type: "summer"
-  },
-  pant: {
-    type: "spring"
-  },
-}
 const initialState: stateInterface = {
     meteo: initialMeteo,
     clothe: initialClothe,
+    user: initialUser,
   }
 
 const AppContext = createContext<{
   state: stateInterface;
-  dispatch: Dispatch<ClotheAction | MeteoAction>;
+  dispatch: Dispatch<ClotheAction | MeteoAction | UserAction>;
 }>({
   state: initialState,
   dispatch: () => null
 });
 
 const mainReducer = (
-  { meteo, clothe }: stateInterface,
-  action: ClotheAction | MeteoAction
+  { meteo, clothe, user }: stateInterface,
+  action: ClotheAction | MeteoAction | UserAction
 ) => ({
   meteo: meteoReducer(meteo, action as MeteoAction),
-  clothe: clotheReducer(clothe, action as ClotheAction)
+  clothe: clotheReducer(clothe, action as ClotheAction),
+  user: userReducer(user, action as UserAction)
 });
 
 const AppProvider: React.FC = ({ children }) => {

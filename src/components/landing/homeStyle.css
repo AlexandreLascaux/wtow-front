@@ -1,0 +1,21 @@
+.home-grid-container {
+    display: grid; 
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 36px;
+    max-width: 768px;
+    margin: auto;
+    padding: 25px;
+    min-width: 360px;
+  }
+  .home-grid-name-label { grid-row-start: 1 }
+  .home-grid-name-input { grid-row-start: 2 }
+  .home-grid-avatar-label { grid-row-start: 3 }
+  .home-grid-avatar-list {
+      grid-row-start: 4;
+      flex-wrap: wrap;
+    }
+
+  .home-avatar-list {
+    flex: 1 0 30%;
+    margin: 10px 5px;
+    }

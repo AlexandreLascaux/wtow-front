@@ -25,7 +25,7 @@ export type MeteoAction =
  | { type: 'setRainPrecipitation', value: number }
  | { type: 'setSnow', value: boolean }
  | { type: 'setSnowPrecipitation', value: number }
- | { type: 'reset', value: meteoInterface};
+ | { type: 'resetMeteo', value: meteoInterface};
 
  function initMeteo(initialState: meteoInterface) {
     return initialState;
@@ -41,7 +41,7 @@ export default function meteoReducer(state: meteoInterface, action: MeteoAction)
         return {...state, snowProperties: {...state.snowProperties, snow: action.value} };
     case 'setSnowPrecipitation':
       return {...state, snowProperties: {...state.snowProperties, snowPrecipitation: action.value} };
-      case 'reset':
+      case 'resetMeteo':
         return initMeteo(action.value);
     default:
       return state;
