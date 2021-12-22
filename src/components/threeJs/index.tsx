@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from "./meteo/rain";
 import Room from "./scene/Scene";
-import Toufan from "./models/toufan";
 import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov } from "./camera/CustomCamera";
 import { Html, OrbitControls } from "@react-three/drei";
 import Snow from "./meteo/snow";
@@ -16,7 +15,6 @@ interface cameraOptionsInferface{
     fov: number;
   }
 
-  
   export default function Scene(){
     const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
     const initialSceneRotation = new THREE.Euler( 0, 0, 0, 'XYZ' );
@@ -26,8 +24,6 @@ interface cameraOptionsInferface{
     const [scroll, setScroll] = useState<number>(0.5);
     const { state, dispatch } = React.useContext(AppContext);
     const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps) => JSX.Element>>();
-
-    //const Avatar = lazy(() => import(`./models/chafrou`));
 
     const [cameraOptions, setCameraOptions] = useState<cameraOptionsInferface>({
         position: defaultCameraPosition,
@@ -73,7 +69,6 @@ interface cameraOptionsInferface{
         {
                    // <OrbitControls />
         }
-        
                     <ambientLight intensity={0.75} />
                     <pointLight color="white" intensity={0.75} position={[initialScenePosition.x, initialScenePosition.y + 3, initialScenePosition.z + 10]} />
         
@@ -91,13 +86,11 @@ interface cameraOptionsInferface{
                             snowCount={1250}
                             position={initialMeteoPosition}
                         />
-
                     {CurrentAvatar && <CurrentAvatar
                         position={[initialScenePosition.x-2, initialScenePosition.y + 0.55, initialScenePosition.z + 5.6]}
                         scale={0.0075}
                         rotation={initialElephantRotation}
                         />}       
- 
                       <Suspense fallback={null}>
                         <Rain
                             isVisible={state.meteo.rainProperties.rain}
@@ -134,15 +127,14 @@ interface cameraOptionsInferface{
                                 <b>Snow</b>
                             </p>
                         </Html>
-
                         <Html 
                           transform
                           style={{color: "Pink", fontSize:"0.3em"}}
                           position={[initialScenePosition.x + 4.2, initialScenePosition.y + 3.75, initialScenePosition.z + 3]}
                         >
-                            <p>
-                                <b>{state.user.name}</b>
-                            </p>
+                          <p>
+                            <b>{state.user.name}</b>
+                          </p>
                         </Html>
                       
                       </Suspense>
