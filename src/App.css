@@ -47,6 +47,7 @@ button {
 .App-header {
   background-color: #AAA7CB;
   min-height: 100vh;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,6 +108,9 @@ button {
 
 .pb-1 {
   padding-bottom: 6px;
+}
+.mb-2 {
+  margin-bottom: 12px;
 }
 
 .mb-5 {

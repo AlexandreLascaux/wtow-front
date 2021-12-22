@@ -19,7 +19,7 @@ export default function CustomAvatar({avatarName, width = 24, active, disabled}:
     return (
         <div className="avatar-container">
             <Avatar
-            className={`cursor-pointer avatar-style ${className()}`}
+            className={`mb-2 cursor-pointer avatar-style ${className()}`}
             alt={avatarName}
             src={`./assets/avatar/${avatarName}.png`}
             sx={{ width: width, height: width }}
