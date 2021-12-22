@@ -114,11 +114,14 @@ return (
       ref={group}
       {...props}
       dispose={null}
+    >
+      <group
+      scale={1.5}
+      rotation={[Math.PI / 2, 0, 0]}
       onClick={(e) => {e.stopPropagation(); randomAnimation()}}
       onPointerEnter={() => setPointer(true)}
       onPointerLeave={() => setPointer(false)} 
-    >
-      <group scale={1.5} rotation={[Math.PI / 2, 0, 0]}>
+      >
         <group rotation={[-Math.PI, 0, 0]}>
           <primitive object={nodes._rootJoint} />
           <skinnedMesh
