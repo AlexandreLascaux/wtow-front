@@ -1,56 +1,42 @@
-import React, { useEffect, useState, ReactElement } from 'react';
-import Login from '../auth/login/login'
-import { Button, TextField } from '@mui/material';
-import Register from '../auth/register/register';
-import Counter from '../examples/counter';
+import React, { useState, ReactElement } from 'react';
+import { TextField } from '@mui/material';
 import Scene from '../threeJs';
+import "./homeStyle.css";
+import { avatarNames } from '../threeJs/reducers/userReducer';
+import CustomAvatar from '../ avatar/customAvatar';
 
 function Home(): ReactElement{
-  const [openScene, setOpenScene] = useState<boolean>(true)
-  const [counter, setCounter] = useState<number>(0);
-  const [text, setText] = useState<string>("");
-  const [win, setWin] = useState<boolean>(false)
-  const [user, setUser] = useState<string | null>(null);
-  
-    useEffect(()=>{
-      if(user){
-        setOpenScene(true)
-      }
-    }, [user])
-
-  function handleSubmit(){
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'React Hooks POST Request Example' })
-  };
-  fetch('https://reqres.in/api/posts', requestOptions)
-      .then(response => response.json())
-      .then(data => setUser(data.id));
-  }
-
-  function handleClose(){
-    setWin(false);
-  }
-
+  const [openScene, setOpenScene] = useState<boolean>(false)
+  const [userName, setUserName] = useState<string>("");
+  const listAvatars: avatarNames[] = ["toufan", "feline", "chafrou", "crocmou", "noel", "rusard"];
 
   return (
     <>
     {
       openScene
       ?
-      <Scene user={user} />
+      <Scene />
       :
-      <>
-      <p>Home Page de {user}</p>
-      
-      <Button variant="contained" onClick={handleSubmit}>Request user</Button>
-      <TextField label="Outlined" variant="outlined" color="success" onChange={(event) => setText(event.target.value)}/>
-      <Counter text={text} counter={counter}/>
-     
-   
-      <div style={{cursor: "pointer"}} onClick={() => setOpenScene(true)}> OPEN SCENE</div>
-      </>
+      <div className="home-grid-container">
+        <div className="home-grid-name-label">
+          <h2>Quel est ton prénom ?</h2>
+        </div>
+        <div className="home-grid-name-input">
+          <TextField label="Outlined" variant="outlined" color="success" value={userName} onChange={(event) => setUserName(event.target.value)}/>
+        </div>
+        <div className="home-grid-avatar-label">
+          <h2>Choisis un personnage</h2>
+        </div>
+        <div className="home-grid-avatar-list d-flex">
+            {
+              listAvatars.map((avatar) => 
+                <div className="home-avatar-list d-flex justify-content-center">
+                  <CustomAvatar avatarName={avatar} width={130} />
+                </div>
+              )
+            }
+        </div>
+      </div>
     }
     
     </>

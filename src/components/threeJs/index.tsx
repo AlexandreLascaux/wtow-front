@@ -9,10 +9,6 @@ import { Html, OrbitControls } from "@react-three/drei";
 import Snow from "./meteo/snow";
 import { AppContext } from "./reducers/context";
 
-interface SceneInterface {
-    user: string | null;
-}
-
 interface cameraOptionsInferface{
     position: number[];
     rotation: number[];
@@ -20,7 +16,7 @@ interface cameraOptionsInferface{
   }
 
 
-export default function Scene({user}: SceneInterface){
+export default function Scene(){
     const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
     const initialSceneRotation = new THREE.Euler( 0, 0, 0, 'XYZ' );
     const initialMeteoPosition = new THREE.Vector3( 10., -2., -10.8 );
@@ -48,7 +44,7 @@ export default function Scene({user}: SceneInterface){
           if(deltaY >= 0 && scroll > 1) setScroll(1);
           if(deltaY >= 0 && scroll < 1) setScroll(scroll+0.05);
           if(deltaY < 0 && scroll > 0) setScroll(scroll-0.05);
-          if(deltaY < 0 && scroll <= 0) setScroll(0);
+          if(deltaY < 0 && scroll < 0) setScroll(0);
       }
 
     return (
@@ -62,18 +58,20 @@ export default function Scene({user}: SceneInterface){
         }
             <Html 
               transform
+              className="user-select-none"
               style={{color: "black", fontSize:"0.070em"}}
               position={[initialScenePosition.x-3.3975, initialScenePosition.y + 2.50, initialScenePosition.z + 5.6]}
             >
                 <p
-                className="cursor-pointer"
-                onClick={() => dispatch({type: 'setRain', value: !state.meteo.rainProperties.rain})}>
+                  className="cursor-pointer"
+                  onClick={() => dispatch({type: 'setRain', value: !state.meteo.rainProperties.rain})}>
                     <b>Rain</b>
                 </p>
             </Html>
 
             <Html 
               transform
+              className="user-select-none"
               style={{color: "black", fontSize:"0.05em"}}
               position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.975, initialScenePosition.z + 5.6]}
             >

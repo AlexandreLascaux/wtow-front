@@ -20,7 +20,7 @@ export type ClotheAction =
 | { type: 'setTshirt', value: string }
  | { type: 'setHat', value: string }
  | { type: 'setPant', value: string }
- | { type: 'reset', value: clotheInterface};
+ | { type: 'resetClothe', value: clotheInterface};
 
  function initClothe(initialState: clotheInterface) {
     return initialState;
@@ -34,7 +34,7 @@ export default function clotheReducer(state: clotheInterface, action: ClotheActi
       return {...state, hat: {...state.hat, type: action.value} };
       case 'setPant':
         return {...state, pant: {...state.pant, type: action.value} };
-      case 'reset':
+      case 'resetClothe':
         return initClothe(action.value);
     default:
       return state;
