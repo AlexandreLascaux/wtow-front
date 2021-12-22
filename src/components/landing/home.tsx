@@ -24,6 +24,7 @@ function Home(): ReactElement{
 
   function handleOnClick(avatar: avatarNames){
     dispatch({type: 'setAvatar', value: avatar});
+    setOpenScene(true);
   }
 
   return (
@@ -31,7 +32,9 @@ function Home(): ReactElement{
     {
       openScene
       ?
-      <Scene />
+      <div style={{height: "100vh", width: "100vw"}}>
+        <Scene />
+      </div>
       :
       <div className="home-grid-container">
         <div className="home-grid-name-label">
@@ -50,7 +53,7 @@ function Home(): ReactElement{
                   <CustomAvatar
                     onClick={() => handleOnClick(avatar)}
                     avatarName={avatar}
-                    width={130}
+                    size={130}
                     active={isActive(avatar)}
                     disabled={isDisabled(avatar)}
                     />
