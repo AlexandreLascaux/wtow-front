@@ -4,12 +4,17 @@ import Scene from '../threeJs';
 import "./homeStyle.css";
 import { avatarNames } from '../threeJs/reducers/userReducer';
 import CustomAvatar from '../ avatar/customAvatar';
+import { AppContext } from '../threeJs/reducers/context';
 
 function Home(): ReactElement{
   const [openScene, setOpenScene] = useState<boolean>(false)
   const [userName, setUserName] = useState<string>("");
   const listAvatars: avatarNames[] = ["toufan", "feline", "chafrou", "crocmou", "noel", "rusard"];
+  const { state, dispatch } = React.useContext(AppContext);
 
+  function isActive(avatar: string){
+    return avatar === state.user.avatar;
+  }
   return (
     <>
     {
@@ -19,10 +24,10 @@ function Home(): ReactElement{
       :
       <div className="home-grid-container">
         <div className="home-grid-name-label">
-          <h2>Quel est ton prénom ?</h2>
+          <h2 className='user-select-none'>Quel est ton prénom ?</h2>
         </div>
         <div className="home-grid-name-input">
-          <TextField label="Outlined" variant="outlined" color="success" value={userName} onChange={(event) => setUserName(event.target.value)}/>
+          <input className="custom-input" type="text" value={userName} onChange={(event) => setUserName(event.target.value)}/>
         </div>
         <div className="home-grid-avatar-label">
           <h2>Choisis un personnage</h2>
@@ -31,14 +36,13 @@ function Home(): ReactElement{
             {
               listAvatars.map((avatar) => 
                 <div className="home-avatar-list d-flex justify-content-center">
-                  <CustomAvatar avatarName={avatar} width={130} />
+                  <CustomAvatar avatarName={avatar} width={130} active={isActive(avatar)} />
                 </div>
               )
             }
         </div>
       </div>
     }
-    
     </>
     );
   }

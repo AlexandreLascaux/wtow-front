@@ -3,6 +3,14 @@
 * {
   margin: 0;
   padding: 0;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
 }
 
 body,
@@ -123,6 +131,28 @@ button {
   text-decoration: none;
 }
 
-.user-select-none {
-  user-select: "none";
+
+/* 
+  INPUT
+*/
+
+.custom-input {
+  background: #9B88C8;
+  border: 6px solid #7469CF;
+  box-sizing: border-box;
+  border-radius: 132px;
+  width: 100%;
+  height: 130px;
+  text-align: center;
+  font-size: 4.5rem;
+  color: #434343;
 }
+
+.custom-input:active, .custom-input:focus-visible {
+  border: 6px solid #7469CF;
+}
+
+:focus-visible {
+  outline: none;
+}
+

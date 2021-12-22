@@ -3,3 +3,19 @@
     flex-direction: column;
     align-items: center;
 }
+
+.avatar-style{
+    border: 4px solid #7469CF;
+}
+
+.avatar-style:hover{
+    box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.75);
+}
+
+.is-active{
+    box-shadow: 0 0 1.25rem rgba(250, 241, 121, 75%);
+}
+
+.is-disabled{
+    
+}
