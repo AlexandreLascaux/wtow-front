@@ -1,8 +1,8 @@
-import React, { useState } from "react"
-import logo from './logo.svg';
+import React from "react"
 import './App.css';
 import useWindowDimensions from './components/setup/useWindowDimensions';
 import Home from './components/landing/home';
+import { AppProvider } from "./components/threeJs/reducers/context";
 
 function App() {
   const { height, width } = useWindowDimensions();
@@ -11,11 +11,13 @@ function App() {
   const realWidth = width > window.screen.availWidth ? window.screen.availWidth : width;
 
   return (
+    <AppProvider>
     <div className="App">
       <header className="App-header" style={{width: `${realWidth}px`, height: realHeight}}>
         <Home/>
       </header>
     </div>
+    </AppProvider>
   );
 }
 

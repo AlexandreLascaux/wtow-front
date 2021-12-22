@@ -5,6 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: url("./components/cursor/white-cartoon-hand-cursor.png"), auto;
+}
+
+.cursor-pointer {
+  cursor: url("./components/cursor/white-cartoon-hand-pointer.png"), pointer !important;
 }
 
 code {

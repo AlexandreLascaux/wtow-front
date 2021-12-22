@@ -1,0 +1,51 @@
+name: Build and deploy React Application
+
+env: 
+  CI: false
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev ]
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.22.0
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.22.0
+      - name: npm build
+        run: |
+          npm install -f
+          npm run build
+      - name: deploy to OVH VPS prod
+        uses: garygrossgarten/github-action-scp@master
+        if: github.ref == 'refs/heads/master'
+        with:
+          host: ${{secrets.SSH_HOST}}
+          privateKey: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+          
+          local: 'build'
+          remote: '/var/www/html/wtow.xyz/'
+          recursive: true
+          atomicPut: true
+          dotfiles: true
+      - name: deploy to OVH VPS dev
+        uses: garygrossgarten/github-action-scp@master
+        if: github.ref == 'refs/heads/dev'
+        with:
+          host: ${{secrets.SSH_HOST}}
+          privateKey: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+          
+          local: 'build'
+          remote: '/var/www/html/dev.wtow.xyz/'
+          recursive: true
+          atomicPut: true
+          dotfiles: true
