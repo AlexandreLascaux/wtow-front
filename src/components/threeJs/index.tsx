@@ -62,7 +62,7 @@ interface cameraOptionsInferface{
 
     return (
         
-            <div ref={scrollArea} style={{height: "100%", width: "100%", position: "relative"}} onWheel={setRotationOnWheel}>
+            <div ref={scrollArea} style={{height: "100vh", width: "100vw", position: "relative"}} onWheel={setRotationOnWheel}>
       
                 <Canvas>
                 <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />

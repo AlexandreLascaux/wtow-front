@@ -3,7 +3,7 @@ export interface userInterface {
     avatar: avatarNames;
 }
 
-export type avatarNames = "toufan" | "feline" | "chafrou" | "crocmou" | "noel" | "rusard"
+export type avatarNames = "toufan" | "lilia" | "chafrou" | "crocmou" | "noel" | "rusard"
 
 export type UserAction =
 | { type: 'setName', value: string }
