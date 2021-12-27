@@ -106,7 +106,7 @@ export default function Lilia(props: JSX.IntrinsicElements['group']) {
       dispose={null}
     >
       <group
-      scale={1.5}
+      scale={1.25}
       rotation={[Math.PI / 2, 0, 0]}
       onClick={(e) => {e.stopPropagation(); randomAnimation()}}
       onPointerEnter={() => setPointer(true)}
