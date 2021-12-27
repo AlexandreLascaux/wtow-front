@@ -122,7 +122,7 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
     onPointerEnter={() => setPointer(true)}
     onPointerLeave={() => setPointer(false)} 
     >
-      <group rotation={[-Math.PI / 2, 0, 0]}>
+      <group scale={1.10} rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[-3.13, 0, 0]}>
           <group rotation={[-Math.PI, 0, 0]}>
             <primitive object={nodes._rootJoint} />

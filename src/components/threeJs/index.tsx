@@ -19,7 +19,7 @@ interface cameraOptionsInferface{
     const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
     const initialSceneRotation = new THREE.Euler( 0, 0, 0, 'XYZ' );
     const initialMeteoPosition = new THREE.Vector3( 10., -2., -10.8 );
-    const initialElephantRotation = new THREE.Euler( -0.03, 0.6, 0.0, 'XYZ' );
+    const initialModelRotation = new THREE.Euler( -0.03, 0.4, 0.0, 'XYZ' );
     const scrollArea = useRef(null)
     const [scroll, setScroll] = useState<number>(0.5);
     const { state, dispatch } = React.useContext(AppContext);
@@ -87,9 +87,9 @@ interface cameraOptionsInferface{
                             position={initialMeteoPosition}
                         />
                     {CurrentAvatar && <CurrentAvatar
-                        position={[initialScenePosition.x-2, initialScenePosition.y + 0.55, initialScenePosition.z + 5.6]}
+                        position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
                         scale={0.0075}
-                        rotation={initialElephantRotation}
+                        rotation={initialModelRotation}
                         />}       
                       <Suspense fallback={null}>
                         <Rain
