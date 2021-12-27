@@ -9,17 +9,12 @@ import { AppContext } from '../threeJs/reducers/context';
 function Home(): ReactElement{
   const [openScene, setOpenScene] = useState<boolean>(false)
   const [userName, setUserName] = useState<string>("");
-  const listAvatars: avatarNames[] = ["toufan", "feline", "chafrou", "crocmou", "noel", "rusard"];
-  const availableAvatars: avatarNames[] = ["toufan", "chafrou"];
+  const listAvatars: avatarNames[] = ["toufan", "lilia", "chafrou", "crocmou", "noel", "rusard"];
 
   const { state, dispatch } = React.useContext(AppContext);
 
   function isActive(avatar: avatarNames){
     return avatar === state.user.avatar;
-  }
-
-  function isDisabled(avatar: avatarNames){
-    return !availableAvatars.includes(avatar);
   }
 
   function handleOnClick(avatar: avatarNames){
@@ -33,7 +28,7 @@ function Home(): ReactElement{
     {
       openScene
       ?
-      <div style={{height: "100vh", width: "100vw"}}>
+      <div style={{height: "100%", width: "100%"}}>
         <Scene />
       </div>
       :
@@ -56,7 +51,6 @@ function Home(): ReactElement{
                     avatarName={avatar}
                     size={130}
                     active={isActive(avatar)}
-                    disabled={isDisabled(avatar)}
                     />
                 </div>
               )
