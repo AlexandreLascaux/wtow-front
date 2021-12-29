@@ -1,3 +1,5 @@
+import { setCurrentUser } from "../localStorage/user";
+
 export interface userInterface {
     name: string;
     avatar: avatarNames;
@@ -17,9 +19,13 @@ export type UserAction =
 export default function userReducer(state: userInterface, action: UserAction): userInterface {
   switch (action.type) {
     case 'setName':
-        return {...state, name: action.value};
+      const newName = {...state, name: action.value}
+      setCurrentUser(newName)
+      return newName;
     case 'setAvatar':
-      return {...state, avatar: action.value };
+      const newAvatar = {...state, avatar: action.value}
+      setCurrentUser(newAvatar)
+      return newAvatar;
     case 'resetUser':
         return initUser(action.value);
     default:
