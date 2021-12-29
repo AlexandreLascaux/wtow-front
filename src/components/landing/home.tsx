@@ -6,11 +6,11 @@ import CustomAvatar from '../ avatar/customAvatar';
 import { AppContext } from '../reducers/context';
 
 function Home(): ReactElement{
+  const { state, dispatch } = React.useContext(AppContext);
   const [openScene, setOpenScene] = useState<boolean>(false)
-  const [userName, setUserName] = useState<string>("");
+  const [userName, setUserName] = useState<string>(state.user.name);
   const listAvatars: avatarNames[] = ["toufan", "lilia", "chafrou", "crocmou", "noel", "rusard"];
 
-  const { state, dispatch } = React.useContext(AppContext);
 
   function isActive(avatar: avatarNames){
     return avatar === state.user.avatar;
