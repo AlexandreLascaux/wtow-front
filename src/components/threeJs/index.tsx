@@ -93,7 +93,7 @@ interface cameraOptionsInferface{
                 <Html className="user-select-none flex-direction-column d-flex bg-default justify-content-center align-items-center" fullscreen style={{height: `${windowDimensions.height}px`}}>
                   <div >
                     <h3>Tourne ton écran :)</h3>
-                      <img src="./assets/screen/rotate.png" alt="rotate" width={windowDimensions.width/2}/>
+                      <img style={{transform: "rotateY(180deg)" }}src="./assets/screen/rotate.png" alt="rotate" width={windowDimensions.width/2}/>
                   </div>
                 </Html>
         }
