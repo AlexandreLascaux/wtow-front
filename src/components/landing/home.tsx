@@ -43,8 +43,8 @@ function Home(): ReactElement{
         </div>
         <div className="home-grid-avatar-list d-flex">
             {
-              listAvatars.map((avatar) => 
-                <div className="home-avatar-list d-flex justify-content-center">
+              listAvatars.map((avatar, index) => 
+                <div key={index} className="home-avatar-list d-flex justify-content-center">
                   <CustomAvatar
                     onClick={() => handleOnClick(avatar)}
                     avatarName={avatar}
