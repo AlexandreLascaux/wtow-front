@@ -1,7 +1,7 @@
 import React from "react"
 import './App.css';
 import Home from './components/landing/home';
-import { AppProvider } from "./components/threeJs/reducers/context";
+import { AppProvider } from "./components/reducers/context";
 
 function App() {
 

@@ -6,7 +6,7 @@ import Room from "./scene/Scene";
 import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov } from "./camera/CustomCamera";
 import { Html, OrbitControls } from "@react-three/drei";
 import Snow from "./meteo/snow";
-import { AppContext } from "./reducers/context";
+import { AppContext } from "../reducers/context";
 import { CircularProgress } from "@mui/material";
 
 interface cameraOptionsInferface{

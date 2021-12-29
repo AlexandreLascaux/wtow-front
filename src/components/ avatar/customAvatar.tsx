@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar } from "@mui/material";
-import { avatarNames } from "../threeJs/reducers/userReducer";
+import { avatarNames } from "../reducers/userReducer";
 import "./customAvatarStyle.css";
 
 interface AvatarInterface {

@@ -1,10 +1,9 @@
 import React, { useState, ReactElement } from 'react';
-import { TextField } from '@mui/material';
 import Scene from '../threeJs';
 import "./homeStyle.css";
-import { avatarNames } from '../threeJs/reducers/userReducer';
+import { avatarNames } from '../reducers/userReducer';
 import CustomAvatar from '../ avatar/customAvatar';
-import { AppContext } from '../threeJs/reducers/context';
+import { AppContext } from '../reducers/context';
 
 function Home(): ReactElement{
   const [openScene, setOpenScene] = useState<boolean>(false)

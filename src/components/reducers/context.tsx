@@ -1,8 +1,9 @@
 import React, { createContext, useReducer, Dispatch } from "react";
+import { getCurrentUser } from "../localStorage/user";
 import clotheReducer, { ClotheAction, clotheInterface } from "./clotheReducer";
 import meteoReducer, { MeteoAction, meteoInterface } from "./meteoReducer";
 import userReducer, { UserAction, userInterface } from "./userReducer";
-import { initialMeteo, initialClothe, initialUser } from "./utils";
+import { initialMeteo, initialClothe } from "./utils";
 
 export interface stateInterface {
     meteo: meteoInterface;
@@ -13,7 +14,7 @@ export interface stateInterface {
 const initialState: stateInterface = {
     meteo: initialMeteo,
     clothe: initialClothe,
-    user: initialUser,
+    user: getCurrentUser(),
   }
 
 const AppContext = createContext<{
