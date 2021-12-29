@@ -70,6 +70,12 @@ button {
   }
 }
 
+/*
+ COLOR
+*/
+.bg-default {
+  background-color: #AAA7CB;
+}
 
 
 /*
@@ -78,6 +84,10 @@ button {
 
 .d-flex {
   display: flex;
+}
+
+.flex-direction-column {
+  flex-direction: column;
 }
 
 /*
@@ -125,6 +135,10 @@ button {
 
 .justify-content-center {
   justify-content: center;
+}
+
+.align-items-center {
+  align-items: center;
 }
 
 /* 

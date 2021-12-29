@@ -8,6 +8,7 @@ import { Html, OrbitControls } from "@react-three/drei";
 import Snow from "./meteo/snow";
 import { AppContext } from "../reducers/context";
 import { CircularProgress } from "@mui/material";
+import useWindowDimensions from "../setup/useWindowDimensions";
 
 interface cameraOptionsInferface{
     position: number[];
@@ -24,17 +25,27 @@ interface cameraOptionsInferface{
     const [scroll, setScroll] = useState<number>(0.5);
     const { state, dispatch } = React.useContext(AppContext);
     const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps) => JSX.Element>>();
-
+    const [landscape, setLandscape] = useState<boolean>(true);
     const [cameraOptions, setCameraOptions] = useState<cameraOptionsInferface>({
         position: defaultCameraPosition,
         rotation: defaultCameraRotation,
         fov: defaultFov,
       });
+      const windowDimensions = useWindowDimensions();
 
       useEffect(() => {
           const newComponent = React.lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
           setCurrentAvatar(newComponent as React.LazyExoticComponent<() => JSX.Element>);
       }, [state.user.avatar]);
+
+      useEffect(()=>{
+        if(windowDimensions.height > windowDimensions.width){
+          setLandscape(false);
+          setScroll(0.5)
+        } else {
+          setLandscape(true);
+        }
+      }, [windowDimensions])
 
       useEffect(() => {
         setCameraOptions((cameraOptions) => {
@@ -45,35 +56,48 @@ interface cameraOptionsInferface{
 
       function setRotationOnWheel(e: React.WheelEvent<HTMLDivElement>){
           const {deltaY} = e
-          if(deltaY >= 0 && scroll > 1) setScroll(1);
-          if(deltaY >= 0 && scroll < 1) setScroll(scroll+0.05);
-          if(deltaY < 0 && scroll > 0) setScroll(scroll-0.05);
-          if(deltaY < 0 && scroll < 0) setScroll(0);
+          if(landscape){
+            if(deltaY >= 0 && scroll > 1) setScroll(1);
+            if(deltaY >= 0 && scroll < 1) setScroll(scroll+0.05);
+            if(deltaY < 0 && scroll > 0) setScroll(scroll-0.05);
+            if(deltaY < 0 && scroll < 0) setScroll(0);
+          }
       }
 
       function WaitingSceneToLoad(){
         return  <Html 
-        fullscreen
-        center
-        className="user-select-none"
-      ><CircularProgress size={46}/>
+        className="user-select-none flex-direction-column d-flex bg-default justify-content-center align-items-center" 
+        fullscreen 
+        style={{height: `${windowDimensions.height}px`}}
+        >
+        <h3 className="pb-2">Chargement de la scène</h3>
+        <CircularProgress color="inherit" size={46}/>
       </Html>
       }
 
     return (
         
-            <div ref={scrollArea} style={{height: "100vh", width: "100vw", position: "relative"}} onWheel={setRotationOnWheel}>
-      
+            <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: "100%", position: "relative"}} onWheel={setRotationOnWheel}>
+
                 <Canvas>
                 <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
+
         {
                    // <OrbitControls />
         }
                     <ambientLight intensity={0.75} />
                     <pointLight color="white" intensity={0.75} position={[initialScenePosition.x, initialScenePosition.y + 3, initialScenePosition.z + 10]} />
         
-
-                    <Suspense fallback={WaitingSceneToLoad}>
+        {
+          !landscape &&
+                <Html className="user-select-none flex-direction-column d-flex bg-default justify-content-center align-items-center" fullscreen style={{height: `${windowDimensions.height}px`}}>
+                  <div >
+                    <h3>Tourne ton écran :)</h3>
+                      <img src="./assets/screen/rotate.png" alt="rotate" width={windowDimensions.width/2}/>
+                  </div>
+                </Html>
+        }
+                    <Suspense fallback={<WaitingSceneToLoad />}>
                         <Room position={initialScenePosition} rotation={initialSceneRotation} />
         
                         <Rain
