@@ -1,17 +1,16 @@
-import React from "react"
+import React from 'react';
 import './App.css';
 import Home from './components/landing/home';
-import { AppProvider } from "./components/reducers/context";
+import { AppProvider } from './components/reducers/context';
 
 function App() {
-
   return (
     <AppProvider>
-    <div className="App">
-      <header className="App-header">
-        <Home/>
-      </header>
-    </div>
+      <div className="App">
+        <header className="App-header">
+          <Home />
+        </header>
+      </div>
     </AppProvider>
   );
 }

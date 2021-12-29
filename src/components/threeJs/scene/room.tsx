@@ -6,12 +6,12 @@ source: https://sketchfab.com/3d-models/office-work-desk-lowpoly-bureau-game-ass
 title: OFFICE WORK DESK LOWPOLY BUREAU GAME ASSETS
 */
 
-import * as THREE from 'three'
-import React, { useRef, useState, useEffect } from 'react'
-import { useFrame, useLoader } from '@react-three/fiber'
-import { useGLTF, useAnimations } from '@react-three/drei'
+import * as THREE from 'three';
+import React, { useRef, useState, useEffect } from 'react';
+import { useFrame, useLoader } from '@react-three/fiber';
+import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -113,11 +113,11 @@ type ActionName = 'Animation'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
 export default function Room(props: JSX.IntrinsicElements['group']) {
-  const group = useRef<THREE.Group>()
-  const gltf = useLoader(GLTFLoader, "/scene/scene.glb");
-  const { nodes, materials, animations } = gltf as GLTFResult
-  const { actions, names } = useAnimations(animations, group)
-  const [mixer] = useState(() => new THREE.AnimationMixer(null as any))
+  const group = useRef<THREE.Group>();
+  const gltf = useLoader(GLTFLoader, '/scene/scene.glb');
+  const { nodes, materials, animations } = gltf as GLTFResult;
+  const { actions, names } = useAnimations(animations, group);
+  const [mixer] = useState(() => new THREE.AnimationMixer(null as any));
 
   const factor = 3;
   const speed = 3;
@@ -127,16 +127,16 @@ export default function Room(props: JSX.IntrinsicElements['group']) {
     const y = Math.sin((delta * factor) / 2) * Math.cos((delta * factor) / 2) * 1.5;
 
     mixer.update(delta * speed);
-  })
+  });
   
   useEffect(() => {
-   /* actions.current = {
+    /* actions.current = {
       KeyAction: mixer.clipAction(animations[0], group.current).play(),
     }*/
     // 
-    if(actions.Animation) actions.Animation.stop()
+    if(actions.Animation) actions.Animation.stop();
     //return () => animations.forEach((clip) => mixer.uncacheClip(clip))
-  }, [names, animations, mixer, actions.animation, actions.Animation])
+  }, [names, animations, mixer, actions.animation, actions.Animation]);
 
 
   return (
@@ -396,7 +396,7 @@ export default function Room(props: JSX.IntrinsicElements['group']) {
         </group>
       </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/scene/scene.glb')
+useGLTF.preload('/scene/scene.glb');
