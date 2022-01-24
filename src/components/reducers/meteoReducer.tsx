@@ -1,13 +1,18 @@
 export interface meteoInterface {
     //storm: boolean;
     //sun: boolean;
-    //cloud: boolean;
+    cloudProperties: cloudProperties;
     rainProperties: rainProperties;
     snowProperties: snowProperties;
-    //cloudCover: number;
-    //windSpeed: number;
     //mist: boolean;
     //mistOpacity: number;
+}
+
+
+interface cloudProperties {
+  cloud: boolean;
+  cloudCover: number;
+  windSpeed: number;
 }
 
 interface rainProperties {
@@ -25,6 +30,9 @@ export type MeteoAction =
  | { type: 'setRainPrecipitation', value: number }
  | { type: 'setSnow', value: boolean }
  | { type: 'setSnowPrecipitation', value: number }
+ | { type: 'setCloud', value: boolean }
+ | { type: 'setCloudCover', value: number }
+ | { type: 'setWindSpeed', value: number }
  | { type: 'resetMeteo', value: meteoInterface};
 
  function initMeteo(initialState: meteoInterface) {
@@ -37,10 +45,16 @@ export default function meteoReducer(state: meteoInterface, action: MeteoAction)
         return {...state, rainProperties: {...state.rainProperties, rain: action.value} };
     case 'setRainPrecipitation':
       return {...state, rainProperties: {...state.rainProperties, rainPrecipitation: action.value} };
-      case 'setSnow':
+    case 'setSnow':
         return {...state, snowProperties: {...state.snowProperties, snow: action.value} };
     case 'setSnowPrecipitation':
       return {...state, snowProperties: {...state.snowProperties, snowPrecipitation: action.value} };
+    case 'setCloud':
+        return {...state, cloudProperties: {...state.cloudProperties, cloud: action.value} };
+    case 'setCloudCover':
+      return {...state, cloudProperties: {...state.cloudProperties, cloudCover: action.value} };
+    case 'setWindSpeed':
+      return {...state, cloudProperties: {...state.cloudProperties, windSpeed: action.value} };
       case 'resetMeteo':
         return initMeteo(action.value);
     default:

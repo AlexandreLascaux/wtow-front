@@ -8,7 +8,12 @@ export const initialMeteo = {
   snowProperties: {
       snow: false,
       snowPrecipitation: 3000,
-  }
+  },
+  cloudProperties: {
+    cloud: true,
+    cloudCover: 4,
+    windSpeed: 1,
+}
   }
   
   export const initialClothe = {

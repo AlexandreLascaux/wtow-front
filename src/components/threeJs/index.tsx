@@ -9,6 +9,7 @@ import Snow from "./meteo/snow";
 import { AppContext } from "../reducers/context";
 import { CircularProgress } from "@mui/material";
 import useWindowDimensions from "../setup/useWindowDimensions";
+import Clouds from "./meteo/clouds";
 
 interface cameraOptionsInferface{
     position: number[];
@@ -83,7 +84,7 @@ interface cameraOptionsInferface{
                 <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
 
         {
-                   // <OrbitControls />
+                  //  <OrbitControls />
         }
                     <ambientLight intensity={0.75} />
                     <pointLight color="white" intensity={0.75} position={[initialScenePosition.x, initialScenePosition.y + 3, initialScenePosition.z + 10]} />
@@ -99,17 +100,7 @@ interface cameraOptionsInferface{
         }
                     <Suspense fallback={<WaitingSceneToLoad />}>
                         <Room position={initialScenePosition} rotation={initialSceneRotation} />
-        
-                        <Rain
-                            isVisible={state.meteo.rainProperties.rain}
-                            rainCount={1250}
-                            position={initialMeteoPosition}
-                        />
-                        <Snow
-                            isVisible={state.meteo.snowProperties.snow}
-                            snowCount={1250}
-                            position={initialMeteoPosition}
-                        />
+
                     {CurrentAvatar && <CurrentAvatar
                         position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
                         scale={0.0075}
@@ -126,6 +117,12 @@ interface cameraOptionsInferface{
                             snowCount={1250}
                             position={initialMeteoPosition}
                         />
+                          <Clouds
+                            isVisible={state.meteo.cloudProperties.cloud}
+                            velocity={state.meteo.cloudProperties.windSpeed}
+                            number={state.meteo.cloudProperties.cloudCover}
+                            position={initialMeteoPosition}
+                         />
                         <Html 
                           transform
                           className="user-select-none"
