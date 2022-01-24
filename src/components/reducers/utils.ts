@@ -6,16 +6,16 @@ export const initialMeteo = {
     rainPrecipitation: 1500
   },
   snowProperties: {
-      snow: false,
-      snowPrecipitation: 3000,
+    snow: false,
+    snowPrecipitation: 3000,
   },
   cloudProperties: {
     cloud: true,
     cloudCover: 4,
     windSpeed: 1,
-}
   }
 };
+
   
 export const initialClothe = {
   hat: {
