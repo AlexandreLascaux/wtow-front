@@ -22,21 +22,21 @@ export type ClotheAction =
  | { type: 'setPant', value: string }
  | { type: 'resetClothe', value: clotheInterface};
 
- function initClothe(initialState: clotheInterface) {
-    return initialState;
-  }
+function initClothe(initialState: clotheInterface) {
+  return initialState;
+}
 
 export default function clotheReducer(state: clotheInterface, action: ClotheAction): clotheInterface {
   switch (action.type) {
-    case 'setTshirt':
-        return {...state, tshirt: {...state.tshirt, type: action.value} };
-    case 'setHat':
-      return {...state, hat: {...state.hat, type: action.value} };
-      case 'setPant':
-        return {...state, pant: {...state.pant, type: action.value} };
-      case 'resetClothe':
-        return initClothe(action.value);
-    default:
-      return state;
+  case 'setTshirt':
+    return {...state, tshirt: {...state.tshirt, type: action.value} };
+  case 'setHat':
+    return {...state, hat: {...state.hat, type: action.value} };
+  case 'setPant':
+    return {...state, pant: {...state.pant, type: action.value} };
+  case 'resetClothe':
+    return initClothe(action.value);
+  default:
+    return state;
   }
 }

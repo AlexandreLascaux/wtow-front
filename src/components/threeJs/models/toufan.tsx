@@ -6,12 +6,12 @@ source: https://sketchfab.com/models/52401c7067f54ff3813da84df073b5f6
 title: Jungle Animal: Cartoon Elephant
 */
 
-import * as THREE from 'three'
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
-import { useFrame, useLoader } from '@react-three/fiber'
-import { useGLTF, useAnimations } from '@react-three/drei'
+import * as THREE from 'three';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useFrame, useLoader } from '@react-three/fiber';
+import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshStandardMaterial } from 'three';
 import { time } from 'console';
 
@@ -51,76 +51,76 @@ type ActionName =
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
 export function getRandomColor(material: MeshStandardMaterial) {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   material.setValues({color});
 }
 
 export default function Toufan(props: JSX.IntrinsicElements['group']) {
-  const group = useRef<THREE.Group>()
-  const gltf = useLoader(GLTFLoader, "/mascotte/toufan.glb");
-  const { nodes, materials, animations } = gltf as GLTFResult
+  const group = useRef<THREE.Group>();
+  const gltf = useLoader(GLTFLoader, '/mascotte/toufan.glb');
+  const { nodes, materials, animations } = gltf as GLTFResult;
   const [pointer, setPointer] = useState<boolean>(false);
 
-  const { actions, names } = useAnimations(animations, group)
+  const { actions, names } = useAnimations(animations, group);
   
   function randomAnimation() {
     stopAnimations();
-    startAnimation(actions[names[Math.floor(Math.random()*names.length)]])
+    startAnimation(actions[names[Math.floor(Math.random()*names.length)]]);
   }
 
   function stopAnimations(){
     const allActions = Object.entries(actions).map(([key]) => key);
     allActions.forEach((e) => {
-      const action = actions[e]
-      if(action) action.stop()
+      const action = actions[e];
+      if(action) action.stop();
     });
   }
 
   function startAnimation(action: THREE.AnimationAction | null){
     if(action) {
-      action.timeScale = 0.8
+      action.timeScale = 0.8;
       action.play();
     }
   }
 
   useEffect(() => {
     animations.forEach((animation, animationIndex) => {
-      let firstKeyFrameSeconds = animation.tracks[0].times[0];
+      const firstKeyFrameSeconds = animation.tracks[0].times[0];
       animation.tracks.forEach((track, trackIndex) => {
         track.times.forEach((time, timesIndex) => {
-          animations[animationIndex].tracks[trackIndex].times[timesIndex] = time - firstKeyFrameSeconds
-        })
-      })
-      animation.resetDuration()
-    })
-  }, [animations])
+          animations[animationIndex].tracks[trackIndex].times[timesIndex] = time - firstKeyFrameSeconds;
+        });
+      });
+      animation.resetDuration();
+    });
+  }, [animations]);
 
   useEffect(() => {
-    if(actions["Idle.FBX_0"]) {
-      actions["Idle.FBX_0"].play()
+    if(actions['Idle.FBX_0']) {
+      actions['Idle.FBX_0'].play();
     } 
-  }, [actions])
+  }, [actions]);
 
   useEffect(()=>{
-    const element = document.querySelector("canvas");
+    const element = document.querySelector('canvas');
     if(element){
-      if(pointer)element.classList.add("cursor-pointer");
-      if(!pointer)element.classList.remove("cursor-pointer");
+      if(pointer)element.classList.add('cursor-pointer');
+      if(!pointer)element.classList.remove('cursor-pointer');
     }
-  }, [pointer])
+  }, [pointer]);
 
   return (
     <group
-    ref={group}
-    {...props}
-    dispose={null}
-    onClick={(e) => {e.stopPropagation(); randomAnimation()}}
-    onPointerEnter={() => setPointer(true)}
-    onPointerLeave={() => setPointer(false)} 
+      ref={group}
+      {...props}
+      dispose={null}
+      onClick={(e) => {e.stopPropagation(); randomAnimation();}}
+      onPointerEnter={() => setPointer(true)}
+      onPointerLeave={() => setPointer(false)} 
     >
       <group scale={1.10} rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[-3.13, 0, 0]}>
@@ -140,7 +140,7 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
         </group>
       </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/mascotte/toufan.glb')
+useGLTF.preload('/mascotte/toufan.glb');

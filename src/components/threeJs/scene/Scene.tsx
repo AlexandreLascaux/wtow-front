@@ -3,14 +3,14 @@ import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 function Room(props: any) {
-const gltf = useLoader(GLTFLoader, "/scene/scene.glb");
+  const gltf = useLoader(GLTFLoader, '/scene/scene.glb');
 
-return (
-   <mesh
-   {...props}
-   >
-   <primitive object={gltf.scene} />
-  </mesh>
-)
+  return (
+    <mesh
+      {...props}
+    >
+      <primitive object={gltf.scene} />
+    </mesh>
+  );
 }
 export default Room;

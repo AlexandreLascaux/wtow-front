@@ -6,11 +6,11 @@ source: https://sketchfab.com/3d-models/forest-animal-fox-abf5788c354f4d4b9ff5ea
 title: Forest Animal: Fox
 */
 
-import * as THREE from 'three'
-import React, { useEffect, useRef, useState } from 'react'
-import { useGLTF, useAnimations } from '@react-three/drei'
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { useLoader, dispose } from '@react-three/fiber'
+import * as THREE from 'three';
+import React, { useEffect, useRef, useState } from 'react';
+import { useGLTF, useAnimations } from '@react-three/drei';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { useLoader, dispose } from '@react-three/fiber';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -47,58 +47,58 @@ type ActionName =
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
 export default function Rusard(props: JSX.IntrinsicElements['group']) {
-  const group = useRef<THREE.Group>()
-  const gltf = useLoader(GLTFLoader, "/mascotte/rusard.glb");
-  const { nodes, materials, animations } = gltf as GLTFResult
+  const group = useRef<THREE.Group>();
+  const gltf = useLoader(GLTFLoader, '/mascotte/rusard.glb');
+  const { nodes, materials, animations } = gltf as GLTFResult;
   const [pointer, setPointer] = useState<boolean>(false);
 
-  const { actions, names } = useAnimations(animations, group)
+  const { actions, names } = useAnimations(animations, group);
   
   function randomAnimation() {
     stopAnimations();
-    startAnimation(actions[names[Math.floor(Math.random()*names.length)]])
+    startAnimation(actions[names[Math.floor(Math.random()*names.length)]]);
   }
 
   function stopAnimations(){
     const allActions = Object.entries(actions).map(([key]) => key);
     allActions.forEach((e) => {
-      const action = actions[e]
-      if(action) action.stop()
+      const action = actions[e];
+      if(action) action.stop();
     });
   }
 
   function startAnimation(action: THREE.AnimationAction | null){
     if(action) {
-      action.timeScale = 0.8
+      action.timeScale = 0.8;
       action.play();
     }
   }
 
   useEffect(() => {
     animations.forEach((animation, animationIndex) => {
-      let firstKeyFrameSeconds = animation.tracks[0].times[0];
+      const firstKeyFrameSeconds = animation.tracks[0].times[0];
       animation.tracks.forEach((track, trackIndex) => {
         track.times.forEach((time, timesIndex) => {
-          animations[animationIndex].tracks[trackIndex].times[timesIndex] = time - firstKeyFrameSeconds
-        })
-      })
-      animation.resetDuration()
-    })
-  }, [animations])
+          animations[animationIndex].tracks[trackIndex].times[timesIndex] = time - firstKeyFrameSeconds;
+        });
+      });
+      animation.resetDuration();
+    });
+  }, [animations]);
 
   useEffect(() => {
-    if(actions["Idle"]) {
-      actions["Idle"].play()
+    if(actions['Idle']) {
+      actions['Idle'].play();
     } 
-  }, [actions])
+  }, [actions]);
 
   useEffect(()=>{
-    const element = document.querySelector("canvas");
+    const element = document.querySelector('canvas');
     if(element){
-      if(pointer)element.classList.add("cursor-pointer");
-      if(!pointer)element.classList.remove("cursor-pointer");
+      if(pointer)element.classList.add('cursor-pointer');
+      if(!pointer)element.classList.remove('cursor-pointer');
     }
-  }, [pointer])
+  }, [pointer]);
 
   return (
     <group
@@ -107,23 +107,23 @@ export default function Rusard(props: JSX.IntrinsicElements['group']) {
       dispose={null}
     >
       <group
-      scale={1.5}
-      rotation={[Math.PI / 2, 0, 0]}
-      onClick={(e) => {e.stopPropagation(); randomAnimation()}}
-      onPointerEnter={() => setPointer(true)}
-      onPointerLeave={() => setPointer(false)} 
+        scale={1.5}
+        rotation={[Math.PI / 2, 0, 0]}
+        onClick={(e) => {e.stopPropagation(); randomAnimation();}}
+        onPointerEnter={() => setPointer(true)}
+        onPointerLeave={() => setPointer(false)} 
       >
         <group rotation={[-Math.PI, 0, 0]}>
-            <primitive object={nodes._rootJoint} />
-            <skinnedMesh
-              geometry={nodes.Fox_Mesh_Fox_0.geometry}
-              material={materials.material}
-              skeleton={nodes.Fox_Mesh_Fox_0.skeleton}
-            />
-          </group>
+          <primitive object={nodes._rootJoint} />
+          <skinnedMesh
+            geometry={nodes.Fox_Mesh_Fox_0.geometry}
+            material={materials.material}
+            skeleton={nodes.Fox_Mesh_Fox_0.skeleton}
+          />
         </group>
       </group>
-  )
+    </group>
+  );
 }
 
-useGLTF.preload('/rusard.glb')
+useGLTF.preload('/rusard.glb');

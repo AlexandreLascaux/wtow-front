@@ -1,6 +1,6 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from "three";
+import * as THREE from 'three';
 
 interface rainInterface{
     rainCount: number;
@@ -17,23 +17,23 @@ interface rainPointInterface{
 }
 
 const setInitialPositions = (rainCount: number, position: THREE.Vector3) => {
-    const initialPositions = [];
-    const initialVelocities = [];
-    const initialAccelerations = [];
-    for (let i = 0; i < rainCount; i++) {
-      initialPositions.push(position.x + Math.random() * 20);
-      initialPositions.push(position.y + Math.random() * 10);
-      initialPositions.push(position.z + Math.random() * 10);
-      initialVelocities.push(0);
-      initialVelocities.push(-1);
-      initialVelocities.push(0);
-      initialAccelerations.push(0);
-      initialAccelerations.push(3);
-      initialAccelerations.push(0);
-    }
+  const initialPositions = [];
+  const initialVelocities = [];
+  const initialAccelerations = [];
+  for (let i = 0; i < rainCount; i++) {
+    initialPositions.push(position.x + Math.random() * 20);
+    initialPositions.push(position.y + Math.random() * 10);
+    initialPositions.push(position.z + Math.random() * 10);
+    initialVelocities.push(0);
+    initialVelocities.push(-1);
+    initialVelocities.push(0);
+    initialAccelerations.push(0);
+    initialAccelerations.push(3);
+    initialAccelerations.push(0);
+  }
 
-    return [initialPositions, initialVelocities, initialAccelerations];
-  };
+  return [initialPositions, initialVelocities, initialAccelerations];
+};
 
 function RainPoints({geom, isVisible, positions, velocities, accelerations}: rainPointInterface){
 
@@ -55,79 +55,79 @@ function RainPoints({geom, isVisible, positions, velocities, accelerations}: rai
       gl_PointSize = 3.0;
   }`;
 
-const frag = `uniform float time;
+  const frag = `uniform float time;
   void main() {
       float z = 1.0 - gl_FragCoord.z;
       gl_FragColor = vec4(0., .5, 0.8, 1.0);
   }`;
 
 
- return ( 
- <points ref={geom} visible={isVisible}>
-  <bufferGeometry attach="geometry">
-    <bufferAttribute
-      attachObject={["attributes", "position"]}
-      count={positions.length / 3}
-      array={positions}
-      itemSize={3}
-    />
-    <bufferAttribute
-      attachObject={["attributes", "velocity"]}
-      count={velocities.length / 3}
-      array={velocities}
-      itemSize={3}
-    />
-    <bufferAttribute
-      attachObject={["attributes", "acceleration"]}
-      count={accelerations.length / 3}
-      array={accelerations}
-      itemSize={3}
-    />
-  </bufferGeometry>
-  <shaderMaterial
-    attach="material"
-    uniforms={uniforms}
-    vertexShader={vert}
-    fragmentShader={frag}
-    vertexColors
-  />
-</points>
-)
+  return ( 
+    <points ref={geom} visible={isVisible}>
+      <bufferGeometry attach="geometry">
+        <bufferAttribute
+          attachObject={['attributes', 'position']}
+          count={positions.length / 3}
+          array={positions}
+          itemSize={3}
+        />
+        <bufferAttribute
+          attachObject={['attributes', 'velocity']}
+          count={velocities.length / 3}
+          array={velocities}
+          itemSize={3}
+        />
+        <bufferAttribute
+          attachObject={['attributes', 'acceleration']}
+          count={accelerations.length / 3}
+          array={accelerations}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <shaderMaterial
+        attach="material"
+        uniforms={uniforms}
+        vertexShader={vert}
+        fragmentShader={frag}
+        vertexColors
+      />
+    </points>
+  );
 }
 
 const Rain = ({ rainCount, isVisible, position }: rainInterface) => {
   const geom: React.MutableRefObject<any> = useRef<THREE.Points>();
 
-    const [positions, velocities, accelerations] = useMemo(() => {
+  const [positions, velocities, accelerations] = useMemo(() => {
 
-      const [
-        initialPositions,
-        initialVelocities,
-        initialAccelerations
-      ] = setInitialPositions(rainCount, position);
-      const positions = new Float32Array(initialPositions);
-      const velocities = new Float32Array(initialVelocities);
-      const accelerations = new Float32Array(initialAccelerations);
-      return [positions, velocities, accelerations];
-    }, [position, rainCount]);
+    const [
+      initialPositions,
+      initialVelocities,
+      initialAccelerations
+    ] = setInitialPositions(rainCount, position);
+    const positions = new Float32Array(initialPositions);
+    const velocities = new Float32Array(initialVelocities);
+    const accelerations = new Float32Array(initialAccelerations);
+    return [positions, velocities, accelerations];
+  }, [position, rainCount]);
 
    
-    useFrame(({ clock }) => {
-      if (geom.current) {
-        geom.current.material.uniforms.time.value = clock.getElapsedTime();
-        geom.current.verticesNeedUpdate = true;
-      }
-    });
+  useFrame(({ clock }) => {
+    if (geom.current) {
+      geom.current.material.uniforms.time.value = clock.getElapsedTime();
+      geom.current.verticesNeedUpdate = true;
+    }
+  });
 
-    return (
-     <RainPoints
-     key={rainCount}
-     positions={positions}
-     velocities={velocities}
-     isVisible={isVisible}
-     accelerations={accelerations}
-     geom={geom}
-     />
-    );
-  };
-  export default Rain;
+  return (
+    <RainPoints
+      key={rainCount}
+      positions={positions}
+      velocities={velocities}
+      isVisible={isVisible}
+      accelerations={accelerations}
+      geom={geom}
+    />
+  );
+};
+export default Rain;
