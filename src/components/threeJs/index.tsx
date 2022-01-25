@@ -17,10 +17,11 @@ interface cameraOptionsInferface{
     fov: number;
   }
 
-export default function Scene(){
+export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
   const initialSceneRotation = new THREE.Euler( 0, 0, 0, 'XYZ' );
   const initialMeteoPosition = new THREE.Vector3( 10., -2., -10.8 );
+  const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 6., initialMeteoPosition.z + 4.8);
   const initialModelRotation = new THREE.Euler( -0.03, 0.4, 0.0, 'XYZ' );
   const scrollArea = useRef(null);
   const [scroll, setScroll] = useState<number>(0.5);
@@ -84,7 +85,7 @@ export default function Scene(){
         <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
 
         {
-          //  <OrbitControls />
+          <OrbitControls />
         }
         <ambientLight intensity={0.75} />
         <pointLight color="white" intensity={0.75} position={[initialScenePosition.x, initialScenePosition.y + 3, initialScenePosition.z + 10]} />
@@ -121,7 +122,7 @@ export default function Scene(){
               isVisible={state.meteo.cloudProperties.cloud}
               velocity={state.meteo.cloudProperties.windSpeed}
               number={state.meteo.cloudProperties.cloudCover}
-              position={[initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 6., initialMeteoPosition.z + 5.6] as unknown as THREE.Vector3}
+              position={initialCloudPosition}
             />
             <Html 
               transform
@@ -146,6 +147,19 @@ export default function Scene(){
                 className="cursor-pointer"
                 onClick={() => dispatch({type: 'setSnow', value: !state.meteo.snowProperties.snow})}>
                 <b>Snow</b>
+              </p>
+            </Html>
+
+            <Html 
+              transform
+              className="user-select-none"
+              style={{color: 'black', fontSize:'0.05em'}}
+              position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.72, initialScenePosition.z + 5.6]}
+            >
+              <p
+                className="cursor-pointer"
+                onClick={() => dispatch({type: 'setCloud', value: !state.meteo.cloudProperties.cloud})}>
+                <b>Cloud</b>
               </p>
             </Html>
             <Html 

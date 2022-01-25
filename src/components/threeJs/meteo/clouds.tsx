@@ -21,7 +21,7 @@ const Cloud = ({ position, isVisible, velocity}: positionInterface) => {
 
   useFrame(({ clock }) => {
     if (group && group.current){
-      if (group.current.position.x >= 70) {group.current.position.x = positionRand(0, -25);}
+      if (group.current.position.x >= 5) {group.current.position.x = positionRand(position.x - 30, position.x - 40);}
       group.current.position.x = (clock.getElapsedTime() * velocity) % 35;
     } 
   });
@@ -71,11 +71,10 @@ function Clouds({number, isVisible, velocity, position}: cloudInterface): React.
     for(let i=0; i<number; i++){
       const x1 = positionRand(position.x, position.x - 25);
       const x2 = positionRand(position.x + 5, position.x - 20);
-      const y1 = positionRand(position.y + 4, position.y + 7);
-      const y2 = positionRand(position.y + 6, position.y + 9);
-      const z = -6;
-      const position1 = new THREE.Vector3( x1, y1, z );
-      const position2 = new THREE.Vector3( x2, y2, z );
+      const y1 = positionRand(position.y, position.y + 1.25);
+      const y2 = positionRand(position.y + 0.5, position.y + 2);
+      const position1 = new THREE.Vector3( x1, y1, position.z );
+      const position2 = new THREE.Vector3( x2, y2, position.z );
 
       cloudsDisplay.push(<Cloud key={i+velocity} isVisible={isVisible} velocity={velocity} position={position1} />);
       cloudsDisplay.push(<Cloud key={i-velocity} isVisible={isVisible} velocity={velocity} position={position2} />);
