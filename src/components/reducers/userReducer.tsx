@@ -19,13 +19,11 @@ function initUser(initialState: userInterface) {
 export default function userReducer(state: userInterface, action: UserAction): userInterface {
   switch (action.type) {
   case 'setName':
-    const newName = {...state, name: action.value};
-    setCurrentUser(newName);
-    return newName;
+    setCurrentUser({...state, name: action.value});
+    return {...state, name: action.value};
   case 'setAvatar':
-    const newAvatar = {...state, avatar: action.value};
-    setCurrentUser(newAvatar);
-    return newAvatar;
+    setCurrentUser({...state, avatar: action.value});
+    return {...state, avatar: action.value};
   case 'resetUser':
     return initUser(action.value);
   default:

@@ -121,7 +121,7 @@ export default function Scene(){
               isVisible={state.meteo.cloudProperties.cloud}
               velocity={state.meteo.cloudProperties.windSpeed}
               number={state.meteo.cloudProperties.cloudCover}
-              position={initialMeteoPosition}
+              position={[initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 6., initialMeteoPosition.z + 5.6] as unknown as THREE.Vector3}
             />
             <Html 
               transform
