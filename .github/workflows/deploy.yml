@@ -27,7 +27,7 @@ jobs:
         run: |
           npm install -f
           npm run build
-      - name: deploy to OVH VPS prod
+      - name: deploy to OVH VPS prod (.xyz)
         uses: garygrossgarten/github-action-scp@master
         if: github.ref == 'refs/heads/master'
         with:
@@ -40,7 +40,20 @@ jobs:
           recursive: true
           atomicPut: true
           dotfiles: true
-      - name: deploy to OVH VPS dev
+      - name: deploy to OVH VPS prod (.fr)
+        uses: garygrossgarten/github-action-scp@master
+        if: github.ref == 'refs/heads/master'
+        with:
+          host: ${{secrets.SSH_HOST}}
+          privateKey: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+          
+          local: 'build'
+          remote: '/var/www/html/wtow.fr/'
+          recursive: true
+          atomicPut: true
+          dotfiles: true
+      - name: deploy to OVH VPS dev (.xyz)
         uses: garygrossgarten/github-action-scp@master
         if: github.ref == 'refs/heads/dev'
         with:
@@ -50,6 +63,19 @@ jobs:
           
           local: 'build'
           remote: '/var/www/html/dev.wtow.xyz/'
+          recursive: true
+          atomicPut: true
+          dotfiles: true
+      - name: deploy to OVH VPS dev (.fr)
+        uses: garygrossgarten/github-action-scp@master
+        if: github.ref == 'refs/heads/dev'
+        with:
+          host: ${{secrets.SSH_HOST}}
+          privateKey: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+          
+          local: 'build'
+          remote: '/var/www/html/dev.wtow.fr/'
           recursive: true
           atomicPut: true
           dotfiles: true
