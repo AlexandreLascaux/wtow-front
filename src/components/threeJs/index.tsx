@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useMemo, useRef, useState} from 'react';
+import React, {lazy, RefObject, Suspense, useEffect, useMemo, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
@@ -47,8 +47,14 @@ export default function Scene(): React.ReactElement{
   const windowDimensions = useWindowDimensions();
   const animations = animationsByAvatar(state.user.avatar);
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
+  const playerRef = useRef<HTMLAudioElement>(null);
+  const [soundSource, setSoundSource] = useState<string | null>(null);
 
   function setCurrentAnimation(currentAnimation: animationInterface){
+    console.log(animations);
+    if (currentAnimation.sound){
+      setSoundSource(currentAnimation.sound);
+    }
     if (controller.current && currentAnimation) {
       controller.current.setCurrentAnimation(currentAnimation);
     }
@@ -68,6 +74,25 @@ export default function Scene(): React.ReactElement{
       setLandscape(true);
     }
   }, [windowDimensions]);
+
+
+  useEffect(() => {
+    if(soundSource){
+      const src=`./assets/sounds/${soundSource}.mp3`;
+      
+      if (playerRef && playerRef.current){
+        playerRef.current.src = src;
+        if (playerRef && playerRef.current) {
+          if (playerRef.current.paused) {
+            playerRef.current.play();
+          } else {
+            playerRef.current.pause();
+          }
+        }
+        
+      }
+    }
+  }, [soundSource]);
 
   useEffect(() => {
     setCameraOptions((cameraOptions) => {
@@ -97,22 +122,30 @@ export default function Scene(): React.ReactElement{
     </Html>;
   }
 
-  const AnimationsRender = () => useMemo(() => {
+  const AnimationsRender = () => {
     return <div className="d-flex">
       {
-        animations.map(({value, icon}, index) => {
+        animations.map(({value, icon, sound}, index) => {
           return (<div key={index} className="pr-2 pl-2 d-flex">
-            <AnimationButton value={value} icon={icon} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
+            <AnimationButton value={value} icon={icon} sound={sound} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
           </div>);
         }
         )}
     </div>;
-  }, [animations]);
+  };
 
  
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
+
+      <audio
+        ref={playerRef as RefObject<HTMLAudioElement>}
+        src='./assets/sounds/run-sound.mp3'
+        autoPlay
+        style={{opacity: 0}}
+        loop>
+      </audio>
 
       <div 
         className="d-flex w-100 justify-content-center position-absolute"

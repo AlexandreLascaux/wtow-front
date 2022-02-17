@@ -11,7 +11,7 @@ export interface animationButtonInterface{
 }
 
 export default function AnimationButton({value, icon, sound, onIconClick}: animationButtonInterface): React.ReactElement{
-  
+  console.log(sound);
   return (
     <Button className="cursor-pointer" variant="contained" onClick={() => onIconClick({value, sound})}>
       {icon}

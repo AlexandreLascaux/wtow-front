@@ -68,7 +68,7 @@ const Chafrou = React.forwardRef<customAvatarInterface, CustomAvatarProps>((prop
   const { actions, names } = useAnimations(animations, group);
 
   useImperativeHandle(ref, () => ({
-    setCurrentAnimation({value, sound}: animationInterface) {
+    setCurrentAnimation({value}: animationInterface) {
       const defaultAnimation: ActionName = value !== '' ? value as ActionName : baseAnimation;
       const currentAnimation = actions[defaultAnimation];
       stopAnimations();
