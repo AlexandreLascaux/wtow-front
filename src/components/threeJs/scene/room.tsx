@@ -6,10 +6,9 @@ source: https://sketchfab.com/3d-models/office-work-desk-lowpoly-bureau-game-ass
 title: OFFICE WORK DESK LOWPOLY BUREAU GAME ASSETS
 */
 
-import * as THREE from 'three';
-import React, { useRef, useState, useEffect } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import React, { useLayoutEffect, useRef } from 'react';
+import { useLoader } from '@react-three/fiber';
+import { useAnimations } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -112,32 +111,14 @@ type GLTFResult = GLTF & {
 type ActionName = 'Animation'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Room(props: JSX.IntrinsicElements['group']): React.ReactElement {
+export default function Model(props: JSX.IntrinsicElements['group']): React.ReactElement {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/scene/scene.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
+
   const { actions, names } = useAnimations(animations, group);
-  const [mixer] = useState(() => new THREE.AnimationMixer(null as any));
 
-  const factor = 3;
-  const speed = 3;
-
-  useFrame((state, delta) => {
-    const x = Math.sin((delta * factor) / 2) * Math.cos((delta * factor) / 2) * 1.5;
-    const y = Math.sin((delta * factor) / 2) * Math.cos((delta * factor) / 2) * 1.5;
-
-    mixer.update(delta * speed);
-  });
   
-  useEffect(() => {
-    /* actions.current = {
-      KeyAction: mixer.clipAction(animations[0], group.current).play(),
-    }*/
-    // 
-    if(actions.Animation) actions.Animation.stop();
-    //return () => animations.forEach((clip) => mixer.uncacheClip(clip))
-  }, [names, animations, mixer, actions.animation, actions.Animation]);
-
 
   return (
     <group ref={group} {...props} dispose={null}>
@@ -283,7 +264,10 @@ export default function Room(props: JSX.IntrinsicElements['group']): React.React
           <group position={[-3.18, 0.54, 3.92]}>
             <mesh geometry={nodes.mesh_31.geometry} material={materials['Material.008']} />
           </group>
-          <group position={[-0.6, 1.42, 4.8]} rotation={[0, 0.24, 0]} scale={[0, 0.05, 0.05]}>
+          {
+            //Table issue
+          }
+          <group position={[-0.6, 1.42, 4.8]} rotation={[0, 0.24, 0]} scale={[0.003, 0.05, 0.05]}>
             <mesh geometry={nodes.mesh_32.geometry} material={materials['Material.003']} />
           </group>
           <group position={[1.52, 0.7, 4.22]} rotation={[0, 0.25, 0]} scale={[0.16, 0.16, 0.16]}>
@@ -398,5 +382,3 @@ export default function Room(props: JSX.IntrinsicElements['group']): React.React
     </group>
   );
 }
-
-useGLTF.preload('/scene/scene.glb');

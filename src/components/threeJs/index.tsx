@@ -2,7 +2,8 @@ import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
-import Room from './scene/Scene';
+import Room from './scene/room';
+
 import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov } from './camera/CustomCamera';
 import { Html, OrbitControls } from '@react-three/drei';
 import Snow from './meteo/snow';
@@ -36,7 +37,7 @@ export default function Scene(): React.ReactElement{
   const windowDimensions = useWindowDimensions();
 
   useEffect(() => {
-    const newComponent = React.lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
+    const newComponent = lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
     setCurrentAvatar(newComponent as React.LazyExoticComponent<() => JSX.Element>);
   }, [state.user.avatar]);
 
@@ -101,7 +102,7 @@ export default function Scene(): React.ReactElement{
         }
         <Suspense fallback={<WaitingSceneToLoad />}>
           <Room position={initialScenePosition} rotation={initialSceneRotation} />
-
+          
           {CurrentAvatar && <CurrentAvatar
             position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
             scale={0.0075}
