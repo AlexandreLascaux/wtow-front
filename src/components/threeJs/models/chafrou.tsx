@@ -7,11 +7,11 @@ title: Cat
 */
 
 import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader, dispose } from '@react-three/fiber';
-import { avatarInterface } from '..';
+import { customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -56,13 +56,26 @@ type ActionName =
   | 'Walk_In_Place'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Chafrou(props: JSX.IntrinsicElements['group'] & avatarInterface) {
+const Chafrou = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props, ref) => {
+  
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/chafrou.glb');
   const { nodes, animations, materials } = gltf as GLTFResult;
   const [pointer, setPointer] = useState<boolean>(false);
 
   const { actions, names } = useAnimations(animations, group);
+
+  useImperativeHandle(ref, () => ({
+    setCurrentAnimation(animation: string | null) {
+      const defaultAnimation: ActionName = animation ? animation as ActionName : 'Idle';
+      const currentAnimation = actions[defaultAnimation];
+      stopAnimations();
+      if(currentAnimation) {
+        currentAnimation.play();
+      } 
+    },
+  }));
+
   
   function randomAnimation() {
     stopAnimations();
@@ -95,15 +108,14 @@ export default function Chafrou(props: JSX.IntrinsicElements['group'] & avatarIn
       animation.resetDuration();
     });
   }, [animations]);
-
+  
   useEffect(() => {
-    const animation: ActionName = (props.animation && props.animation !== '') ? props.animation as ActionName : 'Idle';
-    const currentAnimation = actions[animation];
+    const currentAnimation = actions['Idle'];
     if(currentAnimation) {
       stopAnimations();
       currentAnimation.play();
     } 
-  }, [actions, props.animation]);
+  }, [actions]);
 
   useEffect(()=>{
     const element = document.querySelector('canvas');
@@ -148,6 +160,6 @@ export default function Chafrou(props: JSX.IntrinsicElements['group'] & avatarIn
       </group>
     </group>
   );
-}
-
-useGLTF.preload('/mascotte/chafrou.glb');
+});
+Chafrou.displayName = 'Chafrou';
+export default Chafrou;

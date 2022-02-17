@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useMemo, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
@@ -13,8 +13,9 @@ import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
 import CustomAvatar from '../avatar/customAvatar';
 import { animationsByAvatar } from '../animation/utils';
-import AnimationButton from '../animation/animationButton';
+import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
 import { fchown } from 'fs';
+import { customAvatarInterface } from './models/interfaces';
 
 interface cameraOptionsInferface{
     position: number[];
@@ -35,7 +36,8 @@ export default function Scene(): React.ReactElement{
   const scrollArea = useRef(null);
   const [scroll, setScroll] = useState<number>(0.5);
   const { state, dispatch } = React.useContext(AppContext);
-  const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps & avatarInterface) => JSX.Element>>();
+  const controller = useRef<customAvatarInterface | null>(null);
+  const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps) => JSX.Element>>();
   const [landscape, setLandscape] = useState<boolean>(true);
   const [cameraOptions, setCameraOptions] = useState<cameraOptionsInferface>({
     position: defaultCameraPosition,
@@ -44,7 +46,14 @@ export default function Scene(): React.ReactElement{
   });
   const windowDimensions = useWindowDimensions();
   const animations = animationsByAvatar(state.user.avatar);
-  const [currentAnimation, setCurrentAnimation] = useState<string>('');
+  const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
+
+  function setCurrentAnimation(currentAnimation: string){
+    if (controller.current && currentAnimation) {
+      controller.current.setCurrentAnimation(currentAnimation);
+    }
+  }
+
 
   useEffect(() => {
     const newComponent = lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
@@ -87,7 +96,8 @@ export default function Scene(): React.ReactElement{
       <CircularProgress color="inherit" size={46}/>
     </Html>;
   }
-  function AnimationsRender(){
+
+  const AnimationsRender = () => useMemo(() => {
     return <div className="d-flex">
       {
         animations.map(({value, icon}, index) => {
@@ -97,7 +107,9 @@ export default function Scene(): React.ReactElement{
         }
         )}
     </div>;
-  }
+  }, [animations]);
+
+ 
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
@@ -106,7 +118,11 @@ export default function Scene(): React.ReactElement{
         className="d-flex w-100 justify-content-center position-absolute"
         style={{bottom:'30px', zIndex: 1}}
       >
-        <AnimationsRender />
+        
+        {
+          sceneLoaded && <AnimationsRender />
+        }
+        
       </div>
 
       <Canvas>
@@ -128,13 +144,13 @@ export default function Scene(): React.ReactElement{
                 </Html>
         }
         <Suspense fallback={<WaitingSceneToLoad />}>
-          <Room position={initialScenePosition} rotation={initialSceneRotation} />
+          <Room position={initialScenePosition} rotation={initialSceneRotation} callback={() => setSceneLoaded(true)}/>
           
           {CurrentAvatar && <CurrentAvatar
+            ref={controller}
             position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
             scale={0.0075}
             rotation={initialModelRotation}
-            animation={currentAnimation}
           />}       
           <Suspense fallback={null}>
             <Rain

@@ -6,7 +6,7 @@ source: https://sketchfab.com/3d-models/office-work-desk-lowpoly-bureau-game-ass
 title: OFFICE WORK DESK LOWPOLY BUREAU GAME ASSETS
 */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -111,7 +111,11 @@ type GLTFResult = GLTF & {
 type ActionName = 'Animation'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Model(props: JSX.IntrinsicElements['group']): React.ReactElement {
+interface callbackInterface {
+  callback: () => void;
+}
+
+export default function Model(props: JSX.IntrinsicElements['group'] & callbackInterface): React.ReactElement {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/scene/room.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
@@ -120,6 +124,9 @@ export default function Model(props: JSX.IntrinsicElements['group']): React.Reac
 
   const materialWindows = materials['Material.002'].clone();
 
+  useLayoutEffect(() => {
+    props.callback?.();
+  }, []);
   useEffect(()=>{
     if(windowsPointer){
       materialWindows.setValues({color: 'rgb(250,250,80)'});

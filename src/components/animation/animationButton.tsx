@@ -1,4 +1,5 @@
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
+import { Button } from '@mui/material';
 
 
 export interface animationButtonInterface{
@@ -8,16 +9,11 @@ export interface animationButtonInterface{
 }
 
 export default function AnimationButton({value, icon, onIconClick}: animationButtonInterface): React.ReactElement{
-  const Icon = lazy(() => import(`./icons/${icon}`).catch((e) => console.error(e)));
+  
   return (
-    <div onClick={() => onIconClick(value)}>
-      <Suspense fallback={null}>
-        <Icon />
-      </Suspense>
-      {
-        value
-      }
-    </div>
+    <Button className="cursor-pointer" variant="contained" onClick={() => onIconClick(value)}>
+      {icon}
+    </Button>
   );
 }
 
