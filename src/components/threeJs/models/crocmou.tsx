@@ -7,10 +7,11 @@ title: Jungle Animal: Cartoon Crocodile
 */
 
 import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader, dispose } from '@react-three/fiber';
+import { customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -45,7 +46,9 @@ type ActionName =
   | 'Walk.FBX_0'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Crocmou(props: JSX.IntrinsicElements['group']) {
+const baseAnimation = 'Success.FBX_0';
+
+const Crocmou = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props, ref) => {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/crocmou.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
@@ -53,6 +56,18 @@ export default function Crocmou(props: JSX.IntrinsicElements['group']) {
 
   const { actions, names } = useAnimations(animations, group);
   
+  useImperativeHandle(ref, () => ({
+    setCurrentAnimation(animation: string | null) {
+      const defaultAnimation: ActionName = animation ? animation as ActionName : baseAnimation;
+      const currentAnimation = actions[defaultAnimation];
+      stopAnimations();
+      if(currentAnimation) {
+        currentAnimation.play();
+      } 
+    },
+  }));
+
+
   function randomAnimation() {
     stopAnimations();
     startAnimation(actions[names[Math.floor(Math.random()*names.length)]]);
@@ -86,8 +101,10 @@ export default function Crocmou(props: JSX.IntrinsicElements['group']) {
   }, [animations]);
 
   useEffect(() => {
-    if(actions['Success.FBX_0']) {
-      actions['Success.FBX_0'].play();
+    const currentAnimation = actions[baseAnimation];
+    if(currentAnimation) {
+      stopAnimations();
+      currentAnimation.play();
     } 
   }, [actions]);
 
@@ -133,6 +150,6 @@ export default function Crocmou(props: JSX.IntrinsicElements['group']) {
       </group>
     </group>
   );
-}
-
-useGLTF.preload('/crocmou.glb');
+});
+Crocmou.displayName = 'Crocmou';
+export default Crocmou;
