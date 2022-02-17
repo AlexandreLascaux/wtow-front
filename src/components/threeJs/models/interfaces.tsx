@@ -3,5 +3,10 @@ export interface CustomAvatarProps{
   }
   
 export interface customAvatarInterface {
-    setCurrentAnimation: (animation: string | null) => void;
+    setCurrentAnimation: (animation: animationInterface) => void;
+}
+
+export interface animationInterface {
+  value: string
+  sound?: string
 }

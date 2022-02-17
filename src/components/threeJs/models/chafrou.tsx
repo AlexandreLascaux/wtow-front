@@ -11,7 +11,7 @@ import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader, dispose } from '@react-three/fiber';
-import { customAvatarInterface, CustomAvatarProps } from './interfaces';
+import { animationInterface, customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -56,6 +56,8 @@ type ActionName =
   | 'Walk_In_Place'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
+const baseAnimation = 'Idle';
+
 const Chafrou = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props, ref) => {
   
   const group = useRef<THREE.Group>();
@@ -66,8 +68,8 @@ const Chafrou = React.forwardRef<customAvatarInterface, CustomAvatarProps>((prop
   const { actions, names } = useAnimations(animations, group);
 
   useImperativeHandle(ref, () => ({
-    setCurrentAnimation(animation: string | null) {
-      const defaultAnimation: ActionName = animation ? animation as ActionName : 'Idle';
+    setCurrentAnimation({value, sound}: animationInterface) {
+      const defaultAnimation: ActionName = value !== '' ? value as ActionName : baseAnimation;
       const currentAnimation = actions[defaultAnimation];
       stopAnimations();
       if(currentAnimation) {

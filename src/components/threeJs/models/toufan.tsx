@@ -15,7 +15,7 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshStandardMaterial } from 'three';
 import { time } from 'console';
 import { avatarInterface } from '..';
-import { customAvatarInterface, CustomAvatarProps } from './interfaces';
+import { animationInterface, customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -73,8 +73,8 @@ const Toufan = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props
   const { actions, names } = useAnimations(animations, group);
 
   useImperativeHandle(ref, () => ({
-    setCurrentAnimation(animation: string | null) {
-      const defaultAnimation: ActionName = animation ? animation as ActionName : baseAnimation;
+    setCurrentAnimation({value, sound}: animationInterface) {
+      const defaultAnimation: ActionName = value !== '' ? value as ActionName : baseAnimation;
       const currentAnimation = actions[defaultAnimation];
       stopAnimations();
       if(currentAnimation) {

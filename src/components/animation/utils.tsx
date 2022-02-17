@@ -44,11 +44,13 @@ function toufanAnimations(){
   return [
     {
       value: 'Run.FBX_0',
-      icon: 'Run'
+      icon: 'Run',
+      sound: '',
     },
     {
       value: 'Idle.FBX_0',
       icon: 'pose'
+
     },
     {
       value: 'Sleep.FBX_0',

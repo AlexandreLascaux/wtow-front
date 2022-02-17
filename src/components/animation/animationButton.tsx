@@ -1,19 +1,20 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { animationInterface } from '../threeJs/models/interfaces';
 
 
 export interface animationButtonInterface{
     value: string;
     icon: string;
-    onIconClick: (value: string) => void;
+    sound?: string;
+    onIconClick: ({value, sound}:animationInterface) => void;
 }
 
-export default function AnimationButton({value, icon, onIconClick}: animationButtonInterface): React.ReactElement{
+export default function AnimationButton({value, icon, sound, onIconClick}: animationButtonInterface): React.ReactElement{
   
   return (
-    <Button className="cursor-pointer" variant="contained" onClick={() => onIconClick(value)}>
+    <Button className="cursor-pointer" variant="contained" onClick={() => onIconClick({value, sound})}>
       {icon}
     </Button>
   );
 }
-

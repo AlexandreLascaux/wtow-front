@@ -15,7 +15,7 @@ import CustomAvatar from '../avatar/customAvatar';
 import { animationsByAvatar } from '../animation/utils';
 import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
 import { fchown } from 'fs';
-import { customAvatarInterface } from './models/interfaces';
+import { animationInterface, customAvatarInterface } from './models/interfaces';
 
 interface cameraOptionsInferface{
     position: number[];
@@ -48,7 +48,7 @@ export default function Scene(): React.ReactElement{
   const animations = animationsByAvatar(state.user.avatar);
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
 
-  function setCurrentAnimation(currentAnimation: string){
+  function setCurrentAnimation(currentAnimation: animationInterface){
     if (controller.current && currentAnimation) {
       controller.current.setCurrentAnimation(currentAnimation);
     }
@@ -102,7 +102,7 @@ export default function Scene(): React.ReactElement{
       {
         animations.map(({value, icon}, index) => {
           return (<div key={index} className="pr-2 pl-2 d-flex">
-            <AnimationButton value={value} icon={icon} onIconClick={(value) => setCurrentAnimation(value)} />
+            <AnimationButton value={value} icon={icon} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
           </div>);
         }
         )}
