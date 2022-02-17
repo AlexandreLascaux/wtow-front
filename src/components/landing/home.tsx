@@ -20,7 +20,8 @@ function Home(): ReactElement{
 
 
   function fetchCity(city: string){
-    fetch(`https://wtow.xyz/api/data/forecast/${city}`)
+    // fetch(`https://wtow.xyz/api/data/forecast/${city}`);
+    fetch('')
       .then(async (res) =>{
         const result: forecastInterface[] = await res.json();
         setResultData(result);
@@ -39,7 +40,7 @@ function Home(): ReactElement{
       const meteoData = convertMeteoData(resultData, state.meteo.day);
       dispatch({type: 'setMeteoState', value: meteoData});
     }
-  }, [resultData]);
+  }, [resultData, state.meteo.day]);
 
 
   useEffect(() => {
