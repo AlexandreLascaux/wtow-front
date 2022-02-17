@@ -11,12 +11,20 @@ import { AppContext } from '../reducers/context';
 import { CircularProgress } from '@mui/material';
 import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
+import CustomAvatar from '../avatar/customAvatar';
+import { animationsByAvatar } from '../animation/utils';
+import AnimationButton from '../animation/animationButton';
+import { fchown } from 'fs';
 
 interface cameraOptionsInferface{
     position: number[];
     rotation: number[];
     fov: number;
   }
+
+export interface avatarInterface{
+  animation: string;
+}
 
 export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
@@ -27,7 +35,7 @@ export default function Scene(): React.ReactElement{
   const scrollArea = useRef(null);
   const [scroll, setScroll] = useState<number>(0.5);
   const { state, dispatch } = React.useContext(AppContext);
-  const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps) => JSX.Element>>();
+  const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps & avatarInterface) => JSX.Element>>();
   const [landscape, setLandscape] = useState<boolean>(true);
   const [cameraOptions, setCameraOptions] = useState<cameraOptionsInferface>({
     position: defaultCameraPosition,
@@ -35,6 +43,8 @@ export default function Scene(): React.ReactElement{
     fov: defaultFov,
   });
   const windowDimensions = useWindowDimensions();
+  const animations = animationsByAvatar(state.user.avatar);
+  const [currentAnimation, setCurrentAnimation] = useState<string>('');
 
   useEffect(() => {
     const newComponent = lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
@@ -77,10 +87,27 @@ export default function Scene(): React.ReactElement{
       <CircularProgress color="inherit" size={46}/>
     </Html>;
   }
-
+  function AnimationsRender(){
+    return <div className="d-flex">
+      {
+        animations.map(({value, icon}, index) => {
+          return (<div key={index} className="pr-2 pl-2 d-flex">
+            <AnimationButton value={value} icon={icon} onIconClick={(value) => setCurrentAnimation(value)} />
+          </div>);
+        }
+        )}
+    </div>;
+  }
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
+
+      <div 
+        className="d-flex w-100 justify-content-center position-absolute"
+        style={{bottom:'30px', zIndex: 1}}
+      >
+        <AnimationsRender />
+      </div>
 
       <Canvas>
         <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
@@ -107,6 +134,7 @@ export default function Scene(): React.ReactElement{
             position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
             scale={0.0075}
             rotation={initialModelRotation}
+            animation={currentAnimation}
           />}       
           <Suspense fallback={null}>
             <Rain

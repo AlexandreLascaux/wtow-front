@@ -14,6 +14,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshStandardMaterial } from 'three';
 import { time } from 'console';
+import { avatarInterface } from '..';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -59,7 +60,7 @@ export function getRandomColor(material: MeshStandardMaterial) {
   material.setValues({color});
 }
 
-export default function Toufan(props: JSX.IntrinsicElements['group']) {
+export default function Toufan(props: JSX.IntrinsicElements['group'] & avatarInterface) {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/toufan.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
@@ -100,10 +101,13 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
   }, [animations]);
 
   useEffect(() => {
-    if(actions['Idle.FBX_0']) {
-      actions['Idle.FBX_0'].play();
+    const animation: ActionName = (props.animation && props.animation !== '') ? props.animation as ActionName : 'Idle.FBX_0';
+    const currentAnimation = actions[animation];
+    if(currentAnimation) {
+      stopAnimations();
+      currentAnimation.play();
     } 
-  }, [actions]);
+  }, [actions, props.animation]);
 
   useEffect(()=>{
     const element = document.querySelector('canvas');
