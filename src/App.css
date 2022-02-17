@@ -1,3 +1,34 @@
+@import url(https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;400&display=swap);
+
+* {
+  margin: 0;
+  padding: 0;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+span,
+a,
+button {
+  font-family: 'Roboto Slab', 'Open Sans', 'Helvetica Neue', 'Segoe UI', Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
 .App {
   text-align: center;
 }
@@ -14,14 +45,16 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #AAA7CB;
   min-height: 100vh;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #434343;
+  min-width: 410px;
 }
 
 .App-link {
@@ -36,3 +69,108 @@
     transform: rotate(360deg);
   }
 }
+
+/*
+ COLOR
+*/
+.bg-default {
+  background-color: #AAA7CB;
+}
+
+
+/*
+  DISPLAY
+*/
+
+.d-flex {
+  display: flex;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
+/*
+  SIZE
+*/
+
+.w-100 {
+  width: 100%;
+}
+
+/* SPACING */
+
+.pb-5 {
+  padding-bottom: 30px;
+}
+
+.pb-4 {
+  padding-bottom: 24px;
+}
+
+.pb-3 {
+  padding-bottom: 18px;
+}
+
+.pb-2 {
+  padding-bottom: 12px;
+}
+
+.pb-1 {
+  padding-bottom: 6px;
+}
+.mb-2 {
+  margin-bottom: 12px;
+}
+
+.mb-5 {
+  margin-bottom: 30px;
+}
+
+/* ALIGNMENT */
+
+.text-center {
+  text-align: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+/* 
+  TEXT
+*/
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+
+/* 
+  INPUT
+*/
+
+.custom-input {
+  background: #9B88C8;
+  border: 6px solid #7469CF;
+  box-sizing: border-box;
+  border-radius: 132px;
+  width: 100%;
+  height: 130px;
+  text-align: center;
+  font-size: 4.5rem;
+  color: #434343;
+}
+
+.custom-input:active, .custom-input:focus-visible {
+  border: 6px solid #7469CF;
+}
+
+:focus-visible {
+  outline: none;
+}
+

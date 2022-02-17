@@ -1,60 +1,108 @@
-import React, { useEffect, useState, ReactElement } from 'react';
-import Login from '../auth/login/login'
-import { Button, TextField } from '@mui/material';
-import Register from '../auth/register/register';
-import Counter from '../examples/counter';
+import React, { useState, ReactElement, useEffect } from 'react';
 import Scene from '../threeJs';
+import './homeStyle.css';
+import { avatarNames } from '../reducers/userReducer';
+import CustomAvatar from '../avatar/customAvatar';
+import { AppContext } from '../reducers/context';
+import { forecastInterface } from '../interfaces/meteoInterface';
+import { getIpInterface } from '../interfaces/ipInterface';
+import { convertMeteoData } from '../utils/meteoAdapter';
+
+const defaultCity = 'lyon';
 
 function Home(): ReactElement{
-  const [openScene, setOpenScene] = useState<boolean>(true)
-  const [counter, setCounter] = useState<number>(0);
-  const [text, setText] = useState<string>("");
-  const [win, setWin] = useState<boolean>(false)
-  const [user, setUser] = useState<string | null>(null);
-  
-    useEffect(()=>{
-      if(user){
-        setOpenScene(true)
-      }
-    }, [user])
+  const { state, dispatch } = React.useContext(AppContext);
+  const [openScene, setOpenScene] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>(state.user.name);
+  const listAvatars: avatarNames[] = ['toufan', 'lilia', 'chafrou', 'crocmou', 'noel', 'rusard'];
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [resultData, setResultData] = useState<forecastInterface[]>();
 
-  function handleSubmit(){
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'React Hooks POST Request Example' })
-  };
-  fetch('https://reqres.in/api/posts', requestOptions)
-      .then(response => response.json())
-      .then(data => setUser(data.id));
+
+  function fetchCity(city: string){
+    fetch(`https://wtow.xyz/api/data/forecast/${city}`)
+      .then(async (res) =>{
+        const result: forecastInterface[] = await res.json();
+        setResultData(result);
+      })
+      .catch((error) => {
+        setErrorMessage(error);
+      });
   }
 
-  function handleClose(){
-    setWin(false);
+  useEffect(() => {
+    console.error(errorMessage);
+  }, [errorMessage]);
+
+  useEffect(() => {
+    if(resultData){
+      const meteoData = convertMeteoData(resultData, state.meteo.day);
+      dispatch({type: 'setMeteoState', value: meteoData});
+    }
+  }, [resultData]);
+
+
+  useEffect(() => {
+    fetch('https://geolocation-db.com/json/')
+      .then((res) => {
+        const result: Promise<getIpInterface> = res.json();
+        result.then((response) => {
+          fetchCity(response.city);
+        });
+      })
+      .catch((error) => {
+        setErrorMessage(error);
+        fetchCity(defaultCity);
+      });
+  }, []);
+
+  function isActive(avatar: avatarNames){
+    return avatar === state.user.avatar;
   }
 
+  function handleOnClick(avatar: avatarNames){
+    dispatch({type: 'setAvatar', value: avatar});
+    dispatch({type: 'setName', value: userName});
+    setOpenScene(true);
+  }
 
   return (
     <>
-    {
-      openScene
-      ?
-      <Scene user={user} />
-      :
-      <>
-      <p>Home Page de {user}</p>
-      
-      <Button variant="contained" onClick={handleSubmit}>Request user</Button>
-      <TextField label="Outlined" variant="outlined" color="success" onChange={(event) => setText(event.target.value)}/>
-      <Counter text={text} counter={counter}/>
-     
-   
-      <div style={{cursor: "pointer"}} onClick={() => setOpenScene(true)}> OPEN SCENE</div>
-      </>
-    }
-    
+      {
+        openScene
+          ?
+          <div style={{height: '100%', width: '100%'}}>
+            <Scene />
+          </div>
+          :
+          <div className="home-grid-container">
+            <div className="home-grid-name-label">
+              <h2 className='user-select-none'>Quel est ton prénom ?</h2>
+            </div>
+            <div className="home-grid-name-input">
+              <input className="custom-input" type="text" value={userName} onChange={(event) => setUserName(event.target.value)}/>
+            </div>
+            <div className="home-grid-avatar-label">
+              <h2>Choisis un personnage</h2>
+            </div>
+            <div className="home-grid-avatar-list d-flex">
+              {
+                listAvatars.map((avatar, index) => 
+                  <div key={index} className="home-avatar-list d-flex justify-content-center">
+                    <CustomAvatar
+                      onClick={() => handleOnClick(avatar)}
+                      avatarName={avatar}
+                      size={130}
+                      active={isActive(avatar)}
+                    />
+                  </div>
+                )
+              }
+            </div>
+          </div>
+      }
     </>
-    );
-  }
+  );
+}
   
-  export default Home;
+export default Home;
