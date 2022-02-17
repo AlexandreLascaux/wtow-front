@@ -2,6 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 // import { OrbitControls, MeshDistortMaterial, shaderMaterial } from "@react-three/drei";
 import * as THREE from 'three';
+import { uniqueId } from 'lodash';
 
 interface positionInterface{
     position: THREE.Vector3;
@@ -64,11 +65,14 @@ const positionRand = (min: number, max: number) => {
 };
 
 function Clouds({number, isVisible, velocity, position}: cloudInterface): React.ReactElement {
-
+  const uniqId = parseInt(uniqueId(), 10);
   const CloudSpawn = useMemo(() => {
     const cloudsDisplay = [];
   
     for(let i=0; i<number; i++){
+      const uniqId1 = parseInt(uniqueId(), 10);
+      const uniqId2 = parseInt(uniqueId(), 10);
+
       const x1 = positionRand(position.x, position.x - 25);
       const x2 = positionRand(position.x + 5, position.x - 20);
       const y1 = positionRand(position.y, position.y + 1.25);
@@ -76,14 +80,14 @@ function Clouds({number, isVisible, velocity, position}: cloudInterface): React.
       const position1 = new THREE.Vector3( x1, y1, position.z );
       const position2 = new THREE.Vector3( x2, y2, position.z );
 
-      cloudsDisplay.push(<Cloud key={i+velocity} isVisible={isVisible} velocity={velocity} position={position1} />);
-      cloudsDisplay.push(<Cloud key={i-velocity} isVisible={isVisible} velocity={velocity} position={position2} />);
+      cloudsDisplay.push(<Cloud key={uniqId1} isVisible={isVisible} velocity={velocity} position={position1} />);
+      cloudsDisplay.push(<Cloud key={uniqId2} isVisible={isVisible} velocity={velocity} position={position2} />);
     }
     return cloudsDisplay;
   }, [number, position.x, position.y, velocity, isVisible]);
 
   return (
-    <group key={number}>
+    <group key={uniqId}>
       {CloudSpawn.map((cloud) => {
         return (cloud);
       })}

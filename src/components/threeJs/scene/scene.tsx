@@ -3,7 +3,7 @@ import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 function Room(props: any): React.ReactElement {
-  const gltf = useLoader(GLTFLoader, '/scene/scene.glb');
+  const gltf = useLoader(GLTFLoader, '/scene/room.glb');
 
   return (
     <mesh

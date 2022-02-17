@@ -119,8 +119,15 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
       {...props}
       dispose={null}
       onClick={(e) => {e.stopPropagation(); randomAnimation();}}
-      onPointerEnter={() => setPointer(true)}
-      onPointerLeave={() => setPointer(false)} 
+      
+      onPointerEnter={() => {
+        materials.Elephant.setValues({emissive: 'rgb(25, 25, 25)'});
+        setPointer(true);
+      }}
+      onPointerLeave={() => {
+        materials.Elephant.setValues({emissive: 'rgb(0, 0, 0)'});
+        setPointer(false);
+      }} 
     >
       <group scale={1.10} rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[-3.13, 0, 0]}>
@@ -136,6 +143,7 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
               material={materials.Elephant}
               skeleton={nodes.Elephant_Elephant_0.skeleton}
             />
+
           </group>
         </group>
       </group>

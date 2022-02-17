@@ -6,12 +6,11 @@ source: https://sketchfab.com/3d-models/office-work-desk-lowpoly-bureau-game-ass
 title: OFFICE WORK DESK LOWPOLY BUREAU GAME ASSETS
 */
 
-import * as THREE from 'three';
-import React, { useRef, useState, useEffect } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+// import { EffectComposer } from '@react-three/postprocessing';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -112,32 +111,22 @@ type GLTFResult = GLTF & {
 type ActionName = 'Animation'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Room(props: JSX.IntrinsicElements['group']): React.ReactElement {
+export default function Model(props: JSX.IntrinsicElements['group']): React.ReactElement {
   const group = useRef<THREE.Group>();
-  const gltf = useLoader(GLTFLoader, '/scene/scene.glb');
+  const gltf = useLoader(GLTFLoader, '/scene/room.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
-  const { actions, names } = useAnimations(animations, group);
-  const [mixer] = useState(() => new THREE.AnimationMixer(null as any));
+  const [windowsColor, setWindowsColor] = useState<string>('#BFBEBE');
+  const [windowsPointer, setWindowsPointer] = useState<boolean>(false);
 
-  const factor = 3;
-  const speed = 3;
+  const materialWindows = materials['Material.002'].clone();
 
-  useFrame((state, delta) => {
-    const x = Math.sin((delta * factor) / 2) * Math.cos((delta * factor) / 2) * 1.5;
-    const y = Math.sin((delta * factor) / 2) * Math.cos((delta * factor) / 2) * 1.5;
-
-    mixer.update(delta * speed);
-  });
-  
-  useEffect(() => {
-    /* actions.current = {
-      KeyAction: mixer.clipAction(animations[0], group.current).play(),
-    }*/
-    // 
-    if(actions.Animation) actions.Animation.stop();
-    //return () => animations.forEach((clip) => mixer.uncacheClip(clip))
-  }, [names, animations, mixer, actions.animation, actions.Animation]);
-
+  useEffect(()=>{
+    if(windowsPointer){
+      materialWindows.setValues({color: 'rgb(250,250,80)'});
+    }else {
+      setWindowsColor(materials['Material.002'].color.getStyle());
+    }
+  }, [windowsPointer]);
 
   return (
     <group ref={group} {...props} dispose={null}>
@@ -265,8 +254,19 @@ export default function Room(props: JSX.IntrinsicElements['group']): React.React
           <group position={[3.87, 1.69, 3.93]} rotation={[Math.PI / 2, -0.12, 0]} scale={[0.06, 0.05, 0.05]}>
             <mesh geometry={nodes.mesh_25.geometry} material={materials['Material.001']} />
           </group>
-          <group position={[-2.8, 1.86, 2.75]} scale={[0.04, 0.02, 0.03]}>
-            <mesh geometry={nodes.mesh_26.geometry} material={materials['Material.002']} />
+          {
+            //fenetre
+          }
+          <group position={[-2.8, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]} onPointerEnter={() => setWindowsPointer(true)} onPointerLeave={() => setWindowsPointer(false)}>
+            <mesh geometry={nodes.mesh_26.geometry} material={materialWindows} >
+              <meshBasicMaterial
+                attach="material"
+                color={windowsColor}
+                opacity={1}
+                transparent
+              />
+ 
+            </mesh>
           </group>
           <group position={[-0.02, 3.8, 6.12]} scale={[0.03, 0.03, 0.27]}>
             <mesh geometry={nodes.mesh_27.geometry} material={materials['Material.001']} />
@@ -283,7 +283,10 @@ export default function Room(props: JSX.IntrinsicElements['group']): React.React
           <group position={[-3.18, 0.54, 3.92]}>
             <mesh geometry={nodes.mesh_31.geometry} material={materials['Material.008']} />
           </group>
-          <group position={[-0.6, 1.42, 4.8]} rotation={[0, 0.24, 0]} scale={[0, 0.05, 0.05]}>
+          {
+            //Table issue
+          }
+          <group position={[-0.6, 1.42, 4.8]} rotation={[0, 0.24, 0]} scale={[0.003, 0.05, 0.05]}>
             <mesh geometry={nodes.mesh_32.geometry} material={materials['Material.003']} />
           </group>
           <group position={[1.52, 0.7, 4.22]} rotation={[0, 0.25, 0]} scale={[0.16, 0.16, 0.16]}>
@@ -350,16 +353,19 @@ export default function Room(props: JSX.IntrinsicElements['group']): React.React
             material={materials['Material.004']}
             skeleton={nodes.mesh_50.skeleton}
           />
+          {
+            //background issue, change scale
+          }
           <group position={[0.41, 1.24, -8.93]}>
-            <mesh geometry={nodes.mesh_63.geometry} material={materials['Material.007']} />
+            <mesh geometry={nodes.mesh_63.geometry} material={materials['Material.007']} scale={[5.,5.,5.]} />
           </group>
           <group position={[-0.14, 0.65, -6.36]} rotation={[0, -0.51, 0]} scale={[0.28, 0.28, 0.28]}>
             <mesh geometry={nodes.mesh_64.geometry} material={materials['Material.006']} />
           </group>
-          <group position={[-7.3, 1.86, 2.75]} scale={[0.04, 0.02, 0.03]}>
+          <group position={[-7.3, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]}>
             <mesh geometry={nodes.mesh_65.geometry} material={materials['Material.002']} />
           </group>
-          <group position={[5.03, 1.86, 2.75]} scale={[0.04, 0.02, 0.03]}>
+          <group position={[5.03, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]}>
             <mesh geometry={nodes.mesh_66.geometry} material={materials['Material.002']} />
           </group>
           <group position={[-7, 4.16, 3.25]} scale={[0.64, 0.12, 0.64]}>
@@ -398,5 +404,3 @@ export default function Room(props: JSX.IntrinsicElements['group']): React.React
     </group>
   );
 }
-
-useGLTF.preload('/scene/scene.glb');
