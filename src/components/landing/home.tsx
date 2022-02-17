@@ -1,16 +1,61 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, ReactElement, useEffect } from 'react';
 import Scene from '../threeJs';
 import './homeStyle.css';
 import { avatarNames } from '../reducers/userReducer';
 import CustomAvatar from '../ avatar/customAvatar';
 import { AppContext } from '../reducers/context';
+import { forecastInterface } from '../interfaces/meteoInterface';
+
+interface getIpInterface {
+  IPv4: string;
+  city: string;
+  country_code: string;
+  country_name: string;
+  latitude: number;
+  longitude: number;
+  postal: string;
+  state: string;
+}
+
+const defaultCity = 'lyon';
 
 function Home(): ReactElement{
   const { state, dispatch } = React.useContext(AppContext);
   const [openScene, setOpenScene] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>(state.user.name);
   const listAvatars: avatarNames[] = ['toufan', 'lilia', 'chafrou', 'crocmou', 'noel', 'rusard'];
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [resultData, setResultData] = useState<forecastInterface[]>();
 
+
+  useEffect(() => {
+    console.error(errorMessage);
+  }, [errorMessage]);
+
+  function fetchCity(city: string){
+    fetch(`https://wtow.xyz/api/data/forecast/${city}`)
+      .then(async (res) =>{
+        const result: forecastInterface[] = await res.json();
+        setResultData(result);
+      })
+      .catch((error) => {
+        setErrorMessage(error);
+      });
+    console.log(resultData);
+  }
+  useEffect(() => {
+    fetch('https://geolocation-db.com/json/')
+      .then((res) => {
+        const result: Promise<getIpInterface> = res.json();
+        result.then((response) => {
+          fetchCity(response.city);
+        });
+      })
+      .catch((error) => {
+        setErrorMessage(error);
+        fetchCity(defaultCity);
+      });
+  }, []);
 
   function isActive(avatar: avatarNames){
     return avatar === state.user.avatar;
