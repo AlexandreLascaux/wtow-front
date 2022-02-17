@@ -6,9 +6,8 @@ source: https://sketchfab.com/3d-models/office-work-desk-lowpoly-bureau-game-ass
 title: OFFICE WORK DESK LOWPOLY BUREAU GAME ASSETS
 */
 
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useLoader } from '@react-three/fiber';
-import { useAnimations } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -115,10 +114,6 @@ export default function Model(props: JSX.IntrinsicElements['group']): React.Reac
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/scene/room.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
-
-  const { actions, names } = useAnimations(animations, group);
-
-
 
   return (
     <group ref={group} {...props} dispose={null}>
@@ -246,7 +241,7 @@ export default function Model(props: JSX.IntrinsicElements['group']): React.Reac
           <group position={[3.87, 1.69, 3.93]} rotation={[Math.PI / 2, -0.12, 0]} scale={[0.06, 0.05, 0.05]}>
             <mesh geometry={nodes.mesh_25.geometry} material={materials['Material.001']} />
           </group>
-          <group position={[-2.8, 1.86, 2.75]} scale={[0.04, 0.02, 0.03]}>
+          <group position={[-2.8, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]}>
             <mesh geometry={nodes.mesh_26.geometry} material={materials['Material.002']} />
           </group>
           <group position={[-0.02, 3.8, 6.12]} scale={[0.03, 0.03, 0.27]}>
@@ -334,16 +329,19 @@ export default function Model(props: JSX.IntrinsicElements['group']): React.Reac
             material={materials['Material.004']}
             skeleton={nodes.mesh_50.skeleton}
           />
+          {
+            //background issue, change scale
+          }
           <group position={[0.41, 1.24, -8.93]}>
-            <mesh geometry={nodes.mesh_63.geometry} material={materials['Material.007']} />
+            <mesh geometry={nodes.mesh_63.geometry} material={materials['Material.007']} scale={[5.,5.,5.]} />
           </group>
           <group position={[-0.14, 0.65, -6.36]} rotation={[0, -0.51, 0]} scale={[0.28, 0.28, 0.28]}>
             <mesh geometry={nodes.mesh_64.geometry} material={materials['Material.006']} />
           </group>
-          <group position={[-7.3, 1.86, 2.75]} scale={[0.04, 0.02, 0.03]}>
+          <group position={[-7.3, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]}>
             <mesh geometry={nodes.mesh_65.geometry} material={materials['Material.002']} />
           </group>
-          <group position={[5.03, 1.86, 2.75]} scale={[0.04, 0.02, 0.03]}>
+          <group position={[5.03, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]}>
             <mesh geometry={nodes.mesh_66.geometry} material={materials['Material.002']} />
           </group>
           <group position={[-7, 4.16, 3.25]} scale={[0.64, 0.12, 0.64]}>
