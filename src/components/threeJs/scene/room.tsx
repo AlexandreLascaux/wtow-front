@@ -113,12 +113,12 @@ type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
 export default function Model(props: JSX.IntrinsicElements['group']): React.ReactElement {
   const group = useRef<THREE.Group>();
-  const gltf = useLoader(GLTFLoader, '/scene/scene.glb');
+  const gltf = useLoader(GLTFLoader, '/scene/room.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
 
   const { actions, names } = useAnimations(animations, group);
 
-  
+
 
   return (
     <group ref={group} {...props} dispose={null}>
