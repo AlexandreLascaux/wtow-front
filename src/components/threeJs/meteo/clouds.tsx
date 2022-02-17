@@ -3,7 +3,6 @@ import { useFrame } from '@react-three/fiber';
 // import { OrbitControls, MeshDistortMaterial, shaderMaterial } from "@react-three/drei";
 import * as THREE from 'three';
 import { uniqueId } from 'lodash';
-import { randFloat } from 'three/src/math/MathUtils';
 
 interface positionInterface{
     position: THREE.Vector3;

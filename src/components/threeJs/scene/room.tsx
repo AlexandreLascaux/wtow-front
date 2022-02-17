@@ -6,10 +6,11 @@ source: https://sketchfab.com/3d-models/office-work-desk-lowpoly-bureau-game-ass
 title: OFFICE WORK DESK LOWPOLY BUREAU GAME ASSETS
 */
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+// import { EffectComposer } from '@react-three/postprocessing';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -114,6 +115,18 @@ export default function Model(props: JSX.IntrinsicElements['group']): React.Reac
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/scene/room.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
+  const [windowsColor, setWindowsColor] = useState<string>('#BFBEBE');
+  const [windowsPointer, setWindowsPointer] = useState<boolean>(false);
+
+  const materialWindows = materials['Material.002'].clone();
+
+  useEffect(()=>{
+    if(windowsPointer){
+      materialWindows.setValues({color: 'rgb(250,250,80)'});
+    }else {
+      setWindowsColor(materials['Material.002'].color.getStyle());
+    }
+  }, [windowsPointer]);
 
   return (
     <group ref={group} {...props} dispose={null}>
@@ -241,8 +254,19 @@ export default function Model(props: JSX.IntrinsicElements['group']): React.Reac
           <group position={[3.87, 1.69, 3.93]} rotation={[Math.PI / 2, -0.12, 0]} scale={[0.06, 0.05, 0.05]}>
             <mesh geometry={nodes.mesh_25.geometry} material={materials['Material.001']} />
           </group>
-          <group position={[-2.8, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]}>
-            <mesh geometry={nodes.mesh_26.geometry} material={materials['Material.002']} />
+          {
+            //fenetre
+          }
+          <group position={[-2.8, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]} onPointerEnter={() => setWindowsPointer(true)} onPointerLeave={() => setWindowsPointer(false)}>
+            <mesh geometry={nodes.mesh_26.geometry} material={materialWindows} >
+              <meshBasicMaterial
+                attach="material"
+                color={windowsColor}
+                opacity={1}
+                transparent
+              />
+ 
+            </mesh>
           </group>
           <group position={[-0.02, 3.8, 6.12]} scale={[0.03, 0.03, 0.27]}>
             <mesh geometry={nodes.mesh_27.geometry} material={materials['Material.001']} />
