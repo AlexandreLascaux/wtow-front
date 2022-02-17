@@ -129,9 +129,6 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
         setPointer(false);
       }} 
     >
-      {
-        console.log(materials.Elephant)
-      }
       <group scale={1.10} rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[-3.13, 0, 0]}>
           <group rotation={[-Math.PI, 0, 0]}>
