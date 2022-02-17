@@ -2,7 +2,7 @@ import React from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-function MonkeyBis(props: JSX.IntrinsicElements['mesh']) {
+function MonkeyBis(props: JSX.IntrinsicElements['mesh']): React.ReactElement {
   const gltf = useLoader(GLTFLoader, '/source/monkeyBis.glb');
   const bonobo = gltf.scene;
 

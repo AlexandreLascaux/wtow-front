@@ -85,7 +85,7 @@ export default function Scene(): React.ReactElement{
         <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
 
         {
-          <OrbitControls />
+          // <OrbitControls />
         }
         <ambientLight intensity={0.75} />
         <pointLight color="white" intensity={0.75} position={[initialScenePosition.x, initialScenePosition.y + 3, initialScenePosition.z + 10]} />

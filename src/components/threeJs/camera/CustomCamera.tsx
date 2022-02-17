@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { PerspectiveCamera } from 'three';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
 
 export const defaultCameraPosition = [0, 0, 8];
 export const defaultCameraRotation = [0,0,0];
@@ -20,6 +19,7 @@ export default function CustomCamera({position, rotation, fov}: cameraOptionsInf
 
   useLayoutEffect(() => {
     if (cameraRef.current) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             cameraRef.current!.aspect! = size.width / size.height;
             
             cameraRef.current.position.x = defaultCameraPosition[0];
@@ -41,6 +41,7 @@ export default function CustomCamera({position, rotation, fov}: cameraOptionsInf
             if(x > x2)*/
       //cameraRef.current.position.x += 0.01
       //set({ camera: cameraRef.current as unknown as PerspectiveCamera })
+     
       cameraRef.current.rotation.y = rotation[1];
     }
   });

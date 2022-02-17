@@ -46,7 +46,7 @@ type ActionName =
   | 'Walk_In_Place'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Lilia(props: JSX.IntrinsicElements['group']) {
+export default function Lilia(props: JSX.IntrinsicElements['group']): React.ReactElement {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/lilia.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;

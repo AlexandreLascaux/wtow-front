@@ -112,7 +112,7 @@ type GLTFResult = GLTF & {
 type ActionName = 'Animation'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Room(props: JSX.IntrinsicElements['group']) {
+export default function Room(props: JSX.IntrinsicElements['group']): React.ReactElement {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/scene/scene.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;

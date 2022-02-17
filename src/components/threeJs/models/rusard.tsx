@@ -10,7 +10,7 @@ import * as THREE from 'three';
 import React, { useEffect, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useLoader, dispose } from '@react-three/fiber';
+import { useLoader } from '@react-three/fiber';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -27,7 +27,7 @@ type GLTFResult = GLTF & {
     material: THREE.MeshStandardMaterial
   }
 }
-
+/*
 type ActionName =
   | 'Failure'
   | 'Fall'
@@ -44,9 +44,9 @@ type ActionName =
   | 'Talk'
   | 'Walk'
   | 'Walk_In_Place'
-type GLTFActions = Record<ActionName, THREE.AnimationAction>
+*/
 
-export default function Rusard(props: JSX.IntrinsicElements['group']) {
+export default function Rusard(props: JSX.IntrinsicElements['group']): React.ReactElement {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/rusard.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
