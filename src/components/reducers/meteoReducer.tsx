@@ -1,6 +1,7 @@
 export interface meteoInterface {
     //storm: boolean;
-    //sun: boolean;
+    day: number;
+    sunProperties: sunProperties;
     cloudProperties: cloudProperties;
     rainProperties: rainProperties;
     snowProperties: snowProperties;
@@ -8,6 +9,10 @@ export interface meteoInterface {
     //mistOpacity: number;
 }
 
+interface sunProperties {
+  sun: boolean;
+  sunIntensity: number;
+}
 
 interface cloudProperties {
   cloud: boolean;
@@ -26,13 +31,17 @@ interface snowProperties {
 }
 
 export type MeteoAction =
-| { type: 'setRain', value: boolean }
+ | { type: 'setMeteoState', value: meteoInterface }
+ | { type: 'setDay', value: number }
+ | { type: 'setRain', value: boolean }
  | { type: 'setRainPrecipitation', value: number }
  | { type: 'setSnow', value: boolean }
  | { type: 'setSnowPrecipitation', value: number }
  | { type: 'setCloud', value: boolean }
  | { type: 'setCloudCover', value: number }
  | { type: 'setWindSpeed', value: number }
+ | { type: 'setSun', value: boolean }
+ | { type: 'setSunIntensity', value: number }
  | { type: 'resetMeteo', value: meteoInterface};
 
 function initMeteo(initialState: meteoInterface) {
@@ -41,6 +50,10 @@ function initMeteo(initialState: meteoInterface) {
 
 export default function meteoReducer(state: meteoInterface, action: MeteoAction): meteoInterface {
   switch (action.type) {
+  case 'setDay':
+    return {...state, day: action.value};
+  case 'setMeteoState':
+    return {...state, ...action.value};
   case 'setRain':
     return {...state, rainProperties: {...state.rainProperties, rain: action.value} };
   case 'setRainPrecipitation':
@@ -55,6 +68,10 @@ export default function meteoReducer(state: meteoInterface, action: MeteoAction)
     return {...state, cloudProperties: {...state.cloudProperties, cloudCover: action.value} };
   case 'setWindSpeed':
     return {...state, cloudProperties: {...state.cloudProperties, windSpeed: action.value} };
+  case 'setSun':
+    return {...state, sunProperties: {...state.sunProperties, sun: action.value} };
+  case 'setSunIntensity':
+    return {...state, sunProperties: {...state.sunProperties, sunIntensity: action.value} };
   case 'resetMeteo':
     return initMeteo(action.value);
   default:

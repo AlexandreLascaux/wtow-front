@@ -2,20 +2,11 @@ import React, { useState, ReactElement, useEffect } from 'react';
 import Scene from '../threeJs';
 import './homeStyle.css';
 import { avatarNames } from '../reducers/userReducer';
-import CustomAvatar from '../ avatar/customAvatar';
+import CustomAvatar from '../avatar/customAvatar';
 import { AppContext } from '../reducers/context';
 import { forecastInterface } from '../interfaces/meteoInterface';
-
-interface getIpInterface {
-  IPv4: string;
-  city: string;
-  country_code: string;
-  country_name: string;
-  latitude: number;
-  longitude: number;
-  postal: string;
-  state: string;
-}
+import { getIpInterface } from '../interfaces/ipInterface';
+import { convertMeteoData } from '../utils/meteoAdapter';
 
 const defaultCity = 'lyon';
 
@@ -28,10 +19,6 @@ function Home(): ReactElement{
   const [resultData, setResultData] = useState<forecastInterface[]>();
 
 
-  useEffect(() => {
-    console.error(errorMessage);
-  }, [errorMessage]);
-
   function fetchCity(city: string){
     fetch(`https://wtow.xyz/api/data/forecast/${city}`)
       .then(async (res) =>{
@@ -41,8 +28,20 @@ function Home(): ReactElement{
       .catch((error) => {
         setErrorMessage(error);
       });
-    console.log(resultData);
   }
+
+  useEffect(() => {
+    console.error(errorMessage);
+  }, [errorMessage]);
+
+  useEffect(() => {
+    if(resultData){
+      const meteoData = convertMeteoData(resultData, state.meteo.day);
+      dispatch({type: 'setMeteoState', value: meteoData});
+    }
+  }, [resultData]);
+
+
   useEffect(() => {
     fetch('https://geolocation-db.com/json/')
       .then((res) => {

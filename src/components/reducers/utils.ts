@@ -1,6 +1,13 @@
-import { avatarNames } from './userReducer';
+import { clotheInterface } from './clotheReducer';
+import { meteoInterface } from './meteoReducer';
+import { avatarNames, userInterface } from './userReducer';
 
-export const initialMeteo = {
+export const initialMeteo:  meteoInterface= {
+  day: 1,
+  sunProperties: {
+    sun: true,
+    sunIntensity: 1,
+  },
   rainProperties: {
     rain: false,
     rainPrecipitation: 1500
@@ -17,7 +24,7 @@ export const initialMeteo = {
 };
 
   
-export const initialClothe = {
+export const initialClothe : clotheInterface = {
   hat: {
     type: 'winter'
   },
@@ -29,7 +36,7 @@ export const initialClothe = {
   },
 };
 
-export const initialUser = {
+export const initialUser: userInterface = {
   name: '',
   avatar: 'toufan' as avatarNames,
 };

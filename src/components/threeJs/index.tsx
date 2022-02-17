@@ -34,6 +34,7 @@ export default function Scene(): React.ReactElement{
     fov: defaultFov,
   });
   const windowDimensions = useWindowDimensions();
+  console.log(state.meteo);
 
   useEffect(() => {
     const newComponent = React.lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
