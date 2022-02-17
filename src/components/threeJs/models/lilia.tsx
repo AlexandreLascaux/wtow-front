@@ -109,8 +109,14 @@ export default function Lilia(props: JSX.IntrinsicElements['group']): React.Reac
         scale={1.25}
         rotation={[Math.PI / 2, 0, 0]}
         onClick={(e) => {e.stopPropagation(); randomAnimation();}}
-        onPointerEnter={() => setPointer(true)}
-        onPointerLeave={() => setPointer(false)} 
+        onPointerEnter={() => {
+          materials.Deer.setValues({emissive: 'rgb(25, 25, 25)'});
+          setPointer(true);
+        }}
+        onPointerLeave={() => {
+          materials.Deer.setValues({emissive: 'rgb(0, 0, 0)'});
+          setPointer(false);
+        }} 
       >
         <group rotation={[-Math.PI, 0, 0]}>
           <primitive object={nodes._rootJoint} />

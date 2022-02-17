@@ -110,8 +110,14 @@ export default function Rusard(props: JSX.IntrinsicElements['group']): React.Rea
         scale={1.5}
         rotation={[Math.PI / 2, 0, 0]}
         onClick={(e) => {e.stopPropagation(); randomAnimation();}}
-        onPointerEnter={() => setPointer(true)}
-        onPointerLeave={() => setPointer(false)} 
+        onPointerEnter={() => {
+          materials.material.setValues({emissive: 'rgb(25, 25, 25)'});
+          setPointer(true);
+        }}
+        onPointerLeave={() => {
+          materials.material.setValues({emissive: 'rgb(0, 0, 0)'});
+          setPointer(false);
+        }} 
       >
         <group rotation={[-Math.PI, 0, 0]}>
           <primitive object={nodes._rootJoint} />

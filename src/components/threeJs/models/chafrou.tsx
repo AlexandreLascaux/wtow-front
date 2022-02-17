@@ -58,7 +58,7 @@ type GLTFActions = Record<ActionName, THREE.AnimationAction>
 export default function Chafrou(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/chafrou.glb');
-  const { nodes, animations } = gltf as GLTFResult;
+  const { nodes, animations, materials } = gltf as GLTFResult;
   const [pointer, setPointer] = useState<boolean>(false);
 
   const { actions, names } = useAnimations(animations, group);
@@ -119,19 +119,25 @@ export default function Chafrou(props: JSX.IntrinsicElements['group']) {
         scale={1.5}
         rotation={[Math.PI / 2, 0, 0]}
         onClick={(e) => {e.stopPropagation(); randomAnimation();}}
-        onPointerEnter={() => setPointer(true)}
-        onPointerLeave={() => setPointer(false)} 
+        onPointerEnter={() => {
+          materials.material.setValues({emissive: 'rgb(25, 25, 25)'});
+          setPointer(true);
+        }}
+        onPointerLeave={() => {
+          materials.material.setValues({emissive: 'rgb(0, 0, 0)'});
+          setPointer(false);
+        }}  
       >
         <group rotation={[-Math.PI, 0, 0]}>
           <primitive object={nodes._rootJoint} />
           <skinnedMesh
             geometry={nodes.Object_7.geometry}
-            material={nodes.Object_7.material}
+            material={materials.material}
             skeleton={nodes.Object_7.skeleton}
           />
           <skinnedMesh
             geometry={nodes.Object_9.geometry}
-            material={nodes.Object_9.material}
+            material={materials.material}
             skeleton={nodes.Object_9.skeleton}
           />
         </group>
