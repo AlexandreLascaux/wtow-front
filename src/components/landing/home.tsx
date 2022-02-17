@@ -20,8 +20,7 @@ function Home(): ReactElement{
 
 
   function fetchCity(city: string){
-    // fetch(`https://wtow.xyz/api/data/forecast/${city}`);
-    fetch('')
+    fetch(`https://wtow.xyz/api/data/forecast/${city}`)
       .then(async (res) =>{
         const result: forecastInterface[] = await res.json();
         setResultData(result);
