@@ -44,7 +44,6 @@ function RainPoints({geom, isVisible, positions, velocities, accelerations}: rai
   varying float curY;
   void main() {
       vec3 pos = position;
-      
       gl_Position = projectionMatrix 
           * modelViewMatrix
           * vec4(

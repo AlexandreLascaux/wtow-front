@@ -10,6 +10,8 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { defaultCameraPosition, defaultCameraRotation, defaultFov } from '../camera/CustomCamera';
+import { cameraOptionsInferface } from '..';
 // import { EffectComposer } from '@react-three/postprocessing';
 
 type GLTFResult = GLTF & {
@@ -113,6 +115,7 @@ type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
 interface callbackInterface {
   callback: () => void;
+  onElementClick: (camera: cameraOptionsInferface) => void;
 }
 
 export default function Model(props: JSX.IntrinsicElements['group'] & callbackInterface): React.ReactElement {
@@ -122,11 +125,20 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
   const [windowsColor, setWindowsColor] = useState<string>('#BFBEBE');
   const [windowsPointer, setWindowsPointer] = useState<boolean>(false);
 
+  const [screenColor, setScreenColor] = useState<string>('#BFBEBE');
+  const [screenPointer, setScreenPointer] = useState<boolean>(false);
+
+  const [treePointer, setTreePointer] = useState<boolean>(false);
+
+
   const materialWindows = materials['Material.002'].clone();
+  const materialScreen =  materials['Material.003'].clone();
+  const materialTree =  materials['Material.004'].clone();
 
   useLayoutEffect(() => {
     props.callback?.();
   }, []);
+
   useEffect(()=>{
     if(windowsPointer){
       materialWindows.setValues({color: 'rgb(250,250,80)'});
@@ -134,6 +146,30 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
       setWindowsColor(materials['Material.002'].color.getStyle());
     }
   }, [windowsPointer]);
+
+  useEffect(()=>{
+    if(screenPointer){
+      materialScreen.setValues({color: 'rgb(66, 198, 255)'});
+    }else {
+      setScreenColor(materials['Material.003'].color.getStyle());
+    }
+  }, [screenPointer]);
+
+  useEffect(()=>{
+    if(screenPointer){
+      materialTree.setValues({color: 'rgb(66, 198, 255)'});
+    }else {
+      materialTree.setValues({color: materials['Material.004'].color.getStyle()});
+    }
+  }, [treePointer]);
+
+  useEffect(()=>{
+    const element = document.querySelector('canvas');
+    if(element){
+      if(screenPointer || treePointer || windowsPointer)element.classList.add('cursor-pointer');
+      if(!screenPointer && !windowsPointer && !treePointer)element.classList.remove('cursor-pointer');
+    }
+  }, [screenPointer, windowsPointer, treePointer]);
 
   return (
     <group ref={group} {...props} dispose={null}>
@@ -264,7 +300,17 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
           {
             //fenetre
           }
-          <group position={[-2.8, 1.86, 2.75]} scale={[0.0425, 0.0228, 0.03]} onPointerEnter={() => setWindowsPointer(true)} onPointerLeave={() => setWindowsPointer(false)}>
+          <group
+            position={[-2.8, 1.86, 2.75]}
+            scale={[0.0425, 0.0228, 0.03]}
+            onPointerEnter={(e) => {e.stopPropagation(); setWindowsPointer(true);}}
+            onPointerLeave={(e) => {e.stopPropagation(); setWindowsPointer(false);}}
+            onClick={(e) => {e.stopPropagation(); props.onElementClick({
+              position: defaultCameraPosition,
+              rotation: defaultCameraRotation,
+              fov: defaultFov,
+            });}}
+          >
             <mesh geometry={nodes.mesh_26.geometry} material={materialWindows} >
               <meshBasicMaterial
                 attach="material"
@@ -272,7 +318,6 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
                 opacity={1}
                 transparent
               />
- 
             </mesh>
           </group>
           <group position={[-0.02, 3.8, 6.12]} scale={[0.03, 0.03, 0.27]}>
@@ -350,22 +395,58 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
           <group position={[2.37, 0.72, 4.08]} scale={[0.18, 0.18, 0.18]}>
             <mesh geometry={nodes.mesh_48.geometry} material={materials['Material.003']} />
           </group>
-          <group position={[-0.09, 1.93, 4.18]} rotation={[-0.3, 0.48, 0.14]}>
-            <mesh geometry={nodes.mesh_49.geometry} material={materials['Material.003']} />
+          {
+            //ECRAN
+          }
+          <group position={[-0.09, 1.93, 4.18]} rotation={[-0.3, 0.48, 0.14]} >
+            <mesh
+              geometry={nodes.mesh_49.geometry}
+              material={materialScreen} 
+              onPointerEnter={(e) => {e.stopPropagation(); setScreenPointer(true);}}
+              onPointerLeave={(e) => {e.stopPropagation(); setScreenPointer(false);}}
+              onClick={(e) => {e.stopPropagation(); props.onElementClick({
+                position: [0.55, 0.42, 1.62],
+                rotation: [defaultCameraRotation[0] - 0.21, defaultCameraRotation[1] + 0.48, defaultCameraRotation[2] + 0.1],
+                fov: defaultFov,
+              });}}
+            />
+            <meshBasicMaterial
+              attach="material"
+              color={screenColor}
+              opacity={1}
+            />
           </group>
           <primitive object={nodes.GLTF_created_0_rootJoint} />
           <group position={[-3.44, 0.4, 0.22]} rotation={[0, 1.51, 0]} scale={[0.52, 0.6, 0.52]} />
+          {
+            //arbre
+          }
           <skinnedMesh
+            onPointerEnter={(e) => {e.stopPropagation(); setTreePointer(true);}}
+            onPointerLeave={(e) => {e.stopPropagation(); setTreePointer(false);}}
+            onClick={(e) => {e.stopPropagation(); props.onElementClick({
+              position: [-0.77, 0.85, 0.93],
+              rotation: [defaultCameraRotation[0] - 0.080, defaultCameraRotation[1] - 0.15, defaultCameraRotation[2]],
+              fov: defaultFov,
+            });}}
             geometry={nodes.mesh_50.geometry}
-            material={materials['Material.004']}
+            material={materialTree}
             skeleton={nodes.mesh_50.skeleton}
           />
+
           {
             //background issue, change scale
           }
           <group position={[0.41, 1.24, -8.93]}>
-            <mesh geometry={nodes.mesh_63.geometry} material={materials['Material.007']} scale={[5.,5.,5.]} />
+            <mesh
+              geometry={nodes.mesh_63.geometry}
+              material={materials['Material.007']}
+              scale={[5.,5.,5.]}
+            />
           </group>
+          {
+            // immeuble
+          }
           <group position={[-0.14, 0.65, -6.36]} rotation={[0, -0.51, 0]} scale={[0.28, 0.28, 0.28]}>
             <mesh geometry={nodes.mesh_64.geometry} material={materials['Material.006']} />
           </group>

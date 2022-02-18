@@ -16,7 +16,7 @@ import AnimationButton from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
 import ModalProfile from '../modals/modalProfile';
 
-interface cameraOptionsInferface{
+export interface cameraOptionsInferface{
     position: number[];
     rotation: number[];
     fov: number;
@@ -66,6 +66,16 @@ export default function Scene(): React.ReactElement{
     }
   }
 
+  function handleOnElementClick(camera: cameraOptionsInferface){
+    /*
+    setCameraOptions((cameraOptions) => {
+      const {0: rx, 2: rz} = cameraOptions.rotation;
+      return {...cameraOptions, rotation: [rx, Math.cos(Math.PI * scroll)*0.15, rz]};
+    });
+    */
+    setCameraOptions(camera);
+  }
+
 
   useEffect(() => {
     const newComponent = lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
@@ -80,13 +90,15 @@ export default function Scene(): React.ReactElement{
       setLandscape(true);
     }
   }, [windowDimensions]);
-
+  /*
   useEffect(() => {
     setCameraOptions((cameraOptions) => {
       const {0: rx, 2: rz} = cameraOptions.rotation;
       return {...cameraOptions, rotation: [rx, Math.cos(Math.PI * scroll)*0.15, rz]};
     });
   }, [scroll]);
+
+  */
 
   function setRotationOnWheel(e: React.WheelEvent<HTMLDivElement>){
     const {deltaY} = e;
@@ -97,6 +109,7 @@ export default function Scene(): React.ReactElement{
       if(deltaY < 0 && scroll < 0) setScroll(0);
     }
   }
+  
 
   function WaitingSceneToLoad(){
     return  <Html 
@@ -173,11 +186,16 @@ export default function Scene(): React.ReactElement{
                 </Html>
         }
         <Suspense fallback={<WaitingSceneToLoad />}>
-          <Room position={initialScenePosition} rotation={initialSceneRotation} callback={() => setSceneLoaded(true)}/>
+          <Room
+            position={initialScenePosition}
+            rotation={initialSceneRotation}
+            callback={() => setSceneLoaded(true)}
+            onElementClick={handleOnElementClick}
+          />
           
           {CurrentAvatar && <CurrentAvatar
             ref={controller}
-            position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
+            position={[initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
             scale={0.0075}
             rotation={initialModelRotation}
           />} 
