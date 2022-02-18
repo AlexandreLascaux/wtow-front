@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
+import React, {lazy, RefObject, Suspense, useEffect, useMemo, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
@@ -11,12 +11,21 @@ import { AppContext } from '../reducers/context';
 import { CircularProgress } from '@mui/material';
 import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
+import CustomAvatar from '../avatar/customAvatar';
+import { animationsByAvatar } from '../animation/utils';
+import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
+import { fchown } from 'fs';
+import { animationInterface, customAvatarInterface } from './models/interfaces';
 
 interface cameraOptionsInferface{
     position: number[];
     rotation: number[];
     fov: number;
   }
+
+export interface avatarInterface{
+  animation: string;
+}
 
 export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
@@ -27,6 +36,7 @@ export default function Scene(): React.ReactElement{
   const scrollArea = useRef(null);
   const [scroll, setScroll] = useState<number>(0.5);
   const { state, dispatch } = React.useContext(AppContext);
+  const controller = useRef<customAvatarInterface | null>(null);
   const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps) => JSX.Element>>();
   const [landscape, setLandscape] = useState<boolean>(true);
   const [cameraOptions, setCameraOptions] = useState<cameraOptionsInferface>({
@@ -35,6 +45,21 @@ export default function Scene(): React.ReactElement{
     fov: defaultFov,
   });
   const windowDimensions = useWindowDimensions();
+  const animations = animationsByAvatar(state.user.avatar);
+  const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
+  const playerRef = useRef<HTMLAudioElement>(null);
+  const [soundSource, setSoundSource] = useState<string | null>(null);
+
+  function setCurrentAnimation(currentAnimation: animationInterface){
+    console.log(animations);
+    if (currentAnimation.sound){
+      setSoundSource(currentAnimation.sound);
+    }
+    if (controller.current && currentAnimation) {
+      controller.current.setCurrentAnimation(currentAnimation);
+    }
+  }
+
 
   useEffect(() => {
     const newComponent = lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
@@ -49,6 +74,25 @@ export default function Scene(): React.ReactElement{
       setLandscape(true);
     }
   }, [windowDimensions]);
+
+
+  useEffect(() => {
+    if(soundSource){
+      const src=`./assets/sounds/${soundSource}.mp3`;
+      
+      if (playerRef && playerRef.current){
+        playerRef.current.src = src;
+        if (playerRef && playerRef.current) {
+          if (playerRef.current.paused) {
+            playerRef.current.play();
+          } else {
+            playerRef.current.pause();
+          }
+        }
+        
+      }
+    }
+  }, [soundSource]);
 
   useEffect(() => {
     setCameraOptions((cameraOptions) => {
@@ -78,9 +122,41 @@ export default function Scene(): React.ReactElement{
     </Html>;
   }
 
+  const AnimationsRender = () => {
+    return <div className="d-flex">
+      {
+        animations.map(({value, icon, sound}, index) => {
+          return (<div key={index} className="pr-2 pl-2 d-flex">
+            <AnimationButton value={value} icon={icon} sound={sound} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
+          </div>);
+        }
+        )}
+    </div>;
+  };
+
+ 
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
+
+      <audio
+        ref={playerRef as RefObject<HTMLAudioElement>}
+        src='./assets/sounds/run-sound.mp3'
+        autoPlay
+        style={{opacity: 0}}
+        loop>
+      </audio>
+
+      <div 
+        className="d-flex w-100 justify-content-center position-absolute"
+        style={{bottom:'30px', zIndex: 1}}
+      >
+        
+        {
+          sceneLoaded && <AnimationsRender />
+        }
+        
+      </div>
 
       <Canvas>
         <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
@@ -101,9 +177,10 @@ export default function Scene(): React.ReactElement{
                 </Html>
         }
         <Suspense fallback={<WaitingSceneToLoad />}>
-          <Room position={initialScenePosition} rotation={initialSceneRotation} />
+          <Room position={initialScenePosition} rotation={initialSceneRotation} callback={() => setSceneLoaded(true)}/>
           
           {CurrentAvatar && <CurrentAvatar
+            ref={controller}
             position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
             scale={0.0075}
             rotation={initialModelRotation}

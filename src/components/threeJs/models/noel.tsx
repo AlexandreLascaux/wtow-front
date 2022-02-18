@@ -7,10 +7,11 @@ title: Moose
 */
 
 import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader, dispose } from '@react-three/fiber';
+import { animationInterface, customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -46,7 +47,9 @@ type ActionName =
   | 'Walk_In_Place'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Noel(props: JSX.IntrinsicElements['group']) {
+const baseAnimation = 'Idle';
+
+const Noel = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props, ref) => {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/noel.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
@@ -54,6 +57,17 @@ export default function Noel(props: JSX.IntrinsicElements['group']) {
 
   const { actions, names } = useAnimations(animations, group);
   
+  useImperativeHandle(ref, () => ({
+    setCurrentAnimation({value, sound}: animationInterface) {
+      const defaultAnimation: ActionName = value !== '' ? value as ActionName : baseAnimation;
+      const currentAnimation = actions[defaultAnimation];
+      stopAnimations();
+      if(currentAnimation) {
+        currentAnimation.play();
+      } 
+    },
+  }));
+
   function randomAnimation() {
     stopAnimations();
     startAnimation(actions[names[Math.floor(Math.random()*names.length)]]);
@@ -87,8 +101,10 @@ export default function Noel(props: JSX.IntrinsicElements['group']) {
   }, [animations]);
 
   useEffect(() => {
-    if(actions['Idle']) {
-      actions['Idle'].play();
+    const currentAnimation = actions[baseAnimation];
+    if(currentAnimation) {
+      stopAnimations();
+      currentAnimation.play();
     } 
   }, [actions]);
 
@@ -130,6 +146,7 @@ export default function Noel(props: JSX.IntrinsicElements['group']) {
       </group>
     </group>
   );
-}
+});
 
-useGLTF.preload('/noel.glb');
+Noel.displayName = 'Noel';
+export default Noel;

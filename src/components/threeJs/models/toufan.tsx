@@ -7,13 +7,15 @@ title: Jungle Animal: Cartoon Elephant
 */
 
 import * as THREE from 'three';
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect, useImperativeHandle } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshStandardMaterial } from 'three';
 import { time } from 'console';
+import { avatarInterface } from '..';
+import { animationInterface, customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -59,13 +61,28 @@ export function getRandomColor(material: MeshStandardMaterial) {
   material.setValues({color});
 }
 
-export default function Toufan(props: JSX.IntrinsicElements['group']) {
+const baseAnimation = 'Idle.FBX_0';
+
+const Toufan = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props, ref) => {
+
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/toufan.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
   const [pointer, setPointer] = useState<boolean>(false);
 
   const { actions, names } = useAnimations(animations, group);
+
+  useImperativeHandle(ref, () => ({
+    setCurrentAnimation({value, sound}: animationInterface) {
+      const defaultAnimation: ActionName = value !== '' ? value as ActionName : baseAnimation;
+      const currentAnimation = actions[defaultAnimation];
+      stopAnimations();
+      if(currentAnimation) {
+        currentAnimation.play();
+      } 
+    },
+  }));
+
   
   function randomAnimation() {
     stopAnimations();
@@ -100,8 +117,10 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
   }, [animations]);
 
   useEffect(() => {
-    if(actions['Idle.FBX_0']) {
-      actions['Idle.FBX_0'].play();
+    const currentAnimation = actions[baseAnimation];
+    if(currentAnimation) {
+      stopAnimations();
+      currentAnimation.play();
     } 
   }, [actions]);
 
@@ -149,6 +168,7 @@ export default function Toufan(props: JSX.IntrinsicElements['group']) {
       </group>
     </group>
   );
-}
+});
 
-useGLTF.preload('/mascotte/toufan.glb');
+Toufan.displayName = 'Toufan';
+export default Toufan;

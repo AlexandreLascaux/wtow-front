@@ -7,10 +7,11 @@ title: Cat
 */
 
 import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader, dispose } from '@react-three/fiber';
+import { animationInterface, customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -55,13 +56,28 @@ type ActionName =
   | 'Walk_In_Place'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Chafrou(props: JSX.IntrinsicElements['group']) {
+const baseAnimation = 'Idle';
+
+const Chafrou = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props, ref) => {
+  
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/chafrou.glb');
   const { nodes, animations, materials } = gltf as GLTFResult;
   const [pointer, setPointer] = useState<boolean>(false);
 
   const { actions, names } = useAnimations(animations, group);
+
+  useImperativeHandle(ref, () => ({
+    setCurrentAnimation({value}: animationInterface) {
+      const defaultAnimation: ActionName = value !== '' ? value as ActionName : baseAnimation;
+      const currentAnimation = actions[defaultAnimation];
+      stopAnimations();
+      if(currentAnimation) {
+        currentAnimation.play();
+      } 
+    },
+  }));
+
   
   function randomAnimation() {
     stopAnimations();
@@ -94,10 +110,12 @@ export default function Chafrou(props: JSX.IntrinsicElements['group']) {
       animation.resetDuration();
     });
   }, [animations]);
-
+  
   useEffect(() => {
-    if(actions['Idle']) {
-      actions['Idle'].play();
+    const currentAnimation = actions['Idle'];
+    if(currentAnimation) {
+      stopAnimations();
+      currentAnimation.play();
     } 
   }, [actions]);
 
@@ -144,6 +162,6 @@ export default function Chafrou(props: JSX.IntrinsicElements['group']) {
       </group>
     </group>
   );
-}
-
-useGLTF.preload('/mascotte/chafrou.glb');
+});
+Chafrou.displayName = 'Chafrou';
+export default Chafrou;

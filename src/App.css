@@ -77,6 +77,17 @@ button {
   background-color: #AAA7CB;
 }
 
+/*
+  POSITION
+*/
+
+.position-absolute{
+  position: absolute;
+}
+
+.position-relative{
+  position: relative;
+}
 
 /*
   DISPLAY
@@ -99,7 +110,12 @@ button {
 }
 
 /* SPACING */
-
+.pr-2 {
+  padding-right: 12px;
+}
+.pl-2 {
+  padding-left: 12px;
+}
 .pb-5 {
   padding-bottom: 30px;
 }

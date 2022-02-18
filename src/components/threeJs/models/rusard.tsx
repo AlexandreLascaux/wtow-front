@@ -7,10 +7,11 @@ title: Forest Animal: Fox
 */
 
 import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader } from '@react-three/fiber';
+import { animationInterface, customAvatarInterface, CustomAvatarProps } from './interfaces';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -27,7 +28,7 @@ type GLTFResult = GLTF & {
     material: THREE.MeshStandardMaterial
   }
 }
-/*
+
 type ActionName =
   | 'Failure'
   | 'Fall'
@@ -44,15 +45,27 @@ type ActionName =
   | 'Talk'
   | 'Walk'
   | 'Walk_In_Place'
-*/
 
-export default function Rusard(props: JSX.IntrinsicElements['group']): React.ReactElement {
+const baseAnimation = 'Idle';
+
+const Rusard = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props, ref) => {
   const group = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/mascotte/rusard.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
   const [pointer, setPointer] = useState<boolean>(false);
 
   const { actions, names } = useAnimations(animations, group);
+  
+  useImperativeHandle(ref, () => ({
+    setCurrentAnimation({value, sound}: animationInterface) {
+      const defaultAnimation: ActionName = value !== '' ? value as ActionName : baseAnimation;
+      const currentAnimation = actions[defaultAnimation];
+      stopAnimations();
+      if(currentAnimation) {
+        currentAnimation.play();
+      } 
+    },
+  }));
   
   function randomAnimation() {
     stopAnimations();
@@ -87,8 +100,10 @@ export default function Rusard(props: JSX.IntrinsicElements['group']): React.Rea
   }, [animations]);
 
   useEffect(() => {
-    if(actions['Idle']) {
-      actions['Idle'].play();
+    const currentAnimation = actions[baseAnimation];
+    if(currentAnimation) {
+      stopAnimations();
+      currentAnimation.play();
     } 
   }, [actions]);
 
@@ -130,6 +145,8 @@ export default function Rusard(props: JSX.IntrinsicElements['group']): React.Rea
       </group>
     </group>
   );
-}
+});
 
-useGLTF.preload('/rusard.glb');
+Rusard.displayName = 'Rusard';
+export default Rusard;
+
