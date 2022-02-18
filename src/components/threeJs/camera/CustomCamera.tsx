@@ -92,12 +92,13 @@ export default function CustomCamera({position, rotation, fov, baseCameraPositio
         setDefaultPosition(false);
       }
       
-      if(!defaultPosition && !reachedPosition && isReachedCameraPosition) {
+      if(!isDefaultCameraPosition && !reachedPosition && isReachedCameraPosition) {
         setReachedPosition(true);
         reachedCameraPositionCallback();
       } else if (reachedPosition && !isReachedCameraPosition) {
         setReachedPosition(false);
       }
+      cameraRef.current.updateProjectionMatrix();
 
 
     }
