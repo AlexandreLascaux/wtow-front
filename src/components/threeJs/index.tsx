@@ -1,21 +1,19 @@
-import React, {lazy, RefObject, Suspense, useEffect, useMemo, useRef, useState} from 'react';
+import React, {lazy, RefObject, Suspense, useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
 import Room from './scene/room';
-
 import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov } from './camera/CustomCamera';
 import { Html, OrbitControls } from '@react-three/drei';
 import Snow from './meteo/snow';
 import { AppContext } from '../reducers/context';
-import { CircularProgress,Button,Modal } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
 import CustomAvatar from '../avatar/customAvatar';
 import { animationsByAvatar } from '../animation/utils';
-import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
+import AnimationButton from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
-import { avatarNames } from '../reducers/userReducer';
 import ModalProfile from '../modals/modalProfile';
 
 interface cameraOptionsInferface{
@@ -24,15 +22,15 @@ interface cameraOptionsInferface{
     fov: number;
   }
 
-export interface avatarInterface{
-  animation: string;
-}
+export interface avatarInterface {
+    animation: string;
+  }
 
 export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
   const initialSceneRotation = new THREE.Euler( 0, 0, 0, 'XYZ' );
   const initialMeteoPosition = new THREE.Vector3( 10., -2., -10.8 );
-  const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 6., initialMeteoPosition.z + 4.8);
+  const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 5., initialMeteoPosition.z + 4.8);
   const initialModelRotation = new THREE.Euler( -0.03, 0.4, 0.0, 'XYZ' );
   const scrollArea = useRef(null);
   const [scroll, setScroll] = useState<number>(0.5);
@@ -49,15 +47,19 @@ export default function Scene(): React.ReactElement{
   const animations = animationsByAvatar(state.user.avatar);
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
   const playerRef = useRef<HTMLAudioElement>(null);
-  const [soundSource, setSoundSource] = useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   function setCurrentAnimation(currentAnimation: animationInterface){
-    console.log(animations);
     if (currentAnimation.sound){
-      setSoundSource(currentAnimation.sound);
+      const src=`/assets/sounds/${currentAnimation.sound}.mp3`;
+      
+      if (playerRef && playerRef.current){
+        playerRef.current.volume = 0.1;
+        playerRef.current.src = src;
+        playerRef.current.play(); 
+      }
     }
     if (controller.current && currentAnimation) {
       controller.current.setCurrentAnimation(currentAnimation);
@@ -78,25 +80,6 @@ export default function Scene(): React.ReactElement{
       setLandscape(true);
     }
   }, [windowDimensions]);
-
-
-  useEffect(() => {
-    if(soundSource){
-      const src=`./assets/sounds/${soundSource}.mp3`;
-      
-      if (playerRef && playerRef.current){
-        playerRef.current.src = src;
-        if (playerRef && playerRef.current) {
-          if (playerRef.current.paused) {
-            playerRef.current.play();
-          } else {
-            playerRef.current.pause();
-          }
-        }
-        
-      }
-    }
-  }, [soundSource]);
 
   useEffect(() => {
     setCameraOptions((cameraOptions) => {
@@ -142,7 +125,10 @@ export default function Scene(): React.ReactElement{
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
-      <div style={{position: 'absolute', right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none'}}>
+      <div
+        className="position-absolute"
+        style={{right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none'}}
+      >
         <CustomAvatar
           onClick={handleOpen}
           avatarName={state.user.avatar}
@@ -155,21 +141,15 @@ export default function Scene(): React.ReactElement{
 
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
-        src='./assets/sounds/run-sound.mp3'
-        autoPlay
         style={{opacity: 0}}
-        loop>
+      >
       </audio>
 
       <div 
-        className="d-flex w-100 justify-content-center position-absolute"
-        style={{bottom:'30px', zIndex: 1}}
+        className="w-100 justify-content-center position-absolute"
+        style={{bottom:'30px', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
       >
-        
-        {
-          sceneLoaded && <AnimationsRender />
-        }
-        
+        <AnimationsRender />
       </div>
 
       <ModalProfile onClose={handleClose} open={open} />
@@ -200,63 +180,67 @@ export default function Scene(): React.ReactElement{
             position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
             scale={0.0075}
             rotation={initialModelRotation}
-          />}       
-          <Suspense fallback={null}>
-            <Rain
-              isVisible={state.meteo.rainProperties.rain}
-              rainCount={1250}
-              position={initialMeteoPosition}
-            />
-            <Snow
-              isVisible={state.meteo.snowProperties.snow}
-              snowCount={1250}
-              position={initialMeteoPosition}
-            />
-            <Clouds
-              isVisible={state.meteo.cloudProperties.cloud}
-              velocity={state.meteo.cloudProperties.windSpeed}
-              number={state.meteo.cloudProperties.cloudCover}
-              position={initialCloudPosition}
-            />
-            <Html 
-              transform
-              className="user-select-none"
-              style={{color: 'black', fontSize:'0.070em'}}
-              position={[initialScenePosition.x-3.3975, initialScenePosition.y + 2.50, initialScenePosition.z + 5.6]}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={() => dispatch({type: 'setRain', value: !state.meteo.rainProperties.rain})}>
-                <b>Rain</b>
-              </p>
-            </Html>
+          />} 
 
-            <Html 
-              transform
-              className="user-select-none"
-              style={{color: 'black', fontSize:'0.05em'}}
-              position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.975, initialScenePosition.z + 5.6]}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={() => dispatch({type: 'setSnow', value: !state.meteo.snowProperties.snow})}>
-                <b>Snow</b>
-              </p>
-            </Html>
+          {
+            sceneLoaded && <Suspense fallback={null}>
+              <Rain
+                isVisible={state.meteo.rainProperties.rain}
+                rainCount={1250}
+                position={initialMeteoPosition}
+              />
+              <Snow
+                isVisible={state.meteo.snowProperties.snow}
+                snowCount={1250}
+                position={initialMeteoPosition}
+              />
+              <Clouds
+                isVisible={state.meteo.cloudProperties.cloud}
+                velocity={state.meteo.cloudProperties.windSpeed}
+                number={state.meteo.cloudProperties.cloudCover}
+                position={initialCloudPosition}
+              />
+              <Html 
+                transform
+                className="user-select-none"
+                style={{color: 'black', fontSize:'0.070em'}}
+                position={[initialScenePosition.x-3.3975, initialScenePosition.y + 2.50, initialScenePosition.z + 5.6]}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={() => dispatch({type: 'setRain', value: !state.meteo.rainProperties.rain})}>
+                  <b>Rain</b>
+                </p>
+              </Html>
 
-            <Html 
-              transform
-              className="user-select-none"
-              style={{color: 'black', fontSize:'0.05em'}}
-              position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.72, initialScenePosition.z + 5.6]}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={() => dispatch({type: 'setCloud', value: !state.meteo.cloudProperties.cloud})}>
-                <b>Cloud</b>
-              </p>
-            </Html>
-          </Suspense>
+              <Html 
+                transform
+                className="user-select-none"
+                style={{color: 'black', fontSize:'0.05em'}}
+                position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.975, initialScenePosition.z + 5.6]}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={() => dispatch({type: 'setSnow', value: !state.meteo.snowProperties.snow})}>
+                  <b>Snow</b>
+                </p>
+              </Html>
+
+              <Html 
+                transform
+                className="user-select-none"
+                style={{color: 'black', fontSize:'0.05em'}}
+                position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.72, initialScenePosition.z + 5.6]}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={() => dispatch({type: 'setCloud', value: !state.meteo.cloudProperties.cloud})}>
+                  <b>Cloud</b>
+                </p>
+              </Html>
+            </Suspense>
+          }      
+          
         </Suspense>
       </Canvas>
     </div>
