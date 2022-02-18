@@ -8,14 +8,14 @@ import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov 
 import { Html, OrbitControls } from '@react-three/drei';
 import Snow from './meteo/snow';
 import { AppContext } from '../reducers/context';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress,Button,Modal } from '@mui/material';
 import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
 import CustomAvatar from '../avatar/customAvatar';
 import { animationsByAvatar } from '../animation/utils';
 import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
-import { fchown } from 'fs';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
+import { avatarNames } from '../reducers/userReducer';
 
 interface cameraOptionsInferface{
     position: number[];
@@ -49,6 +49,10 @@ export default function Scene(): React.ReactElement{
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
   const playerRef = useRef<HTMLAudioElement>(null);
   const [soundSource, setSoundSource] = useState<string | null>(null);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const listAvatars: avatarNames[] = ['toufan', 'lilia', 'chafrou', 'crocmou', 'noel', 'rusard'];
 
   function setCurrentAnimation(currentAnimation: animationInterface){
     console.log(animations);
@@ -122,6 +126,10 @@ export default function Scene(): React.ReactElement{
     </Html>;
   }
 
+  function isActive(avatar: avatarNames){
+    return avatar === state.user.avatar;
+  }
+
   const AnimationsRender = () => {
     return <div className="d-flex">
       {
@@ -138,6 +146,16 @@ export default function Scene(): React.ReactElement{
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
+      <div style={{position: 'absolute', right: '30px', top:'15px', zIndex: 1}}>
+        <CustomAvatar
+          onClick={handleOpen}
+          avatarName={state.user.avatar}
+          size={100}
+        />
+        <p>
+          <b>{state.user.name}</b>
+        </p>
+      </div>
 
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
@@ -157,6 +175,37 @@ export default function Scene(): React.ReactElement{
         }
         
       </div>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+      >
+        <>
+          <div className="modal-container">
+            <div className="child">
+              <div className="modal-inputs">
+
+                <h2 id="modal-title">Changer son nom....</h2>
+                <input className="modal-input" type="text" value={state.user.name} onChange={(event) => dispatch({type: 'setName', value: event.target.value})}/>
+              </div>
+              <div className="home-grid-avatar-list d-flex">
+                {
+                  listAvatars.map((avatar, index) => 
+                    <div key={index} className="home-avatar-list d-flex justify-content-center">
+                      <CustomAvatar
+                        onClick={() => dispatch({type: 'setAvatar', value: avatar })}
+                        avatarName={avatar}
+                        size={60}
+                        active={isActive(avatar)}
+                      />
+                    </div>
+                  )
+                }   
+              </div>
+            </div>
+          </div>
+        </>
+      </Modal>
 
       <Canvas>
         <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
@@ -249,10 +298,8 @@ export default function Scene(): React.ReactElement{
                 <b>{state.user.name}</b>
               </p>
             </Html>
-                      
           </Suspense>
         </Suspense>
-        
       </Canvas>
     </div>
   );

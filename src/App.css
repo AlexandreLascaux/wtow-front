@@ -190,3 +190,53 @@ button {
   outline: none;
 }
 
+/* 
+  MODAL
+*/
+
+.modal-container{
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.child {
+  background-color: #9B88C8;
+  border: 6px solid #7469CF;
+  border-radius: 20px;
+  padding: 20px;
+  width: 30%;
+  height: 50%;
+
+}
+
+.modal-title{
+  text-align: center;
+}
+
+.modal-inputs{
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.modal-input {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  background: #9B88C8;
+  border: 6px solid #7469CF;
+  box-sizing: border-box;
+  border-radius: 60px;
+  width: 50%;
+  height: 50px;
+  text-align: center;
+  color: #434343;
+  font-size: 1.5rem;
+}
+
+.modal-input:active, .modal-input:focus-visible {
+  border: 6px solid #7469CF;
+} 
+
