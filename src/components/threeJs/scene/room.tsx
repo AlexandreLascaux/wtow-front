@@ -116,6 +116,7 @@ type GLTFActions = Record<ActionName, THREE.AnimationAction>
 interface callbackInterface {
   callback: () => void;
   onElementClick: (camera: cameraOptionsInferface) => void;
+  sceneLoaded: boolean;
 }
 
 export default function Model(props: JSX.IntrinsicElements['group'] & callbackInterface): React.ReactElement {
@@ -136,7 +137,7 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
   const materialTree =  materials['Material.004'].clone();
 
   useLayoutEffect(() => {
-    props.callback?.();
+    if(!props.sceneLoaded) props.callback?.();
   }, []);
 
   useEffect(()=>{

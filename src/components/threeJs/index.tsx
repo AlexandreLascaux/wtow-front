@@ -15,7 +15,8 @@ import { animationsByAvatar } from '../animation/utils';
 import AnimationButton from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
 import ModalProfile from '../modals/modalProfile';
-import { isEqual } from 'lodash';
+import { isEqual, uniqueId } from 'lodash';
+import Stork from './birds/stork';
 
 export interface cameraOptionsInferface{
     position: number[];
@@ -26,6 +27,7 @@ export interface cameraOptionsInferface{
 export interface avatarInterface {
     animation: string;
   }
+const birdId = uniqueId();
 
 export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
@@ -34,7 +36,6 @@ export default function Scene(): React.ReactElement{
   const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 5., initialMeteoPosition.z + 4.8);
   const initialModelRotation = new THREE.Euler( -0.03, 0.4, 0.0, 'XYZ' );
   const scrollArea = useRef(null);
-  const [scroll, setScroll] = useState<number>(0.5);
   const { state, dispatch } = React.useContext(AppContext);
   const controller = useRef<customAvatarInterface | null>(null);
   const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps) => JSX.Element>>();
@@ -49,6 +50,8 @@ export default function Scene(): React.ReactElement{
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
   const playerRef = useRef<HTMLAudioElement>(null);
   const backgroundAudioRef = useRef<HTMLAudioElement>(null);
+
+  const [birdCounter, setBirdCounter] = useState<number>(0);
 
   const [baseCameraPosition, setBaseCameraPosition] = useState<boolean>(true);
   const [reachedCameraPosition, setReachedCameraPosition] = useState<boolean>(false);
@@ -96,7 +99,6 @@ export default function Scene(): React.ReactElement{
   useEffect(()=>{
     if(windowDimensions.height > windowDimensions.width){
       setLandscape(false);
-      setScroll(0.5);
     } else {
       setLandscape(true);
     }
@@ -117,7 +119,7 @@ export default function Scene(): React.ReactElement{
   }, [scroll]);
 
   */
-
+  /*
   function setRotationOnWheel(e: React.WheelEvent<HTMLDivElement>){
     const {deltaY} = e;
     if(landscape){
@@ -127,7 +129,7 @@ export default function Scene(): React.ReactElement{
       if(deltaY < 0 && scroll < 0) setScroll(0);
     }
   }
-  
+  */
 
   function WaitingSceneToLoad(){
     return  <Html 
@@ -152,10 +154,11 @@ export default function Scene(): React.ReactElement{
     </div>;
   };
 
+  console.log(state);
  
   return (
         
-    <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
+    <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}}>
       <div
         className="position-absolute"
         style={{right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none'}}
@@ -235,6 +238,7 @@ export default function Scene(): React.ReactElement{
             rotation={initialSceneRotation}
             callback={() => setSceneLoaded(true)}
             onElementClick={changeCameraProperties}
+            sceneLoaded={sceneLoaded}
           />
           
           {CurrentAvatar && <CurrentAvatar
@@ -243,9 +247,23 @@ export default function Scene(): React.ReactElement{
             scale={0.0075}
             rotation={initialModelRotation}
           />} 
-
+          {
+            console.log(sceneLoaded)
+          }
           {
             sceneLoaded && <Suspense fallback={null}>
+
+              <Stork
+                key={birdId}
+                props={{
+                  scale: [0.3, 0.3, 0.3],
+                }
+                }
+                position={[defaultCameraPosition[0] + 13, defaultCameraPosition[1] + 1.75, defaultCameraPosition[2] - 14]}
+                birdSpeed={birdCounter}
+                callback={() => setBirdCounter(birdCounter+10)}
+              />
+
               <Rain
                 isVisible={state.meteo.rainProperties.rain}
                 rainCount={1250}

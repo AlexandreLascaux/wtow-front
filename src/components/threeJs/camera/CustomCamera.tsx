@@ -100,7 +100,7 @@ export default function CustomCamera({position, rotation, fov, baseCameraPositio
       }
       cameraRef.current.updateProjectionMatrix();
 
-
+  
     }
   });
 
