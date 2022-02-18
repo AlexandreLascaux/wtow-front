@@ -8,14 +8,15 @@ import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov 
 import { Html, OrbitControls } from '@react-three/drei';
 import Snow from './meteo/snow';
 import { AppContext } from '../reducers/context';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress,Button,Modal } from '@mui/material';
 import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
 import CustomAvatar from '../avatar/customAvatar';
 import { animationsByAvatar } from '../animation/utils';
 import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
-import { fchown } from 'fs';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
+import { avatarNames } from '../reducers/userReducer';
+import ModalProfile from '../modals/modalProfile';
 
 interface cameraOptionsInferface{
     position: number[];
@@ -49,6 +50,9 @@ export default function Scene(): React.ReactElement{
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
   const playerRef = useRef<HTMLAudioElement>(null);
   const [soundSource, setSoundSource] = useState<string | null>(null);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   function setCurrentAnimation(currentAnimation: animationInterface){
     console.log(animations);
@@ -138,6 +142,16 @@ export default function Scene(): React.ReactElement{
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
+      <div style={{position: 'absolute', right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none'}}>
+        <CustomAvatar
+          onClick={handleOpen}
+          avatarName={state.user.avatar}
+          size={100}
+        />
+        <p>
+          <b>{state.user.name}</b>
+        </p>
+      </div>
 
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
@@ -157,6 +171,8 @@ export default function Scene(): React.ReactElement{
         }
         
       </div>
+
+      <ModalProfile onClose={handleClose} open={open} />
 
       <Canvas>
         <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
@@ -240,19 +256,8 @@ export default function Scene(): React.ReactElement{
                 <b>Cloud</b>
               </p>
             </Html>
-            <Html 
-              transform
-              style={{color: 'Pink', fontSize:'0.3em'}}
-              position={[initialScenePosition.x + 4.2, initialScenePosition.y + 3.75, initialScenePosition.z + 3]}
-            >
-              <p>
-                <b>{state.user.name}</b>
-              </p>
-            </Html>
-                      
           </Suspense>
         </Suspense>
-        
       </Canvas>
     </div>
   );

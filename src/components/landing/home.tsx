@@ -7,6 +7,7 @@ import { AppContext } from '../reducers/context';
 import { forecastInterface } from '../interfaces/meteoInterface';
 import { getIpInterface } from '../interfaces/ipInterface';
 import { convertMeteoData } from '../utils/meteoAdapter';
+import { listAvatars } from '../avatar/utils';
 
 const defaultCity = 'lyon';
 
@@ -14,7 +15,6 @@ function Home(): ReactElement{
   const { state, dispatch } = React.useContext(AppContext);
   const [openScene, setOpenScene] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>(state.user.name);
-  const listAvatars: avatarNames[] = ['toufan', 'lilia', 'chafrou', 'crocmou', 'noel', 'rusard'];
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [resultData, setResultData] = useState<forecastInterface[]>();
 
