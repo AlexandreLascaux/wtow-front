@@ -38,7 +38,7 @@ export default function ModalProfile({open,onClose}: modalProfileInterface): Rea
                   <CustomAvatar
                     onClick={() => dispatch({type: 'setAvatar', value: avatar })}
                     avatarName={avatar}
-                    size={60}
+                    size={100}
                     active={isActive(avatar)}
                   />
                 </div>

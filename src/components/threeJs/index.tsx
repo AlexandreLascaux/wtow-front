@@ -15,6 +15,9 @@ import { animationsByAvatar } from '../animation/utils';
 import AnimationButton from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
 import ModalProfile from '../modals/modalProfile';
+import NavBar from '../navbar/navBar';
+import ModalClothes from '../modals/modalClothes';
+import ModalAnimations from '../modals/modalAnimations';
 
 export interface cameraOptionsInferface{
     position: number[];
@@ -50,6 +53,14 @@ export default function Scene(): React.ReactElement{
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [openModalClothes, setOpenModalClothes] = React.useState(false);
+  const handleOpenModalClothes = () => setOpenModalClothes(true);
+  const handleCloseModalClothes = () => setOpenModalClothes(false);
+
+  const [openModalAnimations, setOpenModalAnimations] = React.useState(false);
+  const handleOpenModalAnimations = () => setOpenModalAnimations(true);
+  const handleCloseModalAnimations = () => setOpenModalAnimations(false);
 
   function setCurrentAnimation(currentAnimation: animationInterface){
     if (currentAnimation.sound){
@@ -122,17 +133,7 @@ export default function Scene(): React.ReactElement{
     </Html>;
   }
 
-  const AnimationsRender = () => {
-    return <div className="d-flex">
-      {
-        animations.map(({value, icon, sound}, index) => {
-          return (<div key={index} className="pr-2 pl-2 d-flex">
-            <AnimationButton value={value} icon={icon} sound={sound} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
-          </div>);
-        }
-        )}
-    </div>;
-  };
+  
 
  
   return (
@@ -160,11 +161,13 @@ export default function Scene(): React.ReactElement{
 
       <div 
         className="w-100 justify-content-center position-absolute"
-        style={{bottom:'30px', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
+        style={{bottom:'0px', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
       >
-        <AnimationsRender />
+        <NavBar handleOpen={handleOpen} handleOpenModalClothes={handleOpenModalClothes} handleOpenModalAnimations={handleOpenModalAnimations}/>
       </div>
-
+      
+      <ModalClothes onClose={handleCloseModalClothes} open={openModalClothes} />
+      <ModalAnimations onClose={handleCloseModalAnimations} open={openModalAnimations} />
       <ModalProfile onClose={handleClose} open={open} />
 
       <Canvas>

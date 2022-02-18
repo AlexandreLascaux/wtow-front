@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 
 export const defaultCameraPosition = [0, 0, 8];
 export const defaultCameraRotation = [0,0,0];
-export const defaultFov = 40;
+export const defaultFov = 45;
 
 interface cameraOptionsInferface{
     position: number[];

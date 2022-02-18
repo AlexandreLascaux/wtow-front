@@ -240,3 +240,11 @@ button {
   border: 6px solid #7469CF;
 } 
 
+/* NavBar */
+
+.nav-bar{
+  width: 100%;
+  background-color: #9B88C8;
+  margin: 0;
+  padding: 0;
+}
