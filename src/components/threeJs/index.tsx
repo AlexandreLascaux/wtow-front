@@ -16,6 +16,7 @@ import { animationsByAvatar } from '../animation/utils';
 import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
 import { avatarNames } from '../reducers/userReducer';
+import ModalProfile from '../modals/modalProfile';
 
 interface cameraOptionsInferface{
     position: number[];
@@ -52,7 +53,6 @@ export default function Scene(): React.ReactElement{
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const listAvatars: avatarNames[] = ['toufan', 'lilia', 'chafrou', 'crocmou', 'noel', 'rusard'];
 
   function setCurrentAnimation(currentAnimation: animationInterface){
     console.log(animations);
@@ -126,10 +126,6 @@ export default function Scene(): React.ReactElement{
     </Html>;
   }
 
-  function isActive(avatar: avatarNames){
-    return avatar === state.user.avatar;
-  }
-
   const AnimationsRender = () => {
     return <div className="d-flex">
       {
@@ -146,7 +142,7 @@ export default function Scene(): React.ReactElement{
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
-      <div style={{position: 'absolute', right: '30px', top:'15px', zIndex: 1}}>
+      <div style={{position: 'absolute', right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none'}}>
         <CustomAvatar
           onClick={handleOpen}
           avatarName={state.user.avatar}
@@ -176,36 +172,7 @@ export default function Scene(): React.ReactElement{
         
       </div>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
-        <>
-          <div className="modal-container">
-            <div className="child">
-              <div className="modal-inputs">
-
-                <h2 id="modal-title">Changer son nom....</h2>
-                <input className="modal-input" type="text" value={state.user.name} onChange={(event) => dispatch({type: 'setName', value: event.target.value})}/>
-              </div>
-              <div className="home-grid-avatar-list d-flex">
-                {
-                  listAvatars.map((avatar, index) => 
-                    <div key={index} className="home-avatar-list d-flex justify-content-center">
-                      <CustomAvatar
-                        onClick={() => dispatch({type: 'setAvatar', value: avatar })}
-                        avatarName={avatar}
-                        size={60}
-                        active={isActive(avatar)}
-                      />
-                    </div>
-                  )
-                }   
-              </div>
-            </div>
-          </div>
-        </>
-      </Modal>
+      <ModalProfile onClose={handleClose} open={open} />
 
       <Canvas>
         <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
@@ -287,15 +254,6 @@ export default function Scene(): React.ReactElement{
                 className="cursor-pointer"
                 onClick={() => dispatch({type: 'setCloud', value: !state.meteo.cloudProperties.cloud})}>
                 <b>Cloud</b>
-              </p>
-            </Html>
-            <Html 
-              transform
-              style={{color: 'Pink', fontSize:'0.3em'}}
-              position={[initialScenePosition.x + 4.2, initialScenePosition.y + 3.75, initialScenePosition.z + 3]}
-            >
-              <p>
-                <b>{state.user.name}</b>
               </p>
             </Html>
           </Suspense>
