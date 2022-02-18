@@ -1,4 +1,4 @@
-import React, {lazy, RefObject, Suspense, useEffect, useRef, useState} from 'react';
+import React, {lazy, RefObject, Suspense, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
@@ -7,7 +7,7 @@ import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov 
 import { Html, OrbitControls } from '@react-three/drei';
 import Snow from './meteo/snow';
 import { AppContext } from '../reducers/context';
-import { CircularProgress } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
 import CustomAvatar from '../avatar/customAvatar';
@@ -15,6 +15,7 @@ import { animationsByAvatar } from '../animation/utils';
 import AnimationButton from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
 import ModalProfile from '../modals/modalProfile';
+import { isEqual } from 'lodash';
 
 export interface cameraOptionsInferface{
     position: number[];
@@ -47,6 +48,13 @@ export default function Scene(): React.ReactElement{
   const animations = animationsByAvatar(state.user.avatar);
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
   const playerRef = useRef<HTMLAudioElement>(null);
+  const backgroundAudioRef = useRef<HTMLAudioElement>(null);
+
+  const [baseCameraPosition, setBaseCameraPosition] = useState<boolean>(true);
+  const [reachedCameraPosition, setReachedCameraPosition] = useState<boolean>(false);
+
+  
+  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -56,7 +64,6 @@ export default function Scene(): React.ReactElement{
       const src=`/assets/sounds/${currentAnimation.sound}.mp3`;
       
       if (playerRef && playerRef.current){
-        playerRef.current.volume = 0.1;
         playerRef.current.src = src;
         playerRef.current.play(); 
       }
@@ -66,13 +73,17 @@ export default function Scene(): React.ReactElement{
     }
   }
 
-  function handleOnElementClick(camera: cameraOptionsInferface){
-    /*
-    setCameraOptions((cameraOptions) => {
-      const {0: rx, 2: rz} = cameraOptions.rotation;
-      return {...cameraOptions, rotation: [rx, Math.cos(Math.PI * scroll)*0.15, rz]};
-    });
-    */
+  function changeCameraProperties(camera: cameraOptionsInferface){
+    if(!isEqual(camera, {
+      position: defaultCameraPosition,
+      rotation: defaultCameraRotation,
+      fov: defaultFov,
+    })){
+      setBaseCameraPosition(false);
+    }
+    if(!isEqual(camera,cameraOptions)){
+      setReachedCameraPosition(false);
+    }
     setCameraOptions(camera);
   }
 
@@ -90,6 +101,13 @@ export default function Scene(): React.ReactElement{
       setLandscape(true);
     }
   }, [windowDimensions]);
+
+  useLayoutEffect(() =>{
+    if (playerRef && playerRef.current){
+      playerRef.current.volume = 0.2;
+    }
+    if(backgroundAudioRef && backgroundAudioRef.current) backgroundAudioRef.current.volume = 0.15;
+  }, []);
   /*
   useEffect(() => {
     setCameraOptions((cameraOptions) => {
@@ -158,17 +176,43 @@ export default function Scene(): React.ReactElement{
       >
       </audio>
 
+      <audio
+        ref={backgroundAudioRef as RefObject<HTMLAudioElement>}
+        autoPlay
+        loop
+        src='/assets/sounds/pose-sound.mp3'
+        style={{opacity: 0}}
+      >
+      </audio>
+
       <div 
         className="w-100 justify-content-center position-absolute"
         style={{bottom:'30px', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
       >
-        <AnimationsRender />
+        {
+          baseCameraPosition && <AnimationsRender />
+        }
+        {
+          reachedCameraPosition &&
+            <Button variant="contained" onClick={() => changeCameraProperties({
+              position: defaultCameraPosition,
+              rotation: defaultCameraRotation,
+              fov: defaultFov,
+            })}>Back</Button>
+        }
+        
       </div>
 
       <ModalProfile onClose={handleClose} open={open} />
 
       <Canvas>
-        <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
+        <CustomCamera 
+          position={cameraOptions.position}
+          rotation={cameraOptions.rotation}
+          fov={cameraOptions.fov}
+          baseCameraPositionCallback={() => setBaseCameraPosition(true)}
+          reachedCameraPositionCallback={() => setReachedCameraPosition(true)}
+        />
 
         {
           // <OrbitControls />
@@ -190,7 +234,7 @@ export default function Scene(): React.ReactElement{
             position={initialScenePosition}
             rotation={initialSceneRotation}
             callback={() => setSceneLoaded(true)}
-            onElementClick={handleOnElementClick}
+            onElementClick={changeCameraProperties}
           />
           
           {CurrentAvatar && <CurrentAvatar
