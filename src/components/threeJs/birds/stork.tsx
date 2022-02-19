@@ -55,11 +55,12 @@ export default function Stork({props, callback, birdSpeed, position, key}: birdI
       group.current.rotation.y += x;
     }
     if (group.current.position.y <= (position[1] - 8)){
-      group.current.position.x = position[0]; 
+      const newDirection = Math.random() < 0.5;
+      group.current.position.x = newDirection ? position[0] - 30 : position[0]; 
       group.current.position.y = position[1];
       group.current.position.z = position[2];
       setYRatio(false);
-      setEndCourse(false);
+      setEndCourse(newDirection);
     }
     mixer.update(delta * speed);
   });
@@ -74,7 +75,7 @@ export default function Stork({props, callback, birdSpeed, position, key}: birdI
       };
       group.current.rotation.z = 1.5;
     } else {
-      group.current.rotation.y = 0;
+      group.current.rotation.y = endCourse ? Math.PI : 0;
       group.current.rotation.z = -0.4;
     }
     return () => animations.forEach((clip) => mixer.uncacheClip(clip));
