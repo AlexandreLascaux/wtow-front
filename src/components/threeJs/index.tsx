@@ -153,8 +153,6 @@ export default function Scene(): React.ReactElement{
         )}
     </div>;
   };
-
-  console.log(state);
  
   return (
         
@@ -201,7 +199,7 @@ export default function Scene(): React.ReactElement{
               position: defaultCameraPosition,
               rotation: defaultCameraRotation,
               fov: defaultFov,
-            })}>Back</Button>
+            })}>Revenir</Button>
         }
         
       </div>
