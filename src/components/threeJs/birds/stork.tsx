@@ -20,7 +20,7 @@ type GLTFResult = GLTF & {
 type ActionName = 'KeyAction'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-export default function Stork({props, callback, birdSpeed, position, key}: birdInterface) {
+export default function Stork({props, callback, birdSpeed, position, key}: birdInterface): React.ReactElement {
   const group: React.MutableRefObject<any> = useRef<THREE.Group>();
   const gltf = useLoader(GLTFLoader, '/birds/Stork.glb');
   const { nodes, materials, animations } = gltf as GLTFResult;
@@ -28,14 +28,28 @@ export default function Stork({props, callback, birdSpeed, position, key}: birdI
   const speed = 1.25 + birdSpeed/50;
   const actions = useRef<GLTFActions>();
   const [yRatio, setYRatio] = useState<boolean>(false);
+  const [endCourse, setEndCourse] = useState<boolean>(false);
   const [pointer, setPointer] = useState<boolean>(false);
   const positions = useMemo(() => new THREE.Vector3(position[0], position[1], position[2]), [position]);
 
   const [mixer] = useState(() => new THREE.AnimationMixer(null as any));
   useFrame((state, delta) => {
     const x = Math.sin((delta * factor) / 2) * Math.cos((delta * factor) / 2) * 1.5;
-    if (group.current.position.x <= (position[0] - 30)) {group.current.position.x = position[0];}
-    group.current.position.x -= x;
+
+    if(!endCourse){
+      if (group.current.position.x <= (position[0] - 30)) {
+        group.current.rotation.y = Math.PI;
+        setEndCourse(true);
+      }
+      group.current.position.x -= x;
+    } else {
+      if (group.current.position.x >= position[0] + 5) {
+        group.current.rotation.y = 0;
+        setEndCourse(false);
+      }
+      group.current.position.x += x;
+    }
+
     if(yRatio){
       group.current.position.y -= x;
       group.current.rotation.y += x;
@@ -44,8 +58,8 @@ export default function Stork({props, callback, birdSpeed, position, key}: birdI
       group.current.position.x = position[0]; 
       group.current.position.y = position[1];
       group.current.position.z = position[2];
-      group.current.rotation.y = 0.5;
       setYRatio(false);
+      setEndCourse(false);
     }
     mixer.update(delta * speed);
   });
@@ -60,6 +74,7 @@ export default function Stork({props, callback, birdSpeed, position, key}: birdI
       };
       group.current.rotation.z = 1.5;
     } else {
+      group.current.rotation.y = 0;
       group.current.rotation.z = -0.4;
     }
     return () => animations.forEach((clip) => mixer.uncacheClip(clip));

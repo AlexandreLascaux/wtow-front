@@ -255,10 +255,7 @@ export default function Scene(): React.ReactElement{
 
               <Stork
                 key={birdId}
-                props={{
-                  scale: [0.3, 0.3, 0.3],
-                }
-                }
+                props={{scale: [0.3, 0.3, 0.3]}}
                 position={[defaultCameraPosition[0] + 13, defaultCameraPosition[1] + 1.75, defaultCameraPosition[2] - 14]}
                 birdSpeed={birdCounter}
                 callback={() => setBirdCounter(birdCounter+10)}
