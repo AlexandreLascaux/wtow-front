@@ -23,10 +23,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.22.0
-      - name: npm build
+      - name: build
         run: |
-          npm install -f
-          npm run build
+          yarn install
+          yarn build
       - name: deploy to OVH VPS prod (.xyz)
         uses: garygrossgarten/github-action-scp@master
         if: github.ref == 'refs/heads/master'
