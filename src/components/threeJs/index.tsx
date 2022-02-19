@@ -315,7 +315,7 @@ export default function Scene(): React.ReactElement{
 
               <Html 
                 transform
-                style={{color: 'white', fontSize:'0.2em'}}
+                style={{color: 'white', fontSize:'0.175em'}}
                 position={[initialScenePosition.x + 4.25, initialScenePosition.y + 1.52, initialScenePosition.z + 3]}
               >
                 <p>
