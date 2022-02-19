@@ -248,17 +248,14 @@ export default function Scene(): React.ReactElement{
             rotation={initialModelRotation}
           />} 
           {
-            console.log(sceneLoaded)
-          }
-          {
             sceneLoaded && <Suspense fallback={null}>
 
               <Stork
                 key={birdId}
                 props={{scale: [0.3, 0.3, 0.3]}}
                 position={[defaultCameraPosition[0] + 13, defaultCameraPosition[1] + 1.75, defaultCameraPosition[2] - 14]}
-                birdSpeed={birdCounter}
-                callback={() => setBirdCounter(birdCounter+10)}
+                birdSpeed={birdCounter*10}
+                callback={() => setBirdCounter(birdCounter+1)}
               />
 
               <Rain
@@ -315,6 +312,17 @@ export default function Scene(): React.ReactElement{
                   <b>Cloud</b>
                 </p>
               </Html>
+
+              <Html 
+                transform
+                style={{color: 'white', fontSize:'0.2em'}}
+                position={[initialScenePosition.x + 4.25, initialScenePosition.y + 1.52, initialScenePosition.z + 3]}
+              >
+                <p>
+                  <b>{`${birdCounter} oiseau${birdCounter > 1 ? 'x' : ''} tué${birdCounter > 1 ? 's' : ''}` }</b>
+                </p>
+              </Html>
+
             </Suspense>
           }      
           

@@ -81,6 +81,8 @@ export default function Stork({props, callback, birdSpeed, position, key}: birdI
     return () => animations.forEach((clip) => mixer.uncacheClip(clip));
   }, [animations, mixer, yRatio]);
 
+  /*
+  FIX cursor issue
   useEffect(()=>{
     const element = document.querySelector('canvas');
     if(element){
@@ -88,7 +90,7 @@ export default function Stork({props, callback, birdSpeed, position, key}: birdI
       if(!pointer)element.style.cursor = 'auto';
     }
   }, [pointer]);
-
+*/
   const BirdSpawn = useMemo(() => {
 
     return <group
