@@ -249,7 +249,6 @@ export default function Scene(): React.ReactElement{
 
           {
             sceneLoaded && <Suspense fallback={null}>
-
               <Stork
                 identifiant="stork"
                 props={{scale: [0.3, 0.3, 0.3]}}
