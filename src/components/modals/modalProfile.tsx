@@ -27,11 +27,11 @@ export default function ModalProfile({open, onClose}: modalProfileInterface): Re
   >
     <div className="modal-container">
       <div style={{position: 'absolute', top: '5px', right: '0px'}}>
-        <Button color="error" onClick={onClose}><b style={{ fontSize: '1.5rem' }}>X</b></Button>
+        <Button className='cursor-pointer' color="error" onClick={onClose}><b style={{ fontSize: '1.5rem' }}>X</b></Button>
       </div>
       <div className="child">
         <div className="modal-inputs">
-          <h2 id="modal-title">Changer son nom....</h2>
+          <h2 id="modal-title">Change ton nom ici</h2>
           <input className="modal-input" type="text" value={state.user.name} onChange={(event) => dispatch({type: 'setName', value: event.target.value})}/>
         </div>
         <div className="home-grid-avatar-list d-flex">
