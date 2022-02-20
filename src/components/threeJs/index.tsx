@@ -15,7 +15,7 @@ import { animationsByAvatar } from '../animation/utils';
 import AnimationButton from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
 import ModalProfile from '../modals/modalProfile';
-import { isEqual, uniqueId } from 'lodash';
+import { isEqual } from 'lodash';
 import Stork from './birds/stork';
 
 export interface cameraOptionsInferface{
@@ -27,7 +27,6 @@ export interface cameraOptionsInferface{
 export interface avatarInterface {
     animation: string;
   }
-const birdId = uniqueId();
 
 export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
@@ -239,17 +238,20 @@ export default function Scene(): React.ReactElement{
             sceneLoaded={sceneLoaded}
           />
           
-          {CurrentAvatar && <CurrentAvatar
-            ref={controller}
-            position={[initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
-            scale={0.0075}
-            rotation={initialModelRotation}
-          />} 
+          <Suspense fallback={null}>
+            {CurrentAvatar && <CurrentAvatar
+              ref={controller}
+              position={[initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
+              scale={0.0075}
+              rotation={initialModelRotation}
+            />} 
+          </Suspense>
+
           {
             sceneLoaded && <Suspense fallback={null}>
 
               <Stork
-                key={birdId}
+                identifiant="stork"
                 props={{scale: [0.3, 0.3, 0.3]}}
                 position={[defaultCameraPosition[0] + 13, defaultCameraPosition[1] + 1.75, defaultCameraPosition[2] - 14]}
                 birdSpeed={birdCounter*10}
