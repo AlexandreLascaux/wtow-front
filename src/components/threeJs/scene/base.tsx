@@ -144,6 +144,7 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
   const [screenColor, setScreenColor] = useState<string>('#BFBEBE');
   const [screenPointer, setScreenPointer] = useState<boolean>(false);
 
+  const [fanColor, setFanColor] = useState<string>('#BFBEBE');
   const [fanPointer, setFanPointer] = useState<boolean>(false);
 
   const materialWall = materials['Material.009'].clone();
@@ -200,20 +201,12 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
 
   useEffect(()=>{
     if(fanPointer){
-      materialWindows.setValues({color: 'rgb(66, 198, 255)'});
-    }else {
-      setScreenColor(materials['Material.003'].color.getStyle());
+      materialFan.setValues({color: 'rgb(66, 198, 255)'});
+    } else {
+      materialFan.setValues({color: materials['Material.003'].color.getStyle()});
     }
   }, [fanPointer]);
 
-  
-  useEffect(()=>{
-    if(fanPointer){
-      materialFan.setValues({color: 'rgb(66, 198, 255)'});
-    }else {
-      setScreenColor(materials['Material.003'].color.getStyle());
-    }
-  }, [props.windowsMode]);
 
 
   useEffect(()=>{
