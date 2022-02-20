@@ -81,16 +81,20 @@ export default function Stork({props, callback, birdSpeed, position, identifiant
     return () => animations.forEach((clip) => mixer.uncacheClip(clip));
   }, [animations, mixer, yRatio]);
 
-  /*
-  FIX cursor issue
+  
   useEffect(()=>{
     const element = document.querySelector('canvas');
     if(element){
-      if(pointer)element.style.cursor = 'crosshair';
-      if(!pointer)element.style.cursor = 'auto';
+      if(pointer) {
+        element.classList.remove('cursor-pointer');
+        element.classList.add('cursor-crosshair');
+      }
+      if(!pointer){
+        element.classList.remove('cursor-crosshair');
+      }
     }
   }, [pointer]);
-*/
+
   const BirdSpawn = useMemo(() => {
 
     return <group

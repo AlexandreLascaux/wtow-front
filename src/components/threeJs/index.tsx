@@ -2,7 +2,8 @@ import React, {lazy, RefObject, Suspense, useEffect, useLayoutEffect, useRef, us
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
-import Room from './scene/room';
+import Room from './scene/base';
+
 import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov } from './camera/CustomCamera';
 import { Html, OrbitControls } from '@react-three/drei';
 import Snow from './meteo/snow';
@@ -34,6 +35,9 @@ export default function Scene(): React.ReactElement{
   const initialMeteoPosition = new THREE.Vector3( 10., -2., -10.8 );
   const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 5., initialMeteoPosition.z + 4.8);
   const initialModelRotation = new THREE.Euler( -0.03, 0.4, 0.0, 'XYZ' );
+
+  const [windowsMode, setWindowsMode] = useState<boolean>(false);
+
   const scrollArea = useRef(null);
   const { state, dispatch } = React.useContext(AppContext);
   const controller = useRef<customAvatarInterface | null>(null);
@@ -81,7 +85,7 @@ export default function Scene(): React.ReactElement{
     })){
       setBaseCameraPosition(false);
     }
-    if(!isEqual(camera,cameraOptions)){
+    if(!isEqual(camera, cameraOptions)){
       setReachedCameraPosition(false);
     }
     setCameraOptions(camera);
@@ -196,11 +200,11 @@ export default function Scene(): React.ReactElement{
         }
         {
           reachedCameraPosition &&
-            <Button variant="contained" onClick={() => changeCameraProperties({
+            <Button variant="contained" onClick={() => {setWindowsMode(false); changeCameraProperties({
               position: defaultCameraPosition,
               rotation: defaultCameraRotation,
               fov: defaultFov,
-            })}>Revenir</Button>
+            });}}>Revenir</Button>
         }
         
       </div>
@@ -238,6 +242,8 @@ export default function Scene(): React.ReactElement{
             callback={() => setSceneLoaded(true)}
             onElementClick={changeCameraProperties}
             sceneLoaded={sceneLoaded}
+            onWindowsMode={() => setWindowsMode(true)}
+            windowsMode={windowsMode}
           />
           
           <Suspense fallback={null}>

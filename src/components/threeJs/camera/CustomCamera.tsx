@@ -37,7 +37,7 @@ export default function CustomCamera({position, rotation, fov, baseCameraPositio
     }
   }, [set, size.height, size.width]);
 
-
+  
   useFrame((state, delta) => {
     if (cameraRef.current) {
       
