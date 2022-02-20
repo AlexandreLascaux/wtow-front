@@ -55,8 +55,6 @@ export default function Scene(): React.ReactElement{
   const [baseCameraPosition, setBaseCameraPosition] = useState<boolean>(true);
   const [reachedCameraPosition, setReachedCameraPosition] = useState<boolean>(false);
 
-  
-  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -89,6 +87,9 @@ export default function Scene(): React.ReactElement{
     setCameraOptions(camera);
   }
 
+  function textVisible(){
+    return sceneLoaded && !open;
+  }
 
   useEffect(() => {
     const newComponent = lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
@@ -158,12 +159,13 @@ export default function Scene(): React.ReactElement{
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}}>
       <div
         className="position-absolute"
-        style={{right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none'}}
+        style={{right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none', color: 'white'}}
       >
         <CustomAvatar
           onClick={handleOpen}
           avatarName={state.user.avatar}
-          size={100}
+          size={windowDimensions.height/10}
+          color='white'
         />
         <p>
           <b>{state.user.name}</b>
@@ -276,7 +278,13 @@ export default function Scene(): React.ReactElement{
               <Html 
                 transform
                 className="user-select-none"
-                style={{color: 'black', fontSize:'0.070em'}}
+                style={{
+                  color: 'black',
+                  fontSize:'0.070em',
+                  transition: 'all 0.5s',
+                  opacity: textVisible() ? 1 : 0,
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
                 position={[initialScenePosition.x-3.3975, initialScenePosition.y + 2.50, initialScenePosition.z + 5.6]}
               >
                 <p
@@ -289,7 +297,13 @@ export default function Scene(): React.ReactElement{
               <Html 
                 transform
                 className="user-select-none"
-                style={{color: 'black', fontSize:'0.05em'}}
+                style={{
+                  color: 'black',
+                  fontSize:'0.05em',
+                  transition: 'all 0.5s',
+                  opacity: textVisible() ? 1 : 0,
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
                 position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.975, initialScenePosition.z + 5.6]}
               >
                 <p
@@ -302,7 +316,13 @@ export default function Scene(): React.ReactElement{
               <Html 
                 transform
                 className="user-select-none"
-                style={{color: 'black', fontSize:'0.05em'}}
+                style={{
+                  color: 'black',
+                  fontSize:'0.05em',
+                  transition: 'all 0.5s',
+                  opacity: textVisible() ? 1 : 0,
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
                 position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.72, initialScenePosition.z + 5.6]}
               >
                 <p
@@ -314,7 +334,13 @@ export default function Scene(): React.ReactElement{
 
               <Html 
                 transform
-                style={{color: 'white', fontSize:'0.175em'}}
+                style={{
+                  color: 'white',
+                  fontSize:'0.175em',
+                  transition: 'all 0.5s',
+                  opacity: textVisible() ? 1 : 0,
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
                 position={[initialScenePosition.x + 4.25, initialScenePosition.y + 1.52, initialScenePosition.z + 3]}
               >
                 <p>
