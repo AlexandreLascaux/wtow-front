@@ -110,12 +110,30 @@ type GLTFResult = GLTF & {
   }
 }
 
-type ActionName = 'Animation'
+type ActionName =
+  | 'Take 001'
+  | 'KeyAction'
+  | 'Key.001Action'
+  | 'ArmatureAction'
+  | 'Leaf.001Action'
+  | 'Leaf.002Action'
+  | 'Leaf.003Action'
+  | 'Leaf.004Action'
+  | 'Leaf.005Action'
+  | 'Leaf.006Action'
+  | 'Leaf.001Action.001'
+  | 'Leaf.002Action.001'
+  | 'Leaf.003Action.001'
+  | 'Leaf.004Action.001'
+  | 'Leaf.005Action.001'
+  | 'Leaf.006Action.001'
+// type ActionName = 'Animation'
 type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
 interface callbackInterface {
   callback: () => void;
   onElementClick: (camera: cameraOptionsInferface) => void;
+  sceneLoaded: boolean;
 }
 
 export default function Model(props: JSX.IntrinsicElements['group'] & callbackInterface): React.ReactElement {
@@ -136,7 +154,7 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
   const materialTree =  materials['Material.004'].clone();
 
   useLayoutEffect(() => {
-    props.callback?.();
+    if(!props.sceneLoaded) props.callback?.();
   }, []);
 
   useEffect(()=>{
