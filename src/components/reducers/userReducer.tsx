@@ -5,7 +5,7 @@ export interface userInterface {
     avatar: avatarNames;
 }
 
-export type avatarNames = 'toufan' | 'lilia' | 'chafrou' | 'crocmou' | 'noel' | 'rusard';
+export type avatarNames = 'toufan' | 'lilia' | 'chafrou' | 'crocmou' | 'noel' | 'rusard' | 'sun' | 'game' | 'shirt';
 
 export type UserAction =
 | { type: 'setName', value: string }
