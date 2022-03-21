@@ -262,7 +262,7 @@ export default function Scene(): React.ReactElement{
                 props={{scale: [0.3, 0.3, 0.3]}}
                 position={[defaultCameraPosition[0] + 13, defaultCameraPosition[1] + 1.75, defaultCameraPosition[2] - 14]}
                 birdSpeed={birdCounter*10}
-                callback={() => setBirdCounter(birdCounter+1)}
+                callback={() =>setBirdCounter((counter) => counter+1)}
               />
 
               <Rain
@@ -337,7 +337,6 @@ export default function Scene(): React.ReactElement{
                   <b>Cloud</b>
                 </p>
               </Html>
-
               <Html 
                 transform
                 style={{
