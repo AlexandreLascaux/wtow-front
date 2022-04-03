@@ -17,7 +17,8 @@ interface pantProperties {
 }
 
 export type ClotheAction =
-| { type: 'setTshirt', value: string }
+ | { type: 'setClothes', value: clotheInterface }
+ | { type: 'setTshirt', value: string }
  | { type: 'setHat', value: string }
  | { type: 'setPant', value: string }
  | { type: 'resetClothe', value: clotheInterface};
@@ -27,7 +28,10 @@ function initClothe(initialState: clotheInterface) {
 }
 
 export default function clotheReducer(state: clotheInterface, action: ClotheAction): clotheInterface {
+  console.log(action.type);
   switch (action.type) {
+  case 'setClothes':
+    return {...state, ...action.value};
   case 'setTshirt':
     return {...state, tshirt: {...state.tshirt, type: action.value} };
   case 'setHat':

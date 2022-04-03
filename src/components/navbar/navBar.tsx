@@ -11,7 +11,6 @@ interface NavBarInterface{
 
 export default function NavBar({handleOpen,handleOpenModalClothes,handleOpenModalAnimations}: NavBarInterface): React.ReactElement {
   const { state } = React.useContext(AppContext);
-  const sun = 'sun';
   return <>
     <div className="nav-bar">
       <div className="home-grid-avatar-list d-flex">

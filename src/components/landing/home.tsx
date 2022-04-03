@@ -5,6 +5,7 @@ import { avatarNames } from '../reducers/userReducer';
 import CustomAvatar from '../avatar/customAvatar';
 import { AppContext } from '../reducers/context';
 import { forecastInterface } from '../interfaces/meteoInterface';
+import { clotheInterface } from '../interfaces/clotheInterface';
 import { getIpInterface } from '../interfaces/ipInterface';
 import { convertMeteoData } from '../utils/meteoAdapter';
 import { listAvatars } from '../avatar/utils';
@@ -17,10 +18,10 @@ function Home(): ReactElement{
   const [userName, setUserName] = useState<string>(state.user.name);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [resultData, setResultData] = useState<forecastInterface[]>();
-
+  const [resultDataClothes, setResultDataClothes] = useState<clotheInterface[]>();
 
   function fetchCity(city: string){
-    fetch(`https://wtow.xyz/api/data/forecast/${city}`)
+    fetch(`https://wtow.fr/api/data/forecast/${city}`)
       .then(async (res) =>{
         const result: forecastInterface[] = await res.json();
         setResultData(result);
@@ -48,6 +49,7 @@ function Home(): ReactElement{
         const result: Promise<getIpInterface> = res.json();
         result.then((response) => {
           fetchCity(response.city);
+          fetchClothes(response.city, '25-03-2022');
         });
       })
       .catch((error) => {
@@ -65,6 +67,46 @@ function Home(): ReactElement{
     dispatch({type: 'setName', value: userName});
     setOpenScene(true);
   }
+  
+  function fetchClothes(cityName: string,date:string){
+    fetch(`https://wtow.fr/api/data/clothes/${cityName}/${date}`)
+      .then(async (res) =>{
+        const result: clotheInterface[] = await res.json();
+        const clothes = [{
+          hat :{
+            type: 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
+          },
+          tshirt :{
+            type : 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
+          },
+          pant :{
+            type :'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
+          } 
+        }];
+        setResultDataClothes(result);
+        dispatch({type: 'setClothes', value: clothes[0]});
+      })
+      .catch((error) => {
+        const clothes = [{
+          hat :{
+            type: 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
+          },
+          tshirt :{
+            type : 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
+          },
+          pant :{
+            type :'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
+          } 
+        }];
+        dispatch({type: 'setClothes', value: clothes[0]});
+        setResultDataClothes(error);
+      });
+  }
+
+  useEffect(() => {
+    console.error(errorMessage);
+  }, [errorMessage]);
+
 
   return (
     <>
