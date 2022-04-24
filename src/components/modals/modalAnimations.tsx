@@ -39,9 +39,9 @@ export default function ModalAnimations({open,onClose}: modalAnimationInterface)
   const AnimationsRender = () => {
     return <div className="d-flex">
       {
-        animations.map(({value, icon, sound}, index) => {
+        animations.map(({value, icon, sound, img}, index) => {
           return (<div key={index} className="pr-2 pl-2 d-flex">
-            <AnimationButton value={value} icon={icon} sound={sound} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
+            <AnimationButton value={value} icon={icon} sound={sound} img={img} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
           </div>);
         }
         )}

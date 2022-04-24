@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, Dispatch } from 'react';
+import { clotheInterface } from '../interfaces/clotheInterface';
 import { getCurrentUser } from '../localStorage/user';
-import clotheReducer, { ClotheAction, clotheInterface } from './clotheReducer';
+import clotheReducer, { ClotheAction } from './clotheReducer';
 import meteoReducer, { MeteoAction, meteoInterface } from './meteoReducer';
 import userReducer, { UserAction, userInterface } from './userReducer';
 import { initialMeteo, initialClothe } from './utils';

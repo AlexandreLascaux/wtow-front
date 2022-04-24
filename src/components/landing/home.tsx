@@ -18,7 +18,7 @@ function Home(): ReactElement{
   const [userName, setUserName] = useState<string>(state.user.name);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [resultData, setResultData] = useState<forecastInterface[]>();
-  const [resultDataClothes, setResultDataClothes] = useState<clotheInterface[]>();
+  const [resultDataClothes, setResultDataClothes] = useState<clotheInterface>();
 
   function fetchCity(city: string){
     fetch(`https://wtow.fr/api/data/forecast/${city}`)
@@ -69,37 +69,20 @@ function Home(): ReactElement{
   }
   
   function fetchClothes(cityName: string,date:string){
-    fetch(`https://wtow.fr/api/data/clothes/${cityName}/${date}`)
+    console.log(date);
+    fetch('https://wtow.fr/api/data/clothes/paris/2022-03-25')
       .then(async (res) =>{
-        const result: clotheInterface[] = await res.json();
-        const clothes = [{
-          hat :{
-            type: 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
-          },
-          tshirt :{
-            type : 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
-          },
-          pant :{
-            type :'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
-          } 
-        }];
+        const result: clotheInterface = await res.json();
+
+        console.log(result);
         setResultDataClothes(result);
-        dispatch({type: 'setClothes', value: clothes[0]});
+        dispatch({type: 'setUpperbody', value: result.upperbody});
+        dispatch({type: 'setLowerbody', value: result.lowerbody});
+        dispatch({type: 'setShoes', value: result.shoes});
+        dispatch({type: 'setMisc', value: result.misc});
       })
       .catch((error) => {
-        const clothes = [{
-          hat :{
-            type: 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
-          },
-          tshirt :{
-            type : 'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
-          },
-          pant :{
-            type :'https://seagale.fr/490-large_default/action-merino-tshirt.jpg'
-          } 
-        }];
-        dispatch({type: 'setClothes', value: clothes[0]});
-        setResultDataClothes(error);
+        console.log('ee');
       });
   }
 

@@ -10,7 +10,7 @@ interface modalClothesInterface{
 export default function ModalClothes({open,onClose}: modalClothesInterface): React.ReactElement {
   const { state, dispatch } = React.useContext(AppContext);
   
-  console.log();
+  console.log(state);
 
   return <Modal
     open={open}
@@ -20,8 +20,21 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
       <div className="modal-container">
         <div className="child">
           <div className="home-grid-avatar-list d-flex">
-            <p>Mettre vêtements ici</p>
-            <img src={state.clothe.hat.type} alt="hat"></img>
+            <div className="clothes">
+              <p>Vêtements</p>
+              <div>
+                <img className="upperbody" src={state.clothe.upperbody[0].url}></img>
+              </div>
+              <div>
+                <img className="upperbody" src={state.clothe.upperbody[1].url}></img>
+              </div>
+              <div>
+                <img className="upperbody" src={state.clothe.lowerbody.url}></img>
+              </div>
+              <div>
+                <img className="upperbody" src={state.clothe.shoes.url}></img>
+              </div>
+            </div>
           </div>
         </div>
       </div>

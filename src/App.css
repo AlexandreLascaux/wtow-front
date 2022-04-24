@@ -256,3 +256,17 @@ button {
   margin: 0;
   padding: 0;
 }
+
+
+.action-btn{
+  border-radius: 10px !important;
+  background-color: #3a1747 !important;
+  height: 56px;
+  margin-right: 5px !important;
+}
+
+/* vetements */
+
+.upperbody{
+  width: 25%;
+}

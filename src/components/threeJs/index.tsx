@@ -157,36 +157,10 @@ export default function Scene(): React.ReactElement{
     </Html>;
   }
 
-  const AnimationsRender = () => {
-    return <div className="d-flex">
-      {
-        animations.map(({value, icon, sound}, index) => {
-          return (<div key={index} className="pr-2 pl-2 d-flex">
-            <AnimationButton value={value} icon={icon} sound={sound} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
-          </div>);
-        }
-        )}
-    </div>;
-  };
- 
+
   return (
         
     <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}}>
-      <div
-        className="position-absolute"
-        style={{right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none', color: 'white'}}
-      >
-        <CustomAvatar
-          onClick={handleOpen}
-          avatarName={state.user.avatar}
-          size={windowDimensions.height/10}
-          color='white'
-        />
-        <p>
-          <b>{state.user.name}</b>
-        </p>
-      </div>
-
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
         style={{opacity: 0}}
@@ -206,9 +180,9 @@ export default function Scene(): React.ReactElement{
         className="w-100 justify-content-center position-absolute"
         style={{bottom:'0px', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
       >
-        <NavBar handleOpen={handleOpen} handleOpenModalClothes={handleOpenModalClothes} handleOpenModalAnimations={handleOpenModalAnimations}/>
+        <NavBar handleOpen={handleOpen} handleOpenModalClothes={handleOpenModalClothes} handleOpenModalAnimations={handleOpenModalAnimations} setCurrentAnimation={setCurrentAnimation}/>
         {
-          baseCameraPosition && <AnimationsRender />
+          baseCameraPosition 
         }
         {
           reachedCameraPosition &&
