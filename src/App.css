@@ -248,3 +248,25 @@ button {
   border: 6px solid #7469CF;
 } 
 
+/* NavBar */
+
+.nav-bar{
+  width: 100%;
+  background-color: #9B88C8;
+  margin: 0;
+  padding: 0;
+}
+
+
+.action-btn{
+  border-radius: 10px !important;
+  background-color: #3a1747 !important;
+  height: 56px;
+  margin-right: 5px !important;
+}
+
+/* vetements */
+
+.upperbody{
+  width: 25%;
+}
