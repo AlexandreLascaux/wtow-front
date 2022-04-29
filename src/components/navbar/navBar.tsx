@@ -11,9 +11,10 @@ interface NavBarInterface{
     handleOpenModalClothes: () => void;
     handleOpenModalAnimations: () => void;
     setCurrentAnimation: (currentAnimation: animationInterface)=> void;
+    visible: boolean;
   }
 
-export default function NavBar({handleOpen,handleOpenModalClothes,handleOpenModalAnimations,setCurrentAnimation}: NavBarInterface): React.ReactElement {
+export default function NavBar({handleOpen, visible, handleOpenModalClothes,handleOpenModalAnimations,setCurrentAnimation}: NavBarInterface): React.ReactElement {
   const { state } = React.useContext(AppContext);
   const animations = animationsByAvatar(state.user.avatar);
 
@@ -30,9 +31,9 @@ export default function NavBar({handleOpen,handleOpenModalClothes,handleOpenModa
 
   };
 
-  return <>
-    <div className="nav-bar">
-      <div className="home-grid-avatar-list d-flex">
+  return <div className="nav-bar" style={{ transition: 'all 0.5s', opacity: visible ? 1 : 0 }}>
+    {
+      visible && <div className="home-grid-avatar-list d-flex">
         <div className="home-avatar-list d-flex justify-content-center">
           <CustomAvatar
             onClick={handleOpenModalClothes}
@@ -66,6 +67,7 @@ export default function NavBar({handleOpen,handleOpenModalClothes,handleOpenModa
           />
         </div>
       </div>
-    </div>
-  </>;
+    }
+      
+  </div>;
 }

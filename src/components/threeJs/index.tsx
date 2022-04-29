@@ -180,10 +180,18 @@ export default function Scene(): React.ReactElement{
         className="w-100 justify-content-center position-absolute"
         style={{bottom:'0px', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
       >
-        <NavBar handleOpen={handleOpen} handleOpenModalClothes={handleOpenModalClothes} handleOpenModalAnimations={handleOpenModalAnimations} setCurrentAnimation={setCurrentAnimation}/>
-        {
-          baseCameraPosition 
-        }
+        <NavBar
+          visible={textVisible() && baseCameraPosition}
+          handleOpen={handleOpen}
+          handleOpenModalClothes={handleOpenModalClothes}
+          handleOpenModalAnimations={handleOpenModalAnimations}
+          setCurrentAnimation={setCurrentAnimation}
+        />
+      </div>
+      <div 
+        className="w-100 justify-content-center position-absolute"
+        style={{bottom:'25px', left: '50%', transform: 'translate(-50%, 0)', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
+      >
         {
           reachedCameraPosition &&
             <Button variant="contained" onClick={() => {setWindowsMode(false); changeCameraProperties({
@@ -192,9 +200,7 @@ export default function Scene(): React.ReactElement{
               fov: defaultFov,
             });}}>Revenir</Button>
         }
-        
       </div>
-      
       <ModalClothes onClose={handleCloseModalClothes} open={openModalClothes} />
       <ModalAnimations onClose={handleCloseModalAnimations} open={openModalAnimations} />
       <ModalProfile onClose={handleClose} open={open} />
@@ -330,14 +336,14 @@ export default function Scene(): React.ReactElement{
                 style={{
                   color: 'white',
                   fontSize:'0.175em',
-                  transition: 'all 0.5s',
                   opacity: textVisible() ? 1 : 0,
+                  transition: 'all 0.5s',
                   transform: `scale(${textVisible() ? 1 : 0.5})`
                 }}
                 position={[initialScenePosition.x + 4.25, initialScenePosition.y + 1.52, initialScenePosition.z + 3]}
               >
                 <p>
-                  <b>{`${birdCounter} oiseau${birdCounter > 1 ? 'x' : ''} tué${birdCounter > 1 ? 's' : ''}` }</b>
+                  <b>{`${birdCounter} oiseau${birdCounter > 1 ? 'x' : ''} capturé${birdCounter > 1 ? 's' : ''}` }</b>
                 </p>
               </Html>
 
