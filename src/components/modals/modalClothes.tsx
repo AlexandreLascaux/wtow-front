@@ -20,19 +20,16 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
       <div className="modal-container">
         <div className="child">
           <div className="home-grid-avatar-list d-flex">
-            <div className="clothes">
+            <div className="clothes text-center">
               <p>Vêtements</p>
               <div>
-                <img className="upperbody" src={state.clothe.upperbody[0].url}></img>
+                {/* <img className="upperbody" src={`./assets/avatar/${state.clothe.upperbody[1].description}.png`}></img> */}
               </div>
               <div>
-                <img className="upperbody" src={state.clothe.upperbody[1].url}></img>
+                <img className="upperbody" src={`./assets/img/clothes/${state.clothe.lowerbody.description}.png`}></img>              
               </div>
               <div>
-                <img className="upperbody" src={state.clothe.lowerbody.url}></img>
-              </div>
-              <div>
-                <img className="upperbody" src={state.clothe.shoes.url}></img>
+                <img className="upperbody" src={`./assets/img/clothes/${state.clothe.shoes.description}.png`}></img>
               </div>
             </div>
           </div>
