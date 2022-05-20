@@ -5,6 +5,7 @@ import { avatarNames } from '../reducers/userReducer';
 import CustomAvatar from '../avatar/customAvatar';
 import { AppContext } from '../reducers/context';
 import { forecastInterface } from '../interfaces/meteoInterface';
+import { clotheInterface } from '../interfaces/clotheInterface';
 import { getIpInterface } from '../interfaces/ipInterface';
 import { convertMeteoData } from '../utils/meteoAdapter';
 import { listAvatars } from '../avatar/utils';
@@ -17,10 +18,10 @@ function Home(): ReactElement{
   const [userName, setUserName] = useState<string>(state.user.name);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [resultData, setResultData] = useState<forecastInterface[]>();
-
+  const [resultDataClothes, setResultDataClothes] = useState<clotheInterface>();
 
   function fetchCity(city: string){
-    fetch(`https://wtow.xyz/api/data/forecast/${city}`)
+    fetch(`https://wtow.fr/api/data/forecast/${city}`)
       .then(async (res) =>{
         const result: forecastInterface[] = await res.json();
         setResultData(result);
@@ -48,6 +49,7 @@ function Home(): ReactElement{
         const result: Promise<getIpInterface> = res.json();
         result.then((response) => {
           fetchCity(response.city);
+          fetchClothes(response.city, '25-03-2022');
         });
       })
       .catch((error) => {
@@ -65,6 +67,29 @@ function Home(): ReactElement{
     dispatch({type: 'setName', value: userName});
     setOpenScene(true);
   }
+  
+  function fetchClothes(cityName: string,date:string){
+    console.log(date);
+    fetch('https://wtow.fr/api/data/clothes/paris/2022-03-25')
+      .then(async (res) =>{
+        const result: clotheInterface = await res.json();
+
+        console.log(result);
+        setResultDataClothes(result);
+        dispatch({type: 'setUpperbody', value: result.upperbody});
+        dispatch({type: 'setLowerbody', value: result.lowerbody});
+        dispatch({type: 'setShoes', value: result.shoes});
+        dispatch({type: 'setMisc', value: result.misc});
+      })
+      .catch((error) => {
+        console.log('ee');
+      });
+  }
+
+  useEffect(() => {
+    console.error(errorMessage);
+  }, [errorMessage]);
+
 
   return (
     <>

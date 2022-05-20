@@ -1,41 +1,47 @@
-import React, {lazy, RefObject, Suspense, useEffect, useMemo, useRef, useState} from 'react';
+import React, {lazy, RefObject, Suspense, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Canvas, GroupProps } from '@react-three/fiber';
 import Rain from './meteo/rain';
-import Room from './scene/room';
+import Room from './scene/base';
 
 import CustomCamera, { defaultCameraPosition, defaultCameraRotation, defaultFov } from './camera/CustomCamera';
 import { Html, OrbitControls } from '@react-three/drei';
 import Snow from './meteo/snow';
 import { AppContext } from '../reducers/context';
-import { CircularProgress,Button,Modal } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import useWindowDimensions from '../setup/useWindowDimensions';
 import Clouds from './meteo/clouds';
 import CustomAvatar from '../avatar/customAvatar';
 import { animationsByAvatar } from '../animation/utils';
-import AnimationButton, { animationButtonInterface } from '../animation/animationButton';
+import AnimationButton from '../animation/animationButton';
 import { animationInterface, customAvatarInterface } from './models/interfaces';
-import { avatarNames } from '../reducers/userReducer';
 import ModalProfile from '../modals/modalProfile';
+import NavBar from '../navbar/navBar';
+import ModalClothes from '../modals/modalClothes';
+import ModalAnimations from '../modals/modalAnimations';
+import { isEqual } from 'lodash';
+import Stork from './birds/stork';
 
-interface cameraOptionsInferface{
+export interface cameraOptionsInferface{
     position: number[];
     rotation: number[];
     fov: number;
   }
 
-export interface avatarInterface{
-  animation: string;
-}
+export interface avatarInterface {
+    animation: string;
+  }
 
 export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
   const initialSceneRotation = new THREE.Euler( 0, 0, 0, 'XYZ' );
   const initialMeteoPosition = new THREE.Vector3( 10., -2., -10.8 );
-  const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 6., initialMeteoPosition.z + 4.8);
+  const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 5., initialMeteoPosition.z + 4.8);
   const initialModelRotation = new THREE.Euler( -0.03, 0.4, 0.0, 'XYZ' );
+
+  const [windowsMode, setWindowsMode] = useState<boolean>(false);
+
   const scrollArea = useRef(null);
-  const [scroll, setScroll] = useState<number>(0.5);
   const { state, dispatch } = React.useContext(AppContext);
   const controller = useRef<customAvatarInterface | null>(null);
   const [CurrentAvatar, setCurrentAvatar] = useState<React.LazyExoticComponent<(props: GroupProps) => JSX.Element>>();
@@ -49,21 +55,56 @@ export default function Scene(): React.ReactElement{
   const animations = animationsByAvatar(state.user.avatar);
   const [sceneLoaded, setSceneLoaded] = useState<boolean>(false);
   const playerRef = useRef<HTMLAudioElement>(null);
-  const [soundSource, setSoundSource] = useState<string | null>(null);
+  const backgroundAudioRef = useRef<HTMLAudioElement>(null);
+
+  const [birdCounter, setBirdCounter] = useState<number>(0);
+
+  const [baseCameraPosition, setBaseCameraPosition] = useState<boolean>(true);
+  const [reachedCameraPosition, setReachedCameraPosition] = useState<boolean>(false);
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [openModalClothes, setOpenModalClothes] = React.useState(false);
+  const handleOpenModalClothes = () => setOpenModalClothes(true);
+  const handleCloseModalClothes = () => setOpenModalClothes(false);
+
+  const [openModalAnimations, setOpenModalAnimations] = React.useState(false);
+  const handleOpenModalAnimations = () => setOpenModalAnimations(true);
+  const handleCloseModalAnimations = () => setOpenModalAnimations(false);
+
   function setCurrentAnimation(currentAnimation: animationInterface){
-    console.log(animations);
     if (currentAnimation.sound){
-      setSoundSource(currentAnimation.sound);
+      const src=`/assets/sounds/${currentAnimation.sound}.mp3`;
+      
+      if (playerRef && playerRef.current){
+        playerRef.current.src = src;
+        playerRef.current.play(); 
+      }
     }
     if (controller.current && currentAnimation) {
       controller.current.setCurrentAnimation(currentAnimation);
     }
   }
 
+  function changeCameraProperties(camera: cameraOptionsInferface){
+    if(!isEqual(camera, {
+      position: defaultCameraPosition,
+      rotation: defaultCameraRotation,
+      fov: defaultFov,
+    })){
+      setBaseCameraPosition(false);
+    }
+    if(!isEqual(camera, cameraOptions)){
+      setReachedCameraPosition(false);
+    }
+    setCameraOptions(camera);
+  }
+
+  function textVisible(){
+    return sceneLoaded && !open;
+  }
 
   useEffect(() => {
     const newComponent = lazy(() => import(`./models/${state.user.avatar}`).catch((e) => console.error(e)));
@@ -73,31 +114,18 @@ export default function Scene(): React.ReactElement{
   useEffect(()=>{
     if(windowDimensions.height > windowDimensions.width){
       setLandscape(false);
-      setScroll(0.5);
     } else {
       setLandscape(true);
     }
   }, [windowDimensions]);
 
-
-  useEffect(() => {
-    if(soundSource){
-      const src=`./assets/sounds/${soundSource}.mp3`;
-      
-      if (playerRef && playerRef.current){
-        playerRef.current.src = src;
-        if (playerRef && playerRef.current) {
-          if (playerRef.current.paused) {
-            playerRef.current.play();
-          } else {
-            playerRef.current.pause();
-          }
-        }
-        
-      }
+  useLayoutEffect(() =>{
+    if (playerRef && playerRef.current){
+      playerRef.current.volume = 0.2;
     }
-  }, [soundSource]);
-
+    if(backgroundAudioRef && backgroundAudioRef.current) backgroundAudioRef.current.volume = 0.15;
+  }, []);
+  /*
   useEffect(() => {
     setCameraOptions((cameraOptions) => {
       const {0: rx, 2: rz} = cameraOptions.rotation;
@@ -105,6 +133,8 @@ export default function Scene(): React.ReactElement{
     });
   }, [scroll]);
 
+  */
+  /*
   function setRotationOnWheel(e: React.WheelEvent<HTMLDivElement>){
     const {deltaY} = e;
     if(landscape){
@@ -114,6 +144,7 @@ export default function Scene(): React.ReactElement{
       if(deltaY < 0 && scroll < 0) setScroll(0);
     }
   }
+  */
 
   function WaitingSceneToLoad(){
     return  <Html 
@@ -126,56 +157,62 @@ export default function Scene(): React.ReactElement{
     </Html>;
   }
 
-  const AnimationsRender = () => {
-    return <div className="d-flex">
-      {
-        animations.map(({value, icon, sound}, index) => {
-          return (<div key={index} className="pr-2 pl-2 d-flex">
-            <AnimationButton value={value} icon={icon} sound={sound} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
-          </div>);
-        }
-        )}
-    </div>;
-  };
 
- 
   return (
         
-    <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}} onWheel={setRotationOnWheel}>
-      <div style={{position: 'absolute', right: '30px', top:'15px', zIndex: 1, display: sceneLoaded ? 'block' : 'none'}}>
-        <CustomAvatar
-          onClick={handleOpen}
-          avatarName={state.user.avatar}
-          size={100}
-        />
-        <p>
-          <b>{state.user.name}</b>
-        </p>
-      </div>
-
+    <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}}>
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
-        src='./assets/sounds/run-sound.mp3'
-        autoPlay
         style={{opacity: 0}}
-        loop>
+      >
+      </audio>
+
+      <audio
+        ref={backgroundAudioRef as RefObject<HTMLAudioElement>}
+        autoPlay
+        loop
+        src='/assets/sounds/pose-sound.mp3'
+        style={{opacity: 0}}
+      >
       </audio>
 
       <div 
-        className="d-flex w-100 justify-content-center position-absolute"
-        style={{bottom:'30px', zIndex: 1}}
+        className="w-100 justify-content-center position-absolute"
+        style={{bottom:'0px', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
       >
-        
-        {
-          sceneLoaded && <AnimationsRender />
-        }
-        
+        <NavBar
+          visible={textVisible() && baseCameraPosition}
+          handleOpen={handleOpen}
+          handleOpenModalClothes={handleOpenModalClothes}
+          handleOpenModalAnimations={handleOpenModalAnimations}
+          setCurrentAnimation={setCurrentAnimation}
+        />
       </div>
-
+      <div 
+        className="w-100 justify-content-center position-absolute"
+        style={{bottom:'25px', left: '50%', transform: 'translate(-50%, 0)', zIndex: 1, display: sceneLoaded ? 'flex' : 'none'}}
+      >
+        {
+          reachedCameraPosition &&
+            <Button variant="contained" onClick={() => {setWindowsMode(false); changeCameraProperties({
+              position: defaultCameraPosition,
+              rotation: defaultCameraRotation,
+              fov: defaultFov,
+            });}}>Revenir</Button>
+        }
+      </div>
+      <ModalClothes onClose={handleCloseModalClothes} open={openModalClothes} />
+      <ModalAnimations onClose={handleCloseModalAnimations} open={openModalAnimations} />
       <ModalProfile onClose={handleClose} open={open} />
 
       <Canvas>
-        <CustomCamera position={cameraOptions.position} rotation={cameraOptions.rotation} fov={cameraOptions.fov} />
+        <CustomCamera 
+          position={cameraOptions.position}
+          rotation={cameraOptions.rotation}
+          fov={cameraOptions.fov}
+          baseCameraPositionCallback={() => setBaseCameraPosition(true)}
+          reachedCameraPositionCallback={() => setReachedCameraPosition(true)}
+        />
 
         {
           // <OrbitControls />
@@ -193,70 +230,126 @@ export default function Scene(): React.ReactElement{
                 </Html>
         }
         <Suspense fallback={<WaitingSceneToLoad />}>
-          <Room position={initialScenePosition} rotation={initialSceneRotation} callback={() => setSceneLoaded(true)}/>
+          <Room
+            position={initialScenePosition}
+            rotation={initialSceneRotation}
+            callback={() => setSceneLoaded(true)}
+            onElementClick={changeCameraProperties}
+            sceneLoaded={sceneLoaded}
+            onWindowsMode={() => setWindowsMode(true)}
+            windowsMode={windowsMode}
+          />
           
-          {CurrentAvatar && <CurrentAvatar
-            ref={controller}
-            position={[initialScenePosition.x-1.5, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
-            scale={0.0075}
-            rotation={initialModelRotation}
-          />}       
           <Suspense fallback={null}>
-            <Rain
-              isVisible={state.meteo.rainProperties.rain}
-              rainCount={1250}
-              position={initialMeteoPosition}
-            />
-            <Snow
-              isVisible={state.meteo.snowProperties.snow}
-              snowCount={1250}
-              position={initialMeteoPosition}
-            />
-            <Clouds
-              isVisible={state.meteo.cloudProperties.cloud}
-              velocity={state.meteo.cloudProperties.windSpeed}
-              number={state.meteo.cloudProperties.cloudCover}
-              position={initialCloudPosition}
-            />
-            <Html 
-              transform
-              className="user-select-none"
-              style={{color: 'black', fontSize:'0.070em'}}
-              position={[initialScenePosition.x-3.3975, initialScenePosition.y + 2.50, initialScenePosition.z + 5.6]}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={() => dispatch({type: 'setRain', value: !state.meteo.rainProperties.rain})}>
-                <b>Rain</b>
-              </p>
-            </Html>
-
-            <Html 
-              transform
-              className="user-select-none"
-              style={{color: 'black', fontSize:'0.05em'}}
-              position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.975, initialScenePosition.z + 5.6]}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={() => dispatch({type: 'setSnow', value: !state.meteo.snowProperties.snow})}>
-                <b>Snow</b>
-              </p>
-            </Html>
-
-            <Html 
-              transform
-              className="user-select-none"
-              style={{color: 'black', fontSize:'0.05em'}}
-              position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.72, initialScenePosition.z + 5.6]}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={() => dispatch({type: 'setCloud', value: !state.meteo.cloudProperties.cloud})}>
-                <b>Cloud</b>
-              </p>
-            </Html>
+            {CurrentAvatar && <CurrentAvatar
+              ref={controller}
+              position={[initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]}
+              scale={0.0075}
+              rotation={initialModelRotation}
+            />} 
           </Suspense>
+
+          {
+            sceneLoaded && <Suspense fallback={null}>
+              <Stork
+                identifiant="stork"
+                props={{scale: [0.3, 0.3, 0.3]}}
+                position={[defaultCameraPosition[0] + 13, defaultCameraPosition[1] + 1.75, defaultCameraPosition[2] - 14]}
+                birdSpeed={birdCounter*10}
+                callback={() =>setBirdCounter((counter) => counter+1)}
+              />
+
+              <Rain
+                isVisible={state.meteo.rainProperties.rain}
+                rainCount={1250}
+                position={initialMeteoPosition}
+              />
+              <Snow
+                isVisible={state.meteo.snowProperties.snow}
+                snowCount={1250}
+                position={initialMeteoPosition}
+              />
+              <Clouds
+                isVisible={state.meteo.cloudProperties.cloud}
+                velocity={state.meteo.cloudProperties.windSpeed}
+                number={state.meteo.cloudProperties.cloudCover}
+                position={initialCloudPosition}
+              />
+              <Html 
+                transform
+                className="user-select-none"
+                style={{
+                  color: 'black',
+                  fontSize:'0.070em',
+                  transition: 'all 0.5s',
+                  opacity: textVisible() ? 1 : 0,
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
+                position={[initialScenePosition.x-3.3975, initialScenePosition.y + 2.50, initialScenePosition.z + 5.6]}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={() => dispatch({type: 'setRain', value: !state.meteo.rainProperties.rain})}>
+                  <b>Rain</b>
+                </p>
+              </Html>
+
+              <Html 
+                transform
+                className="user-select-none"
+                style={{
+                  color: 'black',
+                  fontSize:'0.05em',
+                  transition: 'all 0.5s',
+                  opacity: textVisible() ? 1 : 0,
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
+                position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.975, initialScenePosition.z + 5.6]}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={() => dispatch({type: 'setSnow', value: !state.meteo.snowProperties.snow})}>
+                  <b>Snow</b>
+                </p>
+              </Html>
+
+              <Html 
+                transform
+                className="user-select-none"
+                style={{
+                  color: 'black',
+                  fontSize:'0.05em',
+                  transition: 'all 0.5s',
+                  opacity: textVisible() ? 1 : 0,
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
+                position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.72, initialScenePosition.z + 5.6]}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={() => dispatch({type: 'setCloud', value: !state.meteo.cloudProperties.cloud})}>
+                  <b>Cloud</b>
+                </p>
+              </Html>
+              <Html 
+                transform
+                style={{
+                  color: 'white',
+                  fontSize:'0.175em',
+                  opacity: textVisible() ? 1 : 0,
+                  transition: 'all 0.5s',
+                  transform: `scale(${textVisible() ? 1 : 0.5})`
+                }}
+                position={[initialScenePosition.x + 4.25, initialScenePosition.y + 1.52, initialScenePosition.z + 3]}
+              >
+                <p>
+                  <b>{`${birdCounter} oiseau${birdCounter > 1 ? 'x' : ''} capturé${birdCounter > 1 ? 's' : ''}` }</b>
+                </p>
+              </Html>
+
+            </Suspense>
+          }      
+          
         </Suspense>
       </Canvas>
     </div>

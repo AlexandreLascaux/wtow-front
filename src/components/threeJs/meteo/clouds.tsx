@@ -65,7 +65,6 @@ const positionRand = (min: number, max: number) => {
 };
 
 function Clouds({number, isVisible, velocity, position}: cloudInterface): React.ReactElement {
-  const uniqId = parseInt(uniqueId(), 10);
   const CloudSpawn = useMemo(() => {
     const cloudsDisplay = [];
   
@@ -87,7 +86,7 @@ function Clouds({number, isVisible, velocity, position}: cloudInterface): React.
   }, [number, position.x, position.y, velocity, isVisible]);
 
   return (
-    <group key={uniqId}>
+    <group>
       {CloudSpawn.map((cloud) => {
         return (cloud);
       })}

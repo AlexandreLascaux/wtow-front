@@ -12,6 +12,10 @@ body {
   cursor: url("./components/cursor/white-cartoon-hand-pointer.png"), pointer !important;
 }
 
+.cursor-crosshair {
+  cursor: crosshair !important;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

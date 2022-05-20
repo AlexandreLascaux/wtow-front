@@ -1,4 +1,4 @@
-import { clotheInterface } from './clotheReducer';
+import { clotheInterface } from '../interfaces/clotheInterface';
 import { meteoInterface } from './meteoReducer';
 import { avatarNames, userInterface } from './userReducer';
 
@@ -25,15 +25,22 @@ export const initialMeteo:  meteoInterface= {
 
   
 export const initialClothe : clotheInterface = {
-  hat: {
-    type: 'winter'
+  upperbody: [{
+    description: 'winter',
+    url :''
+  }],
+  lowerbody: {
+    description: 'winter',
+    url :''
   },
-  tshirt: {
-    type: 'summer'
+  shoes: {
+    description: 'winter',
+    url :''
   },
-  pant: {
-    type: 'spring'
-  },
+  misc: [{
+    description: 'winter',
+    url :''
+  }]
 };
 
 export const initialUser: userInterface = {
