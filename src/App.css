@@ -258,9 +258,10 @@ button {
 
 
 .action-btn{
-  border-radius: 10px !important;
+  border-radius: 100px !important;
   background-color: #3a1747 !important;
-  height: 56px;
+  height: 100px;
+  width: 100%;
   margin-right: 5px !important;
 }
 

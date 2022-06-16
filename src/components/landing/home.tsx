@@ -98,7 +98,7 @@ function Home(): ReactElement{
   }
   
   function fetchClothes(cityName: string, date:string){
-    fetch(`https://dev.wtow.fr/api/data/clothes/${cityName}/${date}`)
+    fetch('https://dev.wtow.fr/api/data/clothes/Paris/2022-05-31')
       .then(async (res) =>{
         const result: clotheInterface = await res.json();
         setResultDataClothes(result);
