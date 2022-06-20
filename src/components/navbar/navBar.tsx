@@ -22,9 +22,10 @@ export default function NavBar({handleOpen, visible, handleOpenModalClothes,hand
     return <div className="d-flex">
       {
         animations.map(({value, icon, sound, img}, index) => {
-          return (<div key={index} className="pr-2 pl-2 d-flex align-items-center" style={{verticalAlign: 'baseline' }}>
-            <AnimationButton value={value} icon={icon} sound={sound} img={img} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
-          </div>);
+          return (
+            <div key={index} className="pr-2 pl-2 d-flex align-items-center" style={{verticalAlign: 'baseline' }}>
+              <AnimationButton value={value} icon={icon} sound={sound} img={img} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
+            </div>);
         }
         )}
     </div>;

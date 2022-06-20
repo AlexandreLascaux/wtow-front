@@ -35,7 +35,7 @@ export interface avatarInterface {
 export default function Scene(): React.ReactElement{
   const initialScenePosition = new THREE.Vector3( 0.3, -1.65, -3.2 );
   const initialSceneRotation = new THREE.Euler( 0, 0, 0, 'XYZ' );
-  const initialMeteoPosition = new THREE.Vector3( 10., -2., -10.8 );
+  const initialMeteoPosition = new THREE.Vector3( 10, -2., -10.8 );
   const initialCloudPosition = new THREE.Vector3(initialMeteoPosition.x - 3.3975, initialMeteoPosition.y + 5., initialMeteoPosition.z + 4.8);
   const initialModelRotation = new THREE.Euler( -0.03, 0.4, 0.0, 'XYZ' );
 

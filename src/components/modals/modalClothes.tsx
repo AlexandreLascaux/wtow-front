@@ -10,7 +10,6 @@ interface modalClothesInterface{
 export default function ModalClothes({open,onClose}: modalClothesInterface): React.ReactElement {
   const { state, dispatch } = React.useContext(AppContext);
   
-  console.log(state);
 
   return <Modal
     open={open}
@@ -20,19 +19,49 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
       <div className="modal-container">
         <div className="child">
           <div className="home-grid-avatar-list d-flex">
-            <div className="clothes">
+            <div className="clothes text-center">
               <p>Vêtements</p>
               <div>
-                <img className="upperbody" src={state.clothe.upperbody[0].url}></img>
+                {
+                  state.clothe.upperbody.map((clothe) => {
+                    if(clothe.description){
+                      return(
+                        <>
+                          <img className="upperbody" src={`./assets/img/clothes/${clothe.description}.png`}></img>
+                        </>
+                      );
+                    }
+                  })
+                }
               </div>
               <div>
-                <img className="upperbody" src={state.clothe.upperbody[1].url}></img>
+                
+                {
+                  state.clothe.lowerbody.description ?
+                    <img className="upperbody" src={`./assets/img/clothes/${state.clothe.lowerbody.description}.png`}></img>              
+
+                    : ''
+                }
               </div>
               <div>
-                <img className="upperbody" src={state.clothe.lowerbody.url}></img>
+                {
+                  state.clothe.shoes.description ?
+                    <img className="upperbody" src={`./assets/img/clothes/${state.clothe.shoes.description}.png`}></img>
+                    : ''
+                }
               </div>
               <div>
-                <img className="upperbody" src={state.clothe.shoes.url}></img>
+                {
+                  state.clothe.misc.map((clothe) => {
+                    if(clothe.description){
+                      return(
+                        <>
+                          <img className="upperbody" src={`./assets/img/clothes/${clothe.description}.png`}></img>
+                        </>
+                      );
+                    }
+                  })
+                }
               </div>
             </div>
           </div>
