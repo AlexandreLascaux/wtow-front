@@ -35,7 +35,7 @@ function chafrouAnimations(){
       sound: 'pose-sound',
     },{
       value: 'Walk_In_Place',
-      icon: 'Marcher',
+      icon: '',
       img: imgs[4],
       sound: 'all-run'
     },
@@ -70,7 +70,7 @@ function toufanAnimations(){
     },
     {    
       value: 'Walk.FBX_0',
-      icon: 'Marcher',
+      icon: '',
       img: imgs[4],
       sound: 'all-run'
     },
@@ -104,7 +104,7 @@ function crocmouAnimations(){
       sound: 'pose-sound',
     },{
       value: 'Walk.FBX_0',
-      icon: 'Marcher',
+      icon: '',
       img: imgs[4],
       sound: 'all-run'
     },
@@ -139,7 +139,7 @@ function liliaAnimations(){
       sound: 'pose-sound',
     },{
       value: 'Walk_In_Place',
-      icon: 'Marcher',
+      icon: '',
       img: imgs[4],
       sound: 'all-run'
     },
@@ -174,7 +174,7 @@ function rusardAnimations(){
       sound: 'pose-sound',
     },{
       value: 'Walk_In_Place',
-      icon: 'Marcher',
+      icon: '',
       img: imgs[4],
       sound: 'all-run'
     },
@@ -208,7 +208,7 @@ function noelAnimations(){
       sound: 'pose-sound',
     },{
       value: 'Walk_In_Place',
-      icon: 'Marcher',
+      icon: '',
       img: imgs[4],
       sound: 'all-run'
     },
