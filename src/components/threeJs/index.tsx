@@ -322,6 +322,7 @@ export default function Scene(): React.ReactElement{
                   visible={sceneRender === 1}
                   position={initialScenePosition}
                   rotation={initialSceneRotation}
+                  moveAvatar={(pos) => moveAvatar([pos.x, pos.y + 0.1, pos.z])}
                   callback={() => setSceneLoaded(true)}
                   onElementClick={changeCameraProperties}
                   sceneLoaded={sceneLoaded}
