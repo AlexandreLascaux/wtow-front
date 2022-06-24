@@ -13,7 +13,7 @@ function initClothe(initialState: clotheInterface) {
 }
 
 export default function clotheReducer(state: clotheInterface, action: ClotheAction): clotheInterface {
-  console.log(action.type);
+
   switch (action.type) {
   case 'setClothes':
     return {...state, ...action.value};

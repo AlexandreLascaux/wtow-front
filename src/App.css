@@ -270,3 +270,12 @@ button {
 .upperbody{
   width: 25%;
 }
+
+@keyframes arrowAnimation {
+  0% {
+      transform: scale(5.0);
+  }
+  100% {
+      transform: scale(6.0);
+  }
+}

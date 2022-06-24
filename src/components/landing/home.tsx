@@ -68,13 +68,11 @@ function Home(): ReactElement{
     setOpenScene(true);
   }
   
-  function fetchClothes(cityName: string,date:string){
-    console.log(date);
+  function fetchClothes(cityName: string, date:string){
     fetch('https://wtow.fr/api/data/clothes/paris/2022-03-25')
       .then(async (res) =>{
         const result: clotheInterface = await res.json();
 
-        console.log(result);
         setResultDataClothes(result);
         dispatch({type: 'setUpperbody', value: result.upperbody});
         dispatch({type: 'setLowerbody', value: result.lowerbody});
@@ -82,14 +80,9 @@ function Home(): ReactElement{
         dispatch({type: 'setMisc', value: result.misc});
       })
       .catch((error) => {
-        console.log('ee');
+        console.error(error);
       });
   }
-
-  useEffect(() => {
-    console.error(errorMessage);
-  }, [errorMessage]);
-
 
   return (
     <>

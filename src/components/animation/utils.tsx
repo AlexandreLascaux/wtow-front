@@ -4,7 +4,8 @@ const imgs = [
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Man_Walking_Emoji_large.png?v=1571606063',
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Man_Running_Emoji_large.png?v=1571606063',
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Clapping_Hands_Emoji_large.png?v=1571606063',
-  'https://cdn.shopify.com/s/files/1/1061/1924/products/Sleeping_Emoji_large.png?v=1571606036'
+  'https://cdn.shopify.com/s/files/1/1061/1924/products/Sleeping_Emoji_large.png?v=1571606036',
+  'https://flyclipart.com/thumb2/walking-458041.png'
 ];
 export function animationsByAvatar(avatar: avatarNames): Omit<animationButtonInterface, 'onIconClick'>[]{
   
@@ -32,6 +33,11 @@ function chafrouAnimations(){
       icon: 'pose',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: 'Marcher',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',
@@ -61,7 +67,12 @@ function toufanAnimations(){
       icon: 'pose',
       img: imgs[0],
       sound: 'pose-sound',
-
+    },
+    {    
+      value: 'Walk.FBX_0',
+      icon: 'Marcher',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run.FBX_0',
@@ -91,6 +102,11 @@ function crocmouAnimations(){
       icon: 'Pose',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk.FBX_0',
+      icon: 'Marcher',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run.FBX_0',
@@ -121,6 +137,11 @@ function liliaAnimations(){
       icon: 'Pose',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: 'Marcher',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',
@@ -151,6 +172,11 @@ function rusardAnimations(){
       icon: 'pose',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: 'Marcher',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',
@@ -180,6 +206,11 @@ function noelAnimations(){
       icon: 'pose',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: 'Marcher',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',

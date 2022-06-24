@@ -10,8 +10,6 @@ interface modalClothesInterface{
 export default function ModalClothes({open,onClose}: modalClothesInterface): React.ReactElement {
   const { state, dispatch } = React.useContext(AppContext);
   
-  console.log(state);
-
   return <Modal
     open={open}
     onClose={onClose}
