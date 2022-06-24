@@ -30,7 +30,7 @@ function chafrouAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
     },{
@@ -41,19 +41,19 @@ function chafrouAnimations(){
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Victory',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound: 'chafrou-victory',
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'chafrou-sleep'
     },
@@ -64,7 +64,7 @@ function toufanAnimations(){
   return [
     {
       value: 'Idle.FBX_0',
-      icon: 'pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
     },
@@ -76,19 +76,19 @@ function toufanAnimations(){
     },
     {
       value: 'Run.FBX_0',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success.FBX_0',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'toufan-victory'
     },
     {
       value: 'Sleep.FBX_0',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'toufan-sleep'
     },
@@ -99,7 +99,7 @@ function crocmouAnimations(){
   return [
     {
       value: 'Idle.FBX_0',
-      icon: 'Pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
     },{
@@ -110,19 +110,19 @@ function crocmouAnimations(){
     },
     {
       value: 'Run.FBX_0',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success.FBX_0',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep.FBX_0',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound:'crocmou-sleep'
     },
@@ -134,7 +134,7 @@ function liliaAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'Pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
     },{
@@ -145,19 +145,19 @@ function liliaAnimations(){
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'noel-sleep'
     },
@@ -169,7 +169,7 @@ function rusardAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
     },{
@@ -180,19 +180,19 @@ function rusardAnimations(){
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'noel-sleep'
     },
@@ -203,7 +203,7 @@ function noelAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'pose',
+      icon: ' ',
       img: imgs[0],
       sound: 'pose-sound',
     },{
@@ -214,19 +214,19 @@ function noelAnimations(){
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'noel-sleep'
     },
