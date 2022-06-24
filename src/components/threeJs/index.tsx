@@ -141,6 +141,7 @@ export default function Scene(): React.ReactElement{
   useEffect(() => {
     if(reachedAvatarPosition){
       setCurrentAnimation({value: ''});
+      if(playerRef.current) playerRef.current.pause();
     }
   }, [reachedAvatarPosition]);
   
