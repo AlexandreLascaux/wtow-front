@@ -42,7 +42,7 @@ export default function NavBar({handleOpen, visible, handleOpenModalClothes, set
           <div className="d-flex align-items-center">
             <CustomAvatar
               onClick={handleOpenModalClothes}
-              avatarName={'VËTEMENTS'}
+              avatarName={'VÊTEMENTS'}
               size={80}
               fs={14}
               mr={50}
