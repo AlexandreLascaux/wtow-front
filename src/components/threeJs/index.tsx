@@ -19,7 +19,6 @@ import { animationInterface, customAvatarInterface } from './models/interfaces';
 import ModalProfile from '../modals/modalProfile';
 import NavBar from '../navbar/navBar';
 import ModalClothes from '../modals/modalClothes';
-import ModalAnimations from '../modals/modalAnimations';
 import { isEqual } from 'lodash';
 import Stork from './birds/stork';
 
@@ -89,10 +88,6 @@ export default function Scene(): React.ReactElement{
   const [openModalClothes, setOpenModalClothes] = React.useState(false);
   const handleOpenModalClothes = () => setOpenModalClothes(true);
   const handleCloseModalClothes = () => setOpenModalClothes(false);
-
-  const [openModalAnimations, setOpenModalAnimations] = React.useState(false);
-  const handleOpenModalAnimations = () => setOpenModalAnimations(true);
-  const handleCloseModalAnimations = () => setOpenModalAnimations(false);
 
   const [avatarPosition, setAvatarPosition] = useState<number[]>([initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]);
 
@@ -232,7 +227,7 @@ export default function Scene(): React.ReactElement{
 
   return (
         
-    <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative'}}>
+    <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative', alignItems: 'baseline'}}>
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
         style={{opacity: 0}}
@@ -256,7 +251,6 @@ export default function Scene(): React.ReactElement{
           visible={textVisible() && baseCameraPosition}
           handleOpen={handleOpen}
           handleOpenModalClothes={handleOpenModalClothes}
-          handleOpenModalAnimations={handleOpenModalAnimations}
           setCurrentAnimation={setCurrentAnimation}
         />
       </div>
@@ -288,7 +282,6 @@ export default function Scene(): React.ReactElement{
       </div>
 
       <ModalClothes onClose={handleCloseModalClothes} open={openModalClothes} />
-      <ModalAnimations onClose={handleCloseModalAnimations} open={openModalAnimations} />
       <ModalProfile onClose={handleClose} open={open} />
 
       <Canvas>
@@ -432,7 +425,7 @@ export default function Scene(): React.ReactElement{
               </Suspense>
           
               :
-              <Suspense fallback={null}>
+              <Suspense fallback={<WaitingSceneToLoad />}>
                 <Garden
                   visible={sceneRender === 2}
                   position={neutralGardenPosition}

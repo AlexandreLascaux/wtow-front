@@ -9,12 +9,11 @@ import { animationInterface } from '../threeJs/models/interfaces';
 interface NavBarInterface{ 
     handleOpen: () => void;
     handleOpenModalClothes: () => void;
-    handleOpenModalAnimations: () => void;
     setCurrentAnimation: (currentAnimation: animationInterface)=> void;
     visible: boolean;
   }
 
-export default function NavBar({handleOpen, visible, handleOpenModalClothes,handleOpenModalAnimations,setCurrentAnimation}: NavBarInterface): React.ReactElement {
+export default function NavBar({handleOpen, visible, handleOpenModalClothes, setCurrentAnimation}: NavBarInterface): React.ReactElement {
   const { state } = React.useContext(AppContext);
   const animations = animationsByAvatar(state.user.avatar);
 
