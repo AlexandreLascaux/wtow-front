@@ -29,10 +29,10 @@ export const initialClothe : clotheInterface = {
     description: 'winter',
     url :''
   }],
-  lowerbody: {
+  lowerbody: [{
     description: 'winter',
     url :''
-  },
+  }],
   shoes: {
     description: 'winter',
     url :''
