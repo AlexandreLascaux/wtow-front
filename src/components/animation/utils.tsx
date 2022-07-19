@@ -4,7 +4,8 @@ const imgs = [
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Man_Walking_Emoji_large.png?v=1571606063',
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Man_Running_Emoji_large.png?v=1571606063',
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Clapping_Hands_Emoji_large.png?v=1571606063',
-  'https://cdn.shopify.com/s/files/1/1061/1924/products/Sleeping_Emoji_large.png?v=1571606036'
+  'https://cdn.shopify.com/s/files/1/1061/1924/products/Sleeping_Emoji_large.png?v=1571606036',
+  'https://flyclipart.com/thumb2/walking-458041.png'
 ];
 export function animationsByAvatar(avatar: avatarNames): Omit<animationButtonInterface, 'onIconClick'>[]{
   
@@ -29,25 +30,30 @@ function chafrouAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: '',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Victory',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound: 'chafrou-victory',
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'chafrou-sleep'
     },
@@ -58,26 +64,31 @@ function toufanAnimations(){
   return [
     {
       value: 'Idle.FBX_0',
-      icon: 'pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
-
+    },
+    {    
+      value: 'Walk.FBX_0',
+      icon: '',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run.FBX_0',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success.FBX_0',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'toufan-victory'
     },
     {
       value: 'Sleep.FBX_0',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'toufan-sleep'
     },
@@ -88,25 +99,30 @@ function crocmouAnimations(){
   return [
     {
       value: 'Idle.FBX_0',
-      icon: 'Pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk.FBX_0',
+      icon: '',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run.FBX_0',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success.FBX_0',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep.FBX_0',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound:'crocmou-sleep'
     },
@@ -118,25 +134,30 @@ function liliaAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'Pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: '',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'noel-sleep'
     },
@@ -148,25 +169,30 @@ function rusardAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'pose',
+      icon: '',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: '',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'noel-sleep'
     },
@@ -177,25 +203,30 @@ function noelAnimations(){
   return [
     {
       value: 'Idle',
-      icon: 'pose',
+      icon: ' ',
       img: imgs[0],
       sound: 'pose-sound',
+    },{
+      value: 'Walk_In_Place',
+      icon: '',
+      img: imgs[4],
+      sound: 'all-run'
     },
     {
       value: 'Run',
-      icon: 'Courir',
+      icon: '',
       img: imgs[1],
       sound: 'all-run'
     },
     {
       value: 'Success',
-      icon: 'Joie',
+      icon: '',
       img: imgs[2],
       sound : 'all-victory'
     },
     {
       value: 'Sleep',
-      icon: 'Dormir',
+      icon: '',
       img: imgs[3],
       sound: 'noel-sleep'
     },

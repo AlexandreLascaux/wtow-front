@@ -9,6 +9,7 @@ import { clotheInterface } from '../interfaces/clotheInterface';
 import { getIpInterface } from '../interfaces/ipInterface';
 import { convertMeteoData } from '../utils/meteoAdapter';
 import { listAvatars } from '../avatar/utils';
+import { cityInterface } from '../interfaces/cityInterface';
 
 const defaultCity = 'lyon';
 
@@ -20,7 +21,9 @@ function Home(): ReactElement{
   const [resultData, setResultData] = useState<forecastInterface[]>();
   const [resultDataClothes, setResultDataClothes] = useState<clotheInterface>();
 
-  function fetchCity(city: string){
+  const [resultDataCity, setDataCity] = useState<cityInterface>({name: ''});
+
+  function fetchCityWeather(city: string){
     fetch(`https://wtow.fr/api/data/forecast/${city}`)
       .then(async (res) =>{
         const result: forecastInterface[] = await res.json();
@@ -42,19 +45,45 @@ function Home(): ReactElement{
     }
   }, [resultData, state.meteo.day]);
 
+  function fetchCity(postalCode: string){
+    return fetch(`https://wtow.fr/api/city/postalCode/${postalCode}`)
+      .then(async (res) =>{
+        const result: Promise< cityInterface> = await res.json();
+        setDataCity(await result);
+        return result;
+      })
+      .catch((error) => {
+        setErrorMessage(error);
+        return null;
+      });
+  }
+
+  useEffect(() => {
+    console.error(errorMessage);
+  }, [errorMessage]);
+
+  useEffect(() => {
+    if(resultData){
+      const meteoData = convertMeteoData(resultData, state.meteo.day);
+      dispatch({type: 'setMeteoState', value: meteoData});
+    }
+  }, [resultData, state.meteo.day]);
 
   useEffect(() => {
     fetch('https://geolocation-db.com/json/')
       .then((res) => {
         const result: Promise<getIpInterface> = res.json();
-        result.then((response) => {
-          fetchCity(response.city);
-          fetchClothes(response.city, '25-03-2022');
+        result.then(async (response) => {
+          const cityName = await fetchCity(response.postal);
+          if(cityName){
+            fetchCityWeather(cityName.name);
+            fetchClothes(cityName.name, '25-03-2022');
+          }
         });
-      })
+      }) 
       .catch((error) => {
         setErrorMessage(error);
-        fetchCity(defaultCity);
+        fetchCityWeather(defaultCity);
       });
   }, []);
 
@@ -68,13 +97,10 @@ function Home(): ReactElement{
     setOpenScene(true);
   }
   
-  function fetchClothes(cityName: string,date:string){
-    console.log(date);
-    fetch('https://wtow.fr/api/data/clothes/paris/2022-03-25')
+  function fetchClothes(cityName: string, date:string){
+    fetch('https://dev.wtow.fr/api/data/clothes/Paris/2022-05-31')
       .then(async (res) =>{
         const result: clotheInterface = await res.json();
-
-        console.log(result);
         setResultDataClothes(result);
         dispatch({type: 'setUpperbody', value: result.upperbody});
         dispatch({type: 'setLowerbody', value: result.lowerbody});
@@ -82,14 +108,9 @@ function Home(): ReactElement{
         dispatch({type: 'setMisc', value: result.misc});
       })
       .catch((error) => {
-        console.log('ee');
+        console.error(error);
       });
   }
-
-  useEffect(() => {
-    console.error(errorMessage);
-  }, [errorMessage]);
-
 
   return (
     <>

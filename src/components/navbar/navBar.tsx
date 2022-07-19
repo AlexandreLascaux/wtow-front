@@ -9,12 +9,11 @@ import { animationInterface } from '../threeJs/models/interfaces';
 interface NavBarInterface{ 
     handleOpen: () => void;
     handleOpenModalClothes: () => void;
-    handleOpenModalAnimations: () => void;
     setCurrentAnimation: (currentAnimation: animationInterface)=> void;
     visible: boolean;
   }
 
-export default function NavBar({handleOpen, visible, handleOpenModalClothes,handleOpenModalAnimations,setCurrentAnimation}: NavBarInterface): React.ReactElement {
+export default function NavBar({handleOpen, visible, handleOpenModalClothes, setCurrentAnimation}: NavBarInterface): React.ReactElement {
   const { state } = React.useContext(AppContext);
   const animations = animationsByAvatar(state.user.avatar);
 
@@ -22,9 +21,10 @@ export default function NavBar({handleOpen, visible, handleOpenModalClothes,hand
     return <div className="d-flex">
       {
         animations.map(({value, icon, sound, img}, index) => {
-          return (<div key={index} className="pr-2 pl-2 d-flex align-items-center" style={{verticalAlign: 'baseline' }}>
-            <AnimationButton value={value} icon={icon} sound={sound} img={img} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
-          </div>);
+          return (
+            <div key={index} className="pr-2 pl-2 d-flex align-items-center" style={{verticalAlign: 'baseline' }}>
+              <AnimationButton value={value} icon={icon} sound={sound} img={img} onIconClick={({value, sound}) => setCurrentAnimation({value, sound})} />
+            </div>);
         }
         )}
     </div>;
@@ -42,7 +42,7 @@ export default function NavBar({handleOpen, visible, handleOpenModalClothes,hand
           <div className="d-flex align-items-center">
             <CustomAvatar
               onClick={handleOpenModalClothes}
-              avatarName={'VËTEMENTS'}
+              avatarName={'VÊTEMENTS'}
               size={80}
               fs={14}
               mr={50}

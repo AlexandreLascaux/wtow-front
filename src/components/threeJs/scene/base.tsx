@@ -1,10 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useLoader } from '@react-three/fiber';
+import { ThreeEvent, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { defaultCameraPosition, defaultCameraRotation, defaultFov } from '../camera/CustomCamera';
 import { cameraOptionsInferface } from '..';
 import { useAnimations } from '@react-three/drei';
+import { Vector3 } from 'three';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -127,6 +128,7 @@ interface callbackInterface {
   sceneLoaded: boolean;
   onWindowsMode: () => void;
   windowsMode: boolean;
+  moveAvatar: (position: Vector3) => void;
 }
 
 const listLeafAnimations = ['Leaf.001Action', 'Leaf.003Action', 'Leaf.004Action', 'Leaf.005Action', 'Leaf.006Action'];
@@ -159,6 +161,13 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
   const materialScreen =  materials['Material.003'].clone();
   const materialFan = materials['Material.003'].clone();
 
+  function moveAvatar(e: ThreeEvent<MouseEvent>) {
+    e.stopPropagation();
+    if(e.intersections[0].point){
+      props.moveAvatar(e.intersections[0].point);
+    }
+   
+  }
 
   function dropLeaf(){
     const leafAnimationsNames = filteredNames.filter((name) => listLeafAnimations.includes(name));
@@ -585,7 +594,7 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
         rotation={[0, 0.37, 0]}
         scale={[0.0365, 0.0365, 0.04]}
       />
-      <mesh geometry={nodes.Plane014.geometry} material={materials['Material.008']} position={[-3.18, 0.54, 3.92]} />
+      <mesh onClick={moveAvatar} geometry={nodes.Plane014.geometry} material={materials['Material.008']} position={[-3.18, 0.54, 3.92]} />
       <mesh
         geometry={nodes.Cube006.geometry}
         material={materials['Material.003']}

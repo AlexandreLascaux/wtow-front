@@ -13,7 +13,7 @@ interface AvatarInterface {
     color?: string;
     onClick?: () => void;
 }
-export default function CustomAvatar({avatarName, size = 24,fs,mr, color = '#434343', active, disabled, onClick}: AvatarInterface): React.ReactElement {
+export default function CustomAvatar({avatarName, size = 24, fs, mr, color = '#434343', active, disabled, onClick}: AvatarInterface): React.ReactElement {
   function className(){
     let className = '';
     if(disabled) className += 'is-disabled';
@@ -24,7 +24,7 @@ export default function CustomAvatar({avatarName, size = 24,fs,mr, color = '#434
     <div className="avatar-container" style={{color,marginRight: mr}}>
       <Avatar
         onClick={onClick}
-        className={`mb-2 cursor-pointer avatar-style ${className()}`}
+        className={`mb-2 cursor-pointer avatar-style ml-auto  ${className()}`}
         alt={avatarName}
         src={`./assets/avatar/${avatarName}.png`}
         sx={{ width: size, height: size }}
