@@ -40,7 +40,7 @@ function Home(): ReactElement{
 
   useEffect(() => {
     if(resultData){
-      const meteoData = convertMeteoData(resultData, state.meteo.day);
+      const meteoData = convertMeteoData(resultData, 0);
       dispatch({type: 'setMeteoState', value: meteoData});
     }
   }, [resultData, state.meteo.day]);
@@ -64,7 +64,7 @@ function Home(): ReactElement{
 
   useEffect(() => {
     if(resultData){
-      const meteoData = convertMeteoData(resultData, state.meteo.day);
+      const meteoData = convertMeteoData(resultData, 0);
       dispatch({type: 'setMeteoState', value: meteoData});
     }
   }, [resultData, state.meteo.day]);

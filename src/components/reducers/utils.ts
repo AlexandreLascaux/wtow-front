@@ -4,6 +4,8 @@ import { avatarNames, userInterface } from './userReducer';
 
 export const initialMeteo:  meteoInterface= {
   day: 1,
+  weather: 1,
+  icon: '',
   sunProperties: {
     sun: true,
     sunIntensity: 1,
