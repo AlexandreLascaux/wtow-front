@@ -40,7 +40,7 @@ function Home(): ReactElement{
 
   useEffect(() => {
     if(resultData){
-      const meteoData = convertMeteoData(resultData, state.meteo.day);
+      const meteoData = convertMeteoData(resultData, 0);
       dispatch({type: 'setMeteoState', value: meteoData});
     }
   }, [resultData, state.meteo.day]);
@@ -64,12 +64,13 @@ function Home(): ReactElement{
 
   useEffect(() => {
     if(resultData){
-      const meteoData = convertMeteoData(resultData, state.meteo.day);
+      const meteoData = convertMeteoData(resultData, 0);
       dispatch({type: 'setMeteoState', value: meteoData});
     }
   }, [resultData, state.meteo.day]);
 
   useEffect(() => {
+    const date = new Date().toISOString().split('T')[0];
     fetch('https://geolocation-db.com/json/')
       .then((res) => {
         const result: Promise<getIpInterface> = res.json();
@@ -77,7 +78,7 @@ function Home(): ReactElement{
           const cityName = await fetchCity(response.postal);
           if(cityName){
             fetchCityWeather(cityName.name);
-            fetchClothes(cityName.name, '25-03-2022');
+            fetchClothes(cityName.name, date);
           }
         });
       }) 
@@ -96,9 +97,18 @@ function Home(): ReactElement{
     dispatch({type: 'setName', value: userName});
     setOpenScene(true);
   }
+
+  function formatDate(dateNotFormated: string){
+    const date = dateNotFormated.split('-');
+    const year = date[0];
+    const month = date[1];
+    const day = parseInt(date[2]) - 1;
+    return `${year}-${month}-${day}`;
+  }
   
   function fetchClothes(cityName: string, date:string){
-    fetch('https://dev.wtow.fr/api/data/clothes/Paris/2022-05-31')
+    const formatedDate: string = formatDate(date);
+    fetch(`https://dev.wtow.fr/api/data/clothes/${cityName}/${formatedDate}`)
       .then(async (res) =>{
         const result: clotheInterface = await res.json();
         setResultDataClothes(result);

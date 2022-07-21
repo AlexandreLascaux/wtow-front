@@ -413,7 +413,23 @@ export default function Scene(): React.ReactElement{
                       position={[initialScenePosition.x + 4.25, initialScenePosition.y + 1.52, initialScenePosition.z + 3]}
                     >
                       <p>
-                        <b>{`${birdCounter} oiseau${birdCounter > 1 ? 'x' : ''} capturé${birdCounter > 1 ? 's' : ''}` }</b>
+                        <b>{`${birdCounter}  🐦` }</b>
+                      </p>
+                    </Html>
+                    <Html 
+                      transform
+                      style={{
+                        color: 'white',
+                        fontSize:'0.275em',
+                        opacity: textVisible() ? 1 : 0,
+                        transition: 'all 0.5s',
+                        transform: `scale(${textVisible() ? 1 : 0.5})`
+                      }}
+                      position={[initialScenePosition.x + 4.40, initialScenePosition.y + 4, initialScenePosition.z + 3]}
+                    >
+                      <p>
+                        <b>{`${state.meteo.weather} °C` }</b>
+                        <img src={`http://openweathermap.org/img/wn/${state.meteo.icon}@2x.png`} width="15px" height="15px" style={{verticalAlign: 'middle'}} alt=""></img>
                       </p>
                     </Html>
                   </Suspense>
