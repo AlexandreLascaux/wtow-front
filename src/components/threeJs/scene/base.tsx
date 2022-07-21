@@ -155,7 +155,8 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
 
   const materialWindows = materials['Material.009'].clone();
   materialWindows.setValues({transparent: true});
-  materialWindows.setValues({opacity: 0});
+  materialWindows.setValues({opacity: 0.4});
+  materialWindows.setValues({color: 'rgb(66, 198, 255)'});
 
 
   const materialScreen =  materials['Material.003'].clone();
@@ -166,7 +167,6 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
     if(e.intersections[0].point){
       props.moveAvatar(e.intersections[0].point);
     }
-   
   }
 
   function dropLeaf(){
@@ -187,29 +187,29 @@ export default function Model(props: JSX.IntrinsicElements['group'] & callbackIn
   }
 
   useLayoutEffect(() => {
-    if(!props.sceneLoaded) props.callback?.();
+    if (!props.sceneLoaded) props.callback?.();
   }, []);
 
 
   useEffect(()=>{
-    if(windowsPointer){
+    if (windowsPointer){
       materialWindows.setValues({color: 'rgb(66, 198, 255)'});
-      materialWindows.setValues({opacity: 0.5});
-    }else {
-      materialWindows.setValues({opacity: 0});
+      materialWindows.setValues({opacity: 0.6});
+    } else {
+      materialWindows.setValues({opacity: 0.4});
     }
   }, [windowsPointer]);
 
   useEffect(()=>{
-    if(screenPointer){
+    if (screenPointer){
       materialScreen.setValues({color: 'rgb(66, 198, 255)'});
-    }else {
+    } else {
       setScreenColor(materials['Material.003'].color.getStyle());
     }
   }, [screenPointer]);
 
   useEffect(()=>{
-    if(fanPointer){
+    if (fanPointer){
       materialFan.setValues({color: 'rgb(66, 198, 255)'});
     } else {
       materialFan.setValues({color: materials['Material.003'].color.getStyle()});

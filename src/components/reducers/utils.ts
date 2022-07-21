@@ -4,6 +4,8 @@ import { avatarNames, userInterface } from './userReducer';
 
 export const initialMeteo:  meteoInterface= {
   day: 1,
+  weather: 1,
+  icon: '',
   sunProperties: {
     sun: true,
     sunIntensity: 1,
@@ -29,10 +31,10 @@ export const initialClothe : clotheInterface = {
     description: 'winter',
     url :''
   }],
-  lowerbody: {
+  lowerbody: [{
     description: 'winter',
     url :''
-  },
+  }],
   shoes: {
     description: 'winter',
     url :''

@@ -2415,9 +2415,6 @@ export default function Garden(props: JSX.IntrinsicElements['group'] & callbackI
           <group position={[0, 0, 4.07]} rotation={[-Math.PI, 0, -Math.PI]} scale={[-0.4, 0.4, 0.2]}>
             <mesh geometry={nodes.Tabletop_0.geometry} material={nodes.Tabletop_0.material} />
           </group>
-          {
-            // carroussel
-          }
           <mesh
             geometry={nodes.Floor_0.geometry}
             material={nodes.Floor_0.material}

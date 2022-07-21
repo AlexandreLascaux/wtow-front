@@ -13,6 +13,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { animationInterface, customAvatarInterface, CustomAvatarProps, customProps } from './interfaces';
+import { Vector3 } from 'three';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -59,6 +60,11 @@ const Rusard = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props
   const { actions, names } = useAnimations(animations, group);
   
   useImperativeHandle(ref, () => ({
+    lookAt(position) {
+      if(group.current){
+        group.current.lookAt(new Vector3(position[0], position[1], position[2]));
+      }
+    },
     getPosition(){
       return group.current?.position;
     },

@@ -1,6 +1,8 @@
 export interface meteoInterface {
     //storm: boolean;
     day: number;
+    weather: number;
+    icon: string;
     sunProperties: sunProperties;
     cloudProperties: cloudProperties;
     rainProperties: rainProperties;
@@ -33,6 +35,8 @@ interface snowProperties {
 export type MeteoAction =
  | { type: 'setMeteoState', value: meteoInterface }
  | { type: 'setDay', value: number }
+ | { type: 'setWeather', value: number }
+ | { type: 'setIcon', value: string }
  | { type: 'setRain', value: boolean }
  | { type: 'setRainPrecipitation', value: number }
  | { type: 'setSnow', value: boolean }
@@ -52,6 +56,10 @@ export default function meteoReducer(state: meteoInterface, action: MeteoAction)
   switch (action.type) {
   case 'setDay':
     return {...state, day: action.value};
+  case 'setWeather':
+    return {...state, weather: action.value};
+  case 'setIcon':
+    return {...state, icon: action.value};
   case 'setMeteoState':
     return {...state, ...action.value};
   case 'setRain':

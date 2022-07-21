@@ -1,7 +1,7 @@
 
 export interface clotheInterface{
         upperbody: ClothesDetailInterface[],
-        lowerbody: ClothesDetailInterface,
+        lowerbody: ClothesDetailInterface[],
         shoes: ClothesDetailInterface,
         misc: ClothesDetailInterface[]
 }

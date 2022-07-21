@@ -3,7 +3,7 @@ import { clotheInterface, ClothesDetailInterface } from '../interfaces/clotheInt
 export type ClotheAction =
  | { type: 'setClothes', value: clotheInterface }
  | { type: 'setUpperbody', value: ClothesDetailInterface[] }
- | { type: 'setLowerbody', value: ClothesDetailInterface }
+ | { type: 'setLowerbody', value: ClothesDetailInterface[] }
  | { type: 'setShoes', value: ClothesDetailInterface }
  | { type: 'setMisc', value: ClothesDetailInterface[] }
  | { type: 'resetClothe', value: clotheInterface};

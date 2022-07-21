@@ -13,6 +13,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader, dispose, useFrame } from '@react-three/fiber';
 import { animationInterface, customAvatarInterface, CustomAvatarProps, customProps } from './interfaces';
+import { Quaternion, Vector3 } from 'three';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -58,8 +59,19 @@ const Lilia = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props,
   const [reachedPosition, setReachedPosition] = useState<boolean>(false);
 
   const { actions, names } = useAnimations(animations, group);
-  
   useImperativeHandle(ref, () => ({
+    lookAt(position) {
+      if(group.current){
+        group.current.lookAt(new Vector3(position[0], position[1], position[2]));
+      }
+    },
+    setAvatarRotation(position: number[]){
+      if(group.current){
+        group.current.rotation.x = position[0];
+        group.current.rotation.y = position[1];
+        group.current.rotation.z = position[2];
+      }
+    },
     getPosition(){
       return group.current?.position;
     },
@@ -68,7 +80,6 @@ const Lilia = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props,
         group.current.position.x = position[0];
         group.current.position.y = position[1];
         group.current.position.z = position[2];
-
       }
     },
     setCurrentAnimation({value, sound}: animationInterface) {
@@ -95,6 +106,9 @@ const Lilia = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props,
         const speedPositionX = 0.05;
         const speedPositionY = 0.05;
         const speedPositionZ = 0.075;
+
+
+        // group.current.rotation.y = modifiedProps.rotation.y;
 
         if(!isReachedAvatarPosition){
           if(currentPosition.x < positionX) group.current.position.x += speedPositionX;

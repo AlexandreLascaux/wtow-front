@@ -21,6 +21,7 @@ import NavBar from '../navbar/navBar';
 import ModalClothes from '../modals/modalClothes';
 import { isEqual } from 'lodash';
 import Stork from './birds/stork';
+import { Euler } from 'three';
 
 export interface cameraOptionsInferface{
     position: number[];
@@ -90,6 +91,7 @@ export default function Scene(): React.ReactElement{
   const handleCloseModalClothes = () => setOpenModalClothes(false);
 
   const [avatarPosition, setAvatarPosition] = useState<number[]>([initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]);
+  const [avatarRotation, setAvatarRotation] = useState<Euler>(initialModelRotation);
 
   function setCurrentAnimation(currentAnimation: animationInterface){
     if (currentAnimation.sound){
@@ -147,6 +149,7 @@ export default function Scene(): React.ReactElement{
       setAvatarPosition([neutralGardenPosition.x+12, neutralGardenPosition.y - 0.5, neutralGardenPosition.z + 5.5]);
       if(controller.current) controller.current.setAvatarPosition([neutralGardenPosition.x+12, neutralGardenPosition.y - 0.5, neutralGardenPosition.z + 5.5]);
       setAvatarScale(0.009);
+      setAvatarRotation(new THREE.Euler( 0.5939310417532755, 0.2495868172236163, -0.16527125382916052, 'XYZ' ));
       break;
     case 1:
     default:
@@ -158,12 +161,11 @@ export default function Scene(): React.ReactElement{
       setAvatarPosition([initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]);
       if(controller.current) controller.current.setAvatarPosition([initialScenePosition.x-1.90, initialScenePosition.y + 0.55, initialScenePosition.z + 6.75]);
       setAvatarScale(0.0075);
+      setAvatarRotation(initialModelRotation);
       break;
     }
     
   }, [sceneRender]);
-
-
 
   useEffect(()=>{
     if(windowDimensions.height > windowDimensions.width){
@@ -186,32 +188,25 @@ export default function Scene(): React.ReactElement{
         setCurrentAnimation(animationsByAvatar(state.user.avatar)[1]);
         setReachedAvatarPosition(false);
       }
+      controller.current.lookAt?.(pos);
     }
-
     setAvatarPosition(pos);
+    
   }
 
-   
-  /*
-  useEffect(() => {
-    setCameraOptions((cameraOptions) => {
-      const {0: rx, 2: rz} = cameraOptions.rotation;
-      return {...cameraOptions, rotation: [rx, Math.cos(Math.PI * scroll)*0.15, rz]};
-    });
-  }, [scroll]);
-
-  */
-  /*
-  function setRotationOnWheel(e: React.WheelEvent<HTMLDivElement>){
+  function setZoomOnWheel(e: React.WheelEvent<HTMLDivElement>){
     const {deltaY} = e;
-    if(landscape){
-      if(deltaY >= 0 && scroll > 1) setScroll(1);
-      if(deltaY >= 0 && scroll < 1) setScroll(scroll+0.05);
-      if(deltaY < 0 && scroll > 0) setScroll(scroll-0.05);
-      if(deltaY < 0 && scroll < 0) setScroll(0);
+    console.log({pz: cameraOptions.position[2]});
+    const {0: px, 1: py, 2: pz} = cameraOptions.position;
+    if(pz <= 10 && pz >= 1.62){
+      changeCameraProperties({...cameraOptions, position: [px, py, pz + (deltaY <= 0 ? -0.5 : 0.5)]});
+    } else if(pz > 10){
+      changeCameraProperties({...cameraOptions, position: [px, py, 10]});
+    } else if(pz <= 1.62){
+      changeCameraProperties({...cameraOptions, position: [px, py, 1.62]});
     }
   }
-  */
+  
 
   function WaitingSceneToLoad(){
     return  <Html 
@@ -227,7 +222,7 @@ export default function Scene(): React.ReactElement{
 
   return (
         
-    <div ref={scrollArea} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative', alignItems: 'baseline'}}>
+    <div ref={scrollArea} onWheel={setZoomOnWheel} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative', alignItems: 'baseline'}}>
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
         style={{opacity: 0}}
@@ -417,7 +412,23 @@ export default function Scene(): React.ReactElement{
                       position={[initialScenePosition.x + 4.25, initialScenePosition.y + 1.52, initialScenePosition.z + 3]}
                     >
                       <p>
-                        <b>{`${birdCounter} oiseau${birdCounter > 1 ? 'x' : ''} capturé${birdCounter > 1 ? 's' : ''}` }</b>
+                        <b>{`${birdCounter}  🐦` }</b>
+                      </p>
+                    </Html>
+                    <Html 
+                      transform
+                      style={{
+                        color: 'white',
+                        fontSize:'0.275em',
+                        opacity: textVisible() ? 1 : 0,
+                        transition: 'all 0.5s',
+                        transform: `scale(${textVisible() ? 1 : 0.5})`
+                      }}
+                      position={[initialScenePosition.x + 4.40, initialScenePosition.y + 4, initialScenePosition.z + 3]}
+                    >
+                      <p>
+                        <b>{`${state.meteo.weather} °C` }</b>
+                        <img src={`http://openweathermap.org/img/wn/${state.meteo.icon}@2x.png`} width="15px" height="15px" style={{verticalAlign: 'middle'}} alt=""></img>
                       </p>
                     </Html>
                   </Suspense>
@@ -449,7 +460,7 @@ export default function Scene(): React.ReactElement{
               reachedAvatarPositionCallback={() => setReachedAvatarPosition(true)}
               //position={avatarPosition as Vector3}
               scale={avatarScale}
-              rotation={initialModelRotation}
+              rotation={avatarRotation}
             />} 
           </Suspense>
 

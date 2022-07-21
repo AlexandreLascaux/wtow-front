@@ -199,6 +199,39 @@ button {
   box-shadow: unset;
 }
 
+@media screen and (min-width: 900px) {
+  .modal-container-clothes{
+    padding-top: 5%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    max-height: 500px;
+  }
+  .clothes-modal{
+    background-color: #AAA7CB;;
+    border: 6px solid #7469CF;
+    border-radius: 20px;
+    padding: 20px;
+    width: 1000px;
+    height: 100%;
+  }
+  .body-kid{
+    height: 100% !important;
+    width: 100% !important;
+  }
+};
+.modal-container-clothes{
+  padding-top: 2% !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  max-height: 500px;
+}
+
 .modal-container{
   padding-top: 200px;
   position: relative;
@@ -212,7 +245,6 @@ button {
 
 .child {
   background-color: #AAA7CB;;
-  
   border: 6px solid #7469CF;
   border-radius: 20px;
   padding: 20px;
@@ -269,7 +301,7 @@ button {
 
 /* vetements */
 
-.upperbody{
+.clothe{
   width: 25%;
 }
 
@@ -280,4 +312,17 @@ button {
   100% {
       transform: scale(6.0);
   }
+}
+
+.body-kid{
+  height: 100%;
+  width: 80%;
+}
+
+
+.clothes-modal{
+  background-color: #AAA7CB;;
+  border: 6px solid #7469CF;
+  border-radius: 20px;
+  padding: 20px;
 }

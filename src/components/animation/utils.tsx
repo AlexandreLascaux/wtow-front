@@ -1,11 +1,11 @@
 import { avatarNames } from '../reducers/userReducer';
 import { animationButtonInterface } from './animationButton';
 const imgs = [
-  'https://cdn.shopify.com/s/files/1/1061/1924/products/Man_Walking_Emoji_large.png?v=1571606063',
+  'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/320/apple/325/person-standing_1f9cd.png',
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Man_Running_Emoji_large.png?v=1571606063',
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Clapping_Hands_Emoji_large.png?v=1571606063',
   'https://cdn.shopify.com/s/files/1/1061/1924/products/Sleeping_Emoji_large.png?v=1571606036',
-  'https://flyclipart.com/thumb2/walking-458041.png'
+  'https://cdn.shopify.com/s/files/1/1061/1924/products/Man_Walking_Emoji_large.png?v=1571606063'
 ];
 export function animationsByAvatar(avatar: avatarNames): Omit<animationButtonInterface, 'onIconClick'>[]{
   

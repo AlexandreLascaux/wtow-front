@@ -1,8 +1,8 @@
 import { forecastInterface } from '../interfaces/meteoInterface';
 import { meteoInterface } from '../reducers/meteoReducer';
 
-export function convertMeteoData(data: forecastInterface[], day: number): meteoInterface{
-  const currentData = data[day];
+export function convertMeteoData(data: any, day: number): meteoInterface{
+  const currentData = data.data[day];
   const sunProperties = {
     sun: hasSun(currentData),
     sunIntensity: 1,
@@ -23,8 +23,13 @@ export function convertMeteoData(data: forecastInterface[], day: number): meteoI
     snowPrecipitation: 3000,
   };
 
+  const weather = parseInt(currentData.Temperature.value);
+  const icon = currentData.icon;
+  
   const meteoDate = {
     day,
+    weather,
+    icon,
     sunProperties,
     rainProperties,
     cloudProperties,
