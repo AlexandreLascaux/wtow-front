@@ -13,7 +13,7 @@ import { useFrame, useLoader } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { MeshStandardMaterial } from 'three';
+import { MeshStandardMaterial, Vector3 } from 'three';
 import { time } from 'console';
 import { avatarInterface } from '..';
 import { animationInterface, customAvatarInterface, CustomAvatarProps, customProps } from './interfaces';
@@ -75,8 +75,16 @@ const Toufan = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props
   const { actions, names } = useAnimations(animations, group);
 
   useImperativeHandle(ref, () => ({
+    lookAt(position) {
+      if(group.current){
+        group.current.lookAt(new Vector3(position[0], position[1], position[2]));
+      }
+    },
     getPosition(){
       return group.current?.position;
+    },
+    getRotation(){
+      return  group.current?.rotation;
     },
     setAvatarPosition(position: number[]){
       if(group.current){

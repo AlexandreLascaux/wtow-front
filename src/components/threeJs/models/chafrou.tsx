@@ -71,6 +71,11 @@ const Chafrou = React.forwardRef<customAvatarInterface, CustomAvatarProps>((prop
   const { actions, names } = useAnimations(animations, group);
 
   useImperativeHandle(ref, () => ({
+    lookAt(position) {
+      if(group.current){
+        group.current.lookAt(new Vector3(position[0], position[1], position[2]));
+      }
+    },
     getPosition(){
       return group.current?.position;
     },
