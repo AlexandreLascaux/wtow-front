@@ -233,6 +233,7 @@ button {
 }
 
 .modal-container{
+  padding-top: 200px;
   position: relative;
   display: flex;
   flex-direction: column;
