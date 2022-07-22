@@ -354,7 +354,7 @@ export default function Scene(): React.ReactElement{
                         opacity: textVisible() ? 1 : 0,
                         transform: `scale(${textVisible() ? 1 : 0.5})`
                       }}
-                      position={[initialScenePosition.x-2.2900, initialScenePosition.y + 2.375, initialScenePosition.z + 5.6]}
+                      position={[initialScenePosition.x-.900, initialScenePosition.y + 3.2, initialScenePosition.z + 5.6]}
                     >
                       <h2
                         className="cursor-pointer"
@@ -373,7 +373,7 @@ export default function Scene(): React.ReactElement{
                         opacity: textVisible() ? 1 : 0,
                         transform: `scale(${textVisible() ? 1 : 0.5})`
                       }}
-                      position={[initialScenePosition.x-2.2900, initialScenePosition.y + 2.675, initialScenePosition.z + 5.6]}
+                      position={[initialScenePosition.x+.2900, initialScenePosition.y + 3.2, initialScenePosition.z + 5.6]}
                     >
                       <h1
                         className="cursor-pointer"
@@ -392,7 +392,7 @@ export default function Scene(): React.ReactElement{
                         opacity: textVisible() ? 1 : 0,
                         transform: `scale(${textVisible() ? 1 : 0.5})`
                       }}
-                      position={[initialScenePosition.x-2.2900, initialScenePosition.y + 2.9050, initialScenePosition.z + 5.6]}
+                      position={[initialScenePosition.x-.2900, initialScenePosition.y + 3.2, initialScenePosition.z + 5.6]}
                     >
                       <h1
                         className="cursor-pointer"
