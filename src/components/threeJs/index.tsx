@@ -223,7 +223,7 @@ export default function Scene(): React.ReactElement{
 
   return (
         
-    <div ref={scrollArea} onWheel={setZoomOnWheel} style={{height: `${windowDimensions.height}px`, width: '100%', position: 'relative', alignItems: 'baseline'}}>
+    <div ref={scrollArea} onWheel={setZoomOnWheel} style={{height: `${windowDimensions.height}px`, overflow: 'hidden', width: '100%', position: 'relative', alignItems: 'baseline'}}>
       <audio
         ref={playerRef as RefObject<HTMLAudioElement>}
         style={{opacity: 0}}
