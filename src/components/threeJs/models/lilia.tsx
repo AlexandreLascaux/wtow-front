@@ -97,8 +97,6 @@ const Lilia = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props,
       const modifiedProps = props as unknown as customProps;
       const currentPosition = group.current.position;
       const avatarPosition = modifiedProps['finalPosition'];
-
-      
       if(currentPosition){
         const [positionX, positionY, positionZ] = avatarPosition;
 
@@ -109,10 +107,10 @@ const Lilia = React.forwardRef<customAvatarInterface, CustomAvatarProps>((props,
         const speedPositionY = 0.05;
         const speedPositionZ = 0.075;
 
+
         // group.current.rotation.y = modifiedProps.rotation.y;
 
         if(!isReachedAvatarPosition){
-
           if(currentPosition.x < positionX) group.current.position.x += speedPositionX;
           if(currentPosition.x > positionX) group.current.position.x -= speedPositionX;
     

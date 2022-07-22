@@ -1,7 +1,6 @@
 import { Modal,Grid, Button } from '@mui/material';
 import React from 'react';
 import { AppContext } from '../reducers/context';
-
 import Draggable from 'react-draggable';
 
 
@@ -12,30 +11,26 @@ interface modalClothesInterface{
 
 export default function ModalClothes({open,onClose}: modalClothesInterface): React.ReactElement {
   const { state } = React.useContext(AppContext);
-  
-
   return <Modal
     open={open}
     onClose={onClose}
   >
     <>
       <div className='modal-container-clothes '>
-
-        <div className='tessssst'>
-
+        <div className='clothes-modal'>
           <Grid container spacing={2} >
             <div style={{position: 'absolute'}}>
               <Button className='cursor-pointer' color='error' onClick={onClose}><b style={{ fontSize: '1.5rem' }}>X</b></Button>
             </div>
             <Grid item xs={6}  style={{ borderRight : '2px solid #7469CF'}}>
               <img 
-                className='test dropzone'
+                className='body-kid dropzone'
                 src='./assets/img/clothes/body.png'
                 alt='boy body'
               />
             </Grid>
             <Grid item xs={6}>
-              <div className='clothes text-center'>
+              <div className='text-center'>
                 <p>Vêtements</p>
                 <div style={{paddingTop: '30px'}}>
                   {
@@ -44,7 +39,7 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
                         <>
                           <Draggable>
                             <div>
-                              <img className='upperbody' id='yes-drop' src={`./assets/img/clothes/${clothe.description}.png`}></img>
+                              <img className='clothe' id='yes-drop' src={`./assetFs/img/clothes/${clothe.description}.png`}></img>
                             </div>
                           </Draggable>
                         </>
@@ -59,7 +54,7 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
                         return(
                           <>
                             <Draggable>
-                              <img className='upperbody' src={`./assets/img/clothes/${clothe.description}.png`}></img>
+                              <img className='clothe' src={`./assets/img/clothes/${clothe.description}.png`}></img>
                             </Draggable>
                           </>
                         );
@@ -70,7 +65,7 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
                 <div style={{paddingTop: '30px'}}>
                   {
                     state.clothe.shoes.description ?
-                      <img className='upperbody' src={`./assets/img/clothes/${state.clothe.shoes.description}.png`}></img>
+                      <img className='clothe' src={`./assets/img/clothes/${state.clothe.shoes.description}.png`}></img>
                       : ''
                   }
                 </div>

@@ -139,7 +139,6 @@ export default function Scene(): React.ReactElement{
     if(reachedAvatarPosition){
       setCurrentAnimation({value: ''});
       if(playerRef.current) playerRef.current.pause();
-
     }
   }, [reachedAvatarPosition]);
   
