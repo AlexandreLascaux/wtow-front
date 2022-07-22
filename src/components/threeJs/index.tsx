@@ -122,7 +122,7 @@ export default function Scene(): React.ReactElement{
   }
 
   function textVisible(){
-    return sceneLoaded && !open;
+    return sceneLoaded && !open && !openModalClothes ;
   }
 
   function changeScene(){
@@ -354,15 +354,15 @@ export default function Scene(): React.ReactElement{
                         opacity: textVisible() ? 1 : 0,
                         transform: `scale(${textVisible() ? 1 : 0.5})`
                       }}
-                      position={[initialScenePosition.x-3.3975, initialScenePosition.y + 2.50, initialScenePosition.z + 5.6]}
+                      position={[initialScenePosition.x-2.2900, initialScenePosition.y + 2.375, initialScenePosition.z + 5.6]}
                     >
-                      <p
+                      <h2
                         className="cursor-pointer"
+                        style={{fontSize: '8px'}}
                         onClick={() => dispatch({type: 'setRain', value: !state.meteo.rainProperties.rain})}>
-                        <b>Rain</b>
-                      </p>
+                        <b>🌧️</b>
+                      </h2>
                     </Html>
-
                     <Html 
                       transform
                       className="user-select-none"
@@ -373,15 +373,15 @@ export default function Scene(): React.ReactElement{
                         opacity: textVisible() ? 1 : 0,
                         transform: `scale(${textVisible() ? 1 : 0.5})`
                       }}
-                      position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.975, initialScenePosition.z + 5.6]}
+                      position={[initialScenePosition.x-2.2900, initialScenePosition.y + 2.675, initialScenePosition.z + 5.6]}
                     >
-                      <p
+                      <h1
                         className="cursor-pointer"
+                        style={{fontSize: '8px'}}
                         onClick={() => dispatch({type: 'setSnow', value: !state.meteo.snowProperties.snow})}>
-                        <b>Snow</b>
-                      </p>
+                        <b>❄️</b>
+                      </h1>
                     </Html>
-
                     <Html 
                       transform
                       className="user-select-none"
@@ -392,13 +392,14 @@ export default function Scene(): React.ReactElement{
                         opacity: textVisible() ? 1 : 0,
                         transform: `scale(${textVisible() ? 1 : 0.5})`
                       }}
-                      position={[initialScenePosition.x-3.3975, initialScenePosition.y + 1.72, initialScenePosition.z + 5.6]}
+                      position={[initialScenePosition.x-2.2900, initialScenePosition.y + 2.9050, initialScenePosition.z + 5.6]}
                     >
-                      <p
+                      <h1
                         className="cursor-pointer"
+                        style={{fontSize: '8px'}}
                         onClick={() => dispatch({type: 'setCloud', value: !state.meteo.cloudProperties.cloud})}>
-                        <b>Cloud</b>
-                      </p>
+                        <b>☁️</b>
+                      </h1>
                     </Html>
                     <Html 
                       transform
