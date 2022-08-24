@@ -39,7 +39,7 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
                         <>
                           <Draggable>
                             <div>
-                              <img className='clothe' id='yes-drop' src={`./assetFs/img/clothes/${clothe.description}.png`}></img>
+                              <img className='clothe' id='yes-drop' src={`./assets/img/clothes/${clothe.description}.png`}></img>
                             </div>
                           </Draggable>
                         </>
