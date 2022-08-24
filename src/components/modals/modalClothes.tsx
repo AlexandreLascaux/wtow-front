@@ -34,29 +34,25 @@ export default function ModalClothes({open,onClose}: modalClothesInterface): Rea
                 <p>Vêtements</p>
                 <div style={{paddingTop: '30px'}}>
                   {
-                    state.clothe.upperbody.map((clothe) => {
+                    state.clothe.upperbody.map((clothe, index) => {
                       return(
-                        <>
-                          <Draggable>
-                            <div>
-                              <img className='clothe' id='yes-drop' src={`./assetFs/img/clothes/${clothe.description}.png`}></img>
-                            </div>
-                          </Draggable>
-                        </>
+                        <Draggable key={index}>
+                          <div>
+                            <img className='clothe' id='yes-drop' src={`./assetFs/img/clothes/${clothe.description}.png`}></img>
+                          </div>
+                        </Draggable>
                       );
                     })
                   }
                 </div>
                 <div style={{paddingTop: '30px'}}>
                   {
-                    state.clothe.lowerbody.map((clothe) => {
+                    state.clothe.lowerbody.map((clothe, index) => {
                       if(clothe.description){
                         return(
-                          <>
-                            <Draggable>
-                              <img className='clothe' src={`./assets/img/clothes/${clothe.description}.png`}></img>
-                            </Draggable>
-                          </>
+                          <Draggable key={index}>
+                            <img className='clothe' src={`./assets/img/clothes/${clothe.description}.png`}></img>
+                          </Draggable>
                         );
                       }
                     })

@@ -200,7 +200,7 @@ button {
 
 @media screen and (min-width: 900px) {
   .modal-container-clothes{
-    padding-top: 5%;
+    padding-top: 10%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -232,7 +232,6 @@ button {
 }
 
 .modal-container{
-  padding-top: 200px;
   position: relative;
   display: flex;
   flex-direction: column;
