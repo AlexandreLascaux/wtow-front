@@ -11,7 +11,6 @@ interface modalProfileInterface{
 }
 
 
-
 export default function ModalProfile({open, onClose}: modalProfileInterface): React.ReactElement {
 
   const { state, dispatch } = React.useContext(AppContext);
